@@ -11,6 +11,7 @@ import tkinter as tk
 from tkinter import filedialog
 from datetime import datetime, date, time
 import re
+import matplotlib.pyplot as plt
 
 
 
@@ -111,7 +112,7 @@ def create_xarray_dataset(dataframe: pd.DataFrame):
         coords=
         {
             # La dimension correspond au nombre de lignes du tableau du fichier .xlsx
-            'lenstation' : np.zeros(dataframe.shape[0]),
+            'lenstation' : np.arange(dataframe.shape[0]),
         },
         # Attributs globaux
         attrs=
@@ -123,7 +124,7 @@ def create_xarray_dataset(dataframe: pd.DataFrame):
     # Ajout des attributs de paramètres
     xarray_dataset['id_station'].attrs['long_name'] = 'id_station'
     xarray_dataset['id_station'].attrs['standard_name'] = 'id_station'
-    xarray_dataset['id_station'].attrs['dtype'] = 'int64'
+    xarray_dataset['id_station'].attrs['dtype'] = 'object'
     
     xarray_dataset['mission'].attrs['long_name'] = 'mission'
     xarray_dataset['mission'].attrs['standard_name'] = 'mission'
@@ -237,7 +238,8 @@ def check_dataframe_integrity(error_log: list[str], dataframe: pd.DataFrame, xar
                                     error_log.append("Less than 10 data are present in column " + column + " . Data will be not selected.")
                             # Sinon
                             else:
-                                error_log.append("Incorrect data type for column " + column + " : " + str(dataframe[column].dtype) + " . Data will be not selected.")
+                                print(column, substring)
+                                error_log.append("Data type in column " + column + " : " + str(dataframe[column].dtype) + " does not match the type of the variable : " + key + " : " + xarray_dataset[key].attrs['dtype'] + " . Data will be not selected.")
     # Retourne les logs d'erreur et le dataset xarray actualisé
     return error_log, xarray_dataset
 
@@ -253,9 +255,9 @@ def check_datetime_format(error_log: list[str], dataframe: pd.DataFrame, xarray_
     else:
         # Parcours de chaque colonne du dataframe
         for column in dataframe.columns:
-            # Parcours de chaque élément du catalogue
+            # Parcours de chaque élément de la première liste du catalogue
             for element in datetime_catalog[0]:
-                # Si la colonne du dataframe n'est pas dans la première liste du catalogue et si le catalogue ne contient pas plus de 3 listes
+                # Si l'élément du catalogue est contenu dans le nom de la colonne du dataframe en minuscule sans espace blanc et si le catalogue ne contient pas plus de 3 listes
                 if element in column.replace(' ', '').lower() and len(datetime_catalog) < 3:
                     # Si la liste de données de la colonne du dataframe contient au minimum 10 données
                     if len(dataframe[column].iloc[:].tolist()) >= 10:
@@ -264,6 +266,7 @@ def check_datetime_format(error_log: list[str], dataframe: pd.DataFrame, xarray_
                     # Sinon
                     else:
                         error_log.append("Less than 10 data are present in column " + column + " . Data will be not selected.")
+        print(datetime_catalog)
         # Si le catalogue contient une liste de noms possibles pour la variable datetime et une liste de données temporelles
         if len(datetime_catalog) == 2:
             # Parcours de la première donnée temporelle jusqu'à la dernière dans la liste
@@ -295,10 +298,131 @@ def check_datetime_format(error_log: list[str], dataframe: pd.DataFrame, xarray_
                     error_log.append("Incorrect data type for " + str(datetime_catalog[1][i]) + " : " + str(type(datetime_catalog[1][i])) + " . Data will be cleared.")
                     # La donnée temporelle est nulle
                     datetime_catalog[1][i] = str('')    
+        # Si le catalogue contient une liste de noms possibles pour la variable datetime et 2 listes de données temporelles
+        elif len(datetime_catalog) == 3:
+            # Parcours de la première donnée temporelle jusqu'à la dernière dans la liste
+            for i in range(0, len(datetime_catalog[1])):
+                # Si la donnée temporelle est au format timestamp
+                if isinstance(datetime_catalog[1][i], pd.Timestamp):
+                    # Si la donnée temporelle est au format 'YYYY-MM-DD'
+                    if str(datetime_catalog[1][i].strftime("%H:%M:%S")) == '00:00:00':
+                        # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
+                        datetime_catalog[1][i] = str(datetime_catalog[1][i].strftime("%Y-%m-%d"))
+                        # Si la donnée temporelle de la deuxième liste est au format time
+                        if isinstance(datetime_catalog[2][i], time):
+                            # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
+                            datetime_catalog[2][i] = str(datetime_catalog[2][i].strftime("%H:%M:%S"))   
+                            # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                            datetime_catalog[1][i] = datetime_catalog[1][i] + " " + datetime_catalog[2][i]
+                        # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
+                        elif isinstance(datetime_catalog[2][i], str):
+                            # Si la donnée temporelle est au format 'HH:MM:SS'
+                            if bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', datetime_catalog[2][i])) == True:
+                                # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                datetime_catalog[1][i] = datetime_catalog[1][i] + " " + datetime_catalog[2][i]
+                    # Sinon la donnée temporelle est au format 'YYYY-MM-DD HH:MM:SS'
+                    else:
+                        # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                        datetime_catalog[1][i] = str(datetime_catalog[1][i].strftime("%Y-%m-%d %H:%M:%S"))
+                # Si la donnée temporelle est au format datetime
+                elif isinstance(datetime_catalog[1][i], datetime):
+                    # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                    datetime_catalog[1][i] = str(datetime_catalog[1][i].strftime("%Y-%m-%d %H:%M:%S"))
+                # Si la donnée temporelle est au format date
+                elif isinstance(datetime_catalog[1][i], date):
+                    # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
+                    datetime_catalog[1][i] = str(datetime_catalog[1][i].strftime("%Y-%m-%d"))
+                    # Si la donnée temporelle de la deuxième liste est au format time
+                    if isinstance(datetime_catalog[2][i], time):
+                        # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
+                        datetime_catalog[2][i] = str(datetime_catalog[2][i].strftime("%H:%M:%S"))   
+                        # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                        datetime_catalog[1][i] = datetime_catalog[1][i] + " " + datetime_catalog[2][i]
+                    # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
+                    elif isinstance(datetime_catalog[2][i], str):
+                        # Si la donnée temporelle est au format 'HH:MM:SS'
+                        if bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', datetime_catalog[2][i])) == True:
+                            # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                            datetime_catalog[1][i] = datetime_catalog[1][i] + " " + datetime_catalog[2][i]
+                # Si la donnée temporelle est au format time
+                elif isinstance(datetime_catalog[1][i], time):
+                    # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
+                    datetime_catalog[1][i] = str(datetime_catalog[1][i].strftime("%H:%M:%S"))
+                    # Si la donnée temporelle de la deuxième liste est au format date
+                    if isinstance(datetime_catalog[2][i], date):
+                        # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
+                        datetime_catalog[2][i] = str(datetime_catalog[2][i].strftime("%Y-%m-%d"))   
+                        # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                        datetime_catalog[1][i] = datetime_catalog[2][i] + " " + datetime_catalog[1][i]
+                    # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
+                    elif isinstance(datetime_catalog[2][i], str):
+                        # Si la donnée temporelle est au format 'YYYY-MM-DD'
+                        if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', datetime_catalog[2][i])) == True:
+                            # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                            datetime_catalog[1][i] = datetime_catalog[2][i] + " " + datetime_catalog[1][i]
+                # Si la donnée temporelle est une chaîne de caractères
+                elif isinstance(datetime_catalog[1][i], str):                
+                    # Si la donnée temporelle est une chaîne de caractères au format 'YYYY-MM-DD'    
+                    if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', datetime_catalog[1][i])) == True:
+                        # Si la donnée temporelle de la deuxième liste est au format time
+                        if isinstance(datetime_catalog[2][i], time):
+                            # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
+                            datetime_catalog[2][i] = str(datetime_catalog[2][i].strftime("%H:%M:%S"))   
+                            # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                            datetime_catalog[1][i] = datetime_catalog[1][i] + " " + datetime_catalog[2][i]
+                        # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
+                        elif isinstance(datetime_catalog[2][i], str):
+                            # Si la donnée temporelle de la deuxième liste est une chaîne de caractères au format 'HH:MM:SS'
+                            if bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', datetime_catalog[2][i])) == True:
+                                # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                datetime_catalog[1][i] = datetime_catalog[1][i] + " " + datetime_catalog[2][i]
+                    # Si la donnée temporelle est une chaîne de caractères au format 'HH:MM:SS'    
+                    elif bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', datetime_catalog[1][i])) == True:
+                        # Si la donnée temporelle de la deuxième liste est au format date
+                        if isinstance(datetime_catalog[2][i], date):
+                            # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
+                            datetime_catalog[2][i] = str(datetime_catalog[2][i].strftime("%Y-%m-%d"))   
+                            # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                            datetime_catalog[1][i] = datetime_catalog[2][i] + " " + datetime_catalog[1][i]
+                        # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
+                        elif isinstance(datetime_catalog[2][i], str):
+                            # Si la donnée temporelle de la deuxième liste est une chaîne de caractères au format 'YYYY-MM-DD'
+                            if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', datetime_catalog[2][i])) == True:
+                                # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                datetime_catalog[1][i] = datetime_catalog[2][i] + " " + datetime_catalog[1][i]
+                    # Si la donnée temporelle est une chaîne de caractères qui n'est pas au format 'YYYY-MM-DD HH:MM:SS', 'YYYY-MM-DD' ou 'HH:MM:SS'
+                    elif bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]) (?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', datetime_catalog[1][i])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', datetime_catalog[1][i])) == False and bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', datetime_catalog[1][i])) == False:
+                        error_log.append("Date format not recognized for " + str(datetime_catalog[1][i]) + " . Data will be cleared.")
+                        # La donnée temporelle est nulle
+                        datetime_catalog[1][i] = str('')
+                # Sinon le type de donnée n'est pas correct
+                else:
+                    error_log.append("Incorrect data type for " + str(datetime_catalog[1][i]) + " : " + str(type(datetime_catalog[1][i])) + " . Data will be cleared.")
+                    # La donnée temporelle est nulle
+                    datetime_catalog[1][i] = str('') 
+            # Technique de slicing pour retirer toutes les listes de données temporelles sauf la première
+            datetime_catalog = datetime_catalog[:-(len(datetime_catalog)-2)]
+        # Sinon
+        else:
+            # Retourne les logs d'erreurs et le dataset xarray
+            return error_log, xarray_dataset
         # Ajout des données temporelles de la liste dans le tableau de données associé à la clé
         xarray_dataset['datetime'].values = np.array(datetime_catalog[1])
-        # Retourne les logs d'erreur et le dataset xarray
+        # Retourne les logs d'erreur et le dataset xarray actualisé
         return error_log, xarray_dataset
+
+
+def adapt_xarray_dataset(xarray_dataset: xr.Dataset):
+    # Parcours de chaque clé du dataset xarray
+    for key in list(xarray_dataset.data_vars.keys()):
+        # Si le tableau de données de la clé est vide
+        if np.all(xarray_dataset[key].values == 0) or np.all(xarray_dataset[key].values != xarray_dataset[key].values):
+            # Suppression des attributs de la variable
+            xarray_dataset[key].attrs.clear()
+            # Suppression de la variable
+            del xarray_dataset[key]
+    # Retourne le dataset xarray actualisé
+    return xarray_dataset
 
 
 
@@ -315,5 +439,6 @@ if __name__ == "__main__":
     xarray_dataset = create_xarray_dataset(dataframe)
     error_log, xarray_dataset = check_dataframe_integrity(error_log, dataframe, xarray_dataset, datetime_catalog)
     error_log, xarray_dataset = check_datetime_format(error_log, dataframe, xarray_dataset, datetime_catalog)
+    xarray_dataset = adapt_xarray_dataset(xarray_dataset)
     print(xarray_dataset, "\n", error_log)
     
