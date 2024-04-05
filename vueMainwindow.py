@@ -3,9 +3,9 @@
 
 
 
-from vueToolbar import vueToolbar
-from vueNetcdf import vueNetCDF
 from modeleMainwindow import modeleMainwindow
+from vueToolbar import vueToolbar
+from vueCatalog import vueCatalog
 
 
 
@@ -15,16 +15,8 @@ from modeleMainwindow import modeleMainwindow
 
 
 
-from typing_extensions import Self
-import xarray as xr
-import pandas as pd
-import numpy as np
-from datetime import datetime, date, time
-import re
-import os
 import sys
-from PyQt6.QtWidgets import QMainWindow, QApplication, QWidget, QTabWidget, QVBoxLayout, QPlainTextEdit, QHBoxLayout, QTableWidget, QListWidget, QScrollBar, QSlider, QComboBox, QLabel, QFileDialog, QPushButton, QMdiSubWindow
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QMainWindow, QApplication, QWidget, QTabWidget, QPlainTextEdit, QHBoxLayout, QVBoxLayout, QGroupBox
 
 
 
@@ -43,6 +35,9 @@ class vueMainwindow(QMainWindow):
     def __init__(self):
         
         super().__init__()
+        self.modelemainwindow = modeleMainwindow()
+        self.mainwindow_vuetoolbar = vueToolbar(self)
+        self.mainwindow_vuecatalog = vueCatalog(self)
         self.init_ui()
         
 
@@ -52,33 +47,34 @@ class vueMainwindow(QMainWindow):
     def init_ui(self):
         
         self.setWindowTitle("Project")
-        modeleMainwindow.screen_width = QApplication.primaryScreen().availableGeometry().width()
-        modeleMainwindow.screen_height = QApplication.primaryScreen().availableGeometry().height()
-        modeleMainwindow.set_screen_resolution(int(QApplication.primaryScreen().availableGeometry().width() * 0.40), int(QApplication.primaryScreen().availableGeometry().height() * 0.90))
-        self.setMinimumSize(modeleMainwindow.screen_width, modeleMainwindow.screen_height)
+        self.modelemainwindow.screen_width = QApplication.primaryScreen().availableGeometry().width()
+        self.modelemainwindow.screen_height = QApplication.primaryScreen().availableGeometry().height()
+        self.modelemainwindow.set_screen_resolution(int(QApplication.primaryScreen().availableGeometry().width()), int(QApplication.primaryScreen().availableGeometry().height() * 0.95))
+        self.setMinimumSize(self.modelemainwindow.screen_width, self.modelemainwindow.screen_height)
         
-        self.mainwindow_vuetoolbar = vueToolbar(self)
         self.addToolBar(self.mainwindow_vuetoolbar)
         
         self.mainwindow_central_widget = QWidget()
         self.setCentralWidget(self.mainwindow_central_widget)
         
-        self.mainwindow_layout = QVBoxLayout(self.mainwindow_central_widget)
-        self.mainwindow_tabwidget = QTabWidget()
-        self.mainwindow_vuenetcdf = vueNetCDF()
+        self.mainwindow_layout = QHBoxLayout(self.mainwindow_central_widget)
         
-        self.mainwindow_tabwidget.addTab(self.mainwindow_vuenetcdf, "Arrange Data")
+        self.mainwindow_vuecatalog_tabwidget = QTabWidget()
         
-        self.mainwindow_label = QLabel("Logs")
-        self.mainwindow_textarea = QPlainTextEdit()
+        self.mainwindow_vuecatalog_tabwidget.addTab(self.mainwindow_vuecatalog, "Arrange Data")
         
-        self.mainwindow_textarea.setReadOnly(True)
-        for log in modeleMainwindow.logs:
-            self.mainwindow_textarea.appendPlainText(str(log))
+        self.mainwindow_logs_groupbox = QGroupBox("Logs")
+        self.mainwindow_logs_groupbox_layout = QVBoxLayout()
+        self.mainwindow_logs_textarea = QPlainTextEdit()
         
-        self.mainwindow_layout.addWidget(self.mainwindow_tabwidget)
-        self.mainwindow_layout.addWidget(self.mainwindow_label)
-        self.mainwindow_layout.addWidget(self.mainwindow_textarea)
+        self.mainwindow_logs_groupbox.setMaximumWidth(int(self.modelemainwindow.screen_width * 0.25))
+        self.mainwindow_logs_textarea.setReadOnly(True)
+        
+        self.mainwindow_logs_groupbox_layout.addWidget(self.mainwindow_logs_textarea)
+        self.mainwindow_logs_groupbox.setLayout(self.mainwindow_logs_groupbox_layout)
+        
+        self.mainwindow_layout.addWidget(self.mainwindow_vuecatalog_tabwidget)
+        self.mainwindow_layout.addWidget(self.mainwindow_logs_groupbox)
 
 
 

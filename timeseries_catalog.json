@@ -40,39 +40,6 @@
                 "dtype": "object"
             }
         },
-        "latitude": {
-            "dimension": [
-                "lenstation"
-            ],
-            "attribute": {
-                "long_name": "latitude",
-                "standard_name": "lat",
-                "dtype": "float64",
-                "units": "Meters"
-            }
-        },
-        "longitude": {
-            "dimension": [
-                "lenstation"
-            ],
-            "attribute": {
-                "long_name": "longitude",
-                "standard_name": "lon",
-                "dtype": "float64",
-                "units": "Meters"
-            }
-        },
-        "depth": {
-            "dimension": [
-                "lenstation"
-            ],
-            "attribute": {
-                "long_name": "depth",
-                "standard_name": "profondeur",
-                "dtype": "float64",
-                "units": "Meters"
-            }
-        },
         "temperature": {
             "dimension": [
                 "lenstation"

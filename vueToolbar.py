@@ -15,7 +15,6 @@ from controleurToolbar import controleurToolbar
 
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QToolBar, QPushButton, QMenu
-from PyQt6.QtCore import pyqtSignal
 
 
 
@@ -44,7 +43,7 @@ class vueToolbar(QToolBar):
     
     def init_ui(self):
         
-        self.controleurToolbar = controleurToolbar(self)
+        self.controleurtoolbar = controleurToolbar(self)
         self.vuetoolbar_file = QMenu("")
         self.vuetoolbar_file.setTitle("File")
         # Ajout d'une action dans le menu contextuel de File
@@ -72,12 +71,12 @@ class vueToolbar(QToolBar):
     
     def connect_signals(self):
         
-        self.vuetoolbar_file_button.clicked.connect(self.controleurToolbar.file_clicked)
-        self.vuetoolbar_options_button.clicked.connect(self.controleurToolbar.options_clicked)
-        self.vuetoolbar_help_button.clicked.connect(self.controleurToolbar.help_clicked)
-        self.action_file.triggered.connect(self.controleurToolbar.import_option)
-        self.action_options.triggered.connect(self.controleurToolbar.resolution_option)
-        self.action_help.triggered.connect(self.controleurToolbar.about_option)
+        self.vuetoolbar_file_button.clicked.connect(self.controleurtoolbar.file_clicked)
+        self.vuetoolbar_options_button.clicked.connect(self.controleurtoolbar.options_clicked)
+        self.vuetoolbar_help_button.clicked.connect(self.controleurtoolbar.help_clicked)
+        self.action_file.triggered.connect(self.controleurtoolbar.import_option)
+        self.action_options.triggered.connect(self.controleurtoolbar.resolution_option)
+        self.action_help.triggered.connect(self.controleurtoolbar.about_option)
 
 
 

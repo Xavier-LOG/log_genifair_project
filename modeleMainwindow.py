@@ -1,4 +1,4 @@
-# Définition de la classe modeleErrorLogs
+# Définition de la classe modeleMainwindow
 
 
 
@@ -6,23 +6,29 @@
 class modeleMainwindow:
     
     
-    logs: list = []
-    screen_width: int = 0
-    screen_height: int = 0
+    # Constructeur par défaut
     
     
-    # Définition des méthodes statiques
-    
-    
-    @staticmethod
-    def log(message):
+    def __init__(self):
         
-        modeleMainwindow.logs.append(message)
+        self.logs = []
+        self.screen_width = 0
+        self.screen_height = 0
+    
+    
+    # Définition des méthodes
+    
+    
+    def log(self, message):
+        
+        if len(self.logs) > 10:
+            self.logs = []
+        self.logs.append(message)
 
 
-    @staticmethod
-    def set_screen_resolution(width: int, height: int):
-        if width <= modeleMainwindow.screen_width:
-            modeleMainwindow.screen_width = width
-        if height <= modeleMainwindow.screen_height:
-            modeleMainwindow.screen_height = height
+    def set_screen_resolution(self, width, height):
+        
+        if width <= self.screen_width:
+            self.screen_width = width
+        if height <= self.screen_height:
+            self.screen_height = height
