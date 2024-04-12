@@ -2,7 +2,7 @@
     "variable": {
         "id_station": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "id_station",
@@ -12,7 +12,7 @@
         },
         "mission": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "mission",
@@ -22,7 +22,7 @@
         },
         "num_station": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "num_station",
@@ -32,7 +32,7 @@
         },
         "datetime": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "datetime",
@@ -42,7 +42,7 @@
         },
         "temperature": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "temperature",
@@ -53,7 +53,7 @@
         },
         "salinity": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "salinity",
@@ -63,7 +63,7 @@
         },
         "turbidity": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "turbidity",
@@ -74,7 +74,7 @@
         },
         "chlorophyll-a": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "chlorophyll-a",
@@ -85,7 +85,7 @@
         },
         "suspended_particulate_matter": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "suspended_particulate_matter",
@@ -96,7 +96,7 @@
         },
         "particulate_organic_carbon": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "particulate_organic_carbon",
@@ -107,7 +107,7 @@
         },
         "dissolved_organic_carbon": {
             "dimension": [
-                "lenstation"
+                "Datetime"
             ],
             "attribute": {
                 "long_name": "dissolved_organic_carbon",
@@ -117,7 +117,7 @@
         }
     },
     "dimension": [
-        "lenstation"
+        "Datetime"
     ],
     "global_attribute": {
         "title": "CF File version 1"

@@ -1,28 +1,8 @@
 {
     "variable": {
-        "id_station": {
-            "dimension": [
-                "Datetime"
-            ],
-            "attribute": {
-                "long_name": "id_station",
-                "standard_name": "id_station",
-                "dtype": "object"
-            }
-        },
-        "mission": {
-            "dimension": [
-                "Datetime"
-            ],
-            "attribute": {
-                "long_name": "mission",
-                "standard_name": "mission",
-                "dtype": "object"
-            }
-        },
         "num_station": {
             "dimension": [
-                "Datetime"
+                "Rows"
             ],
             "attribute": {
                 "long_name": "num_station",
@@ -32,7 +12,7 @@
         },
         "datetime": {
             "dimension": [
-                "Datetime"
+                "Rows"
             ],
             "attribute": {
                 "long_name": "datetime",
@@ -42,7 +22,7 @@
         },
         "latitude": {
             "dimension": [
-                "Datetime"
+                "Rows"
             ],
             "attribute": {
                 "long_name": "latitude",
@@ -53,7 +33,7 @@
         },
         "longitude": {
             "dimension": [
-                "Datetime"
+                "Rows"
             ],
             "attribute": {
                 "long_name": "longitude",
@@ -64,7 +44,7 @@
         },
         "depth": {
             "dimension": [
-                "Datetime"
+                "Rows"
             ],
             "attribute": {
                 "long_name": "depth",
@@ -75,7 +55,7 @@
         }
     },
     "dimension": [
-        "Datetime"
+        "Rows"
     ],
     "global_attribute": {
         "title": "CF File version 1"

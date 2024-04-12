@@ -33,6 +33,7 @@ class vueCatalogviewer(QWidget):
         
         super().__init__(parent)
         self.vuecatalog = parent
+        self.textarea = QPlainTextEdit()
         self.controleurcatalogviewer = controleurCatalogviewer(self)
         self.init_ui()
 
@@ -45,16 +46,15 @@ class vueCatalogviewer(QWidget):
         # Layout associé à l'instance de la classe vueCatalogviewer
         self.vuecatalogviewer_layout = QVBoxLayout(self)
         
-        self.vuecatalogviewer_groupbox = QGroupBox("Catalog Viewer")
-        self.vuecatalogviewer_groupbox_layout = QVBoxLayout()
-        self.vuecatalogviewer_textarea = QPlainTextEdit()
+        self.groupbox = QGroupBox("Catalog Viewer")
+        self.groupbox_layout = QVBoxLayout()
         
-        self.vuecatalogviewer_textarea.setReadOnly(True)
+        self.textarea.setReadOnly(True)
         
-        self.vuecatalogviewer_groupbox_layout.addWidget(self.vuecatalogviewer_textarea)
-        self.vuecatalogviewer_groupbox.setLayout(self.vuecatalogviewer_groupbox_layout)
+        self.groupbox_layout.addWidget(self.textarea)
+        self.groupbox.setLayout(self.groupbox_layout)
         
-        self.vuecatalogviewer_layout.addWidget(self.vuecatalogviewer_groupbox)
+        self.vuecatalogviewer_layout.addWidget(self.groupbox)
 
 
 

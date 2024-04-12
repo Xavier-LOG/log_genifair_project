@@ -1,14 +1,3 @@
-# Importation des fichiers
-
-
-
-
-from modeleMainwindow import modeleMainwindow
-from controleurToolbar import controleurToolbar
-
-
-
-
 # Importation des bibliothèques
 
 
@@ -40,11 +29,11 @@ class modeleNetcdf:
     # Constructeur par défaut
     
     
-    def __init__(self: Self, dataframe: pd.DataFrame, xarray_dataset: xr.Dataset):
+    def __init__(self: Self, controleurlogs, dataframe: pd.DataFrame, xarray_dataset: xr.Dataset):
         
+        self.controleurlogs = controleurlogs
         self.dataframe: pd.DataFrame = dataframe
         self.xarray_dataset: xr.Dataset = xarray_dataset
-        self.modelemainwindow = modeleMainwindow()
     
     
     # Définition des méthodes
@@ -54,7 +43,8 @@ class modeleNetcdf:
         
         # Si le dataframe est vide
         if self.dataframe.empty:
-            self.modelemainwindow.log("Empty dataframe.")
+            self.controleurlogs.log("Empty dataframe.\n")
+            self.controleurlogs.addColoredText("Empty dataframe.\n", "red")
             self.dataframe = pd.DataFrame()
         # Sinon
         else:
@@ -80,7 +70,8 @@ class modeleNetcdf:
                                                 self.xarray_dataset[key].values = np.array(self.dataframe[column].iloc[:].tolist())
                                             # Sinon les données de la colonne du dataframe ne sont pas des valeurs de latitude
                                             else:
-                                                self.modelemainwindow.log("Latitude values are not between -90 and 90.")
+                                                self.controleurlogs.log("Latitude values are not between -90 and 90.\n")
+                                                self.controleurlogs.addColoredText("Latitude values are not between -90 and 90.\n", "red")
                                         # Si la clé est longitude
                                         elif key == 'longitude':
                                             # Si les données de la colonne du dataframe sont des valeurs de longitude
@@ -89,24 +80,28 @@ class modeleNetcdf:
                                                 self.xarray_dataset[key].values = np.array(self.dataframe[column].iloc[:].tolist())
                                             # Sinon les données de la colonne du dataframe ne sont pas des valeurs de longitude
                                             else:
-                                                self.modelemainwindow.log("Longitude values are not between -180 and 180.")
+                                                self.controleurlogs.log("Longitude values are not between -180 and 180.\n")
+                                                self.controleurlogs.addColoredText("Longitude values are not between -180 and 180.\n", "red")
                                         # Sinon la clé est une autre clé
                                         else:
                                             # Ajout des données de la colonne du dataframe dans le tableau de données associé à la clé
                                             self.xarray_dataset[key].values = np.array(self.dataframe[column].iloc[:].tolist())
                                     # Sinon
                                     else:
-                                        self.modelemainwindow.log("Less than 10 data are present in column " + column + " . Data will be not selected.")
+                                        self.controleurlogs.log("Less than 10 data are present in column " + column + " . Data will be not selected.\n")
+                                        self.controleurlogs.addColoredText("Less than 10 data are present in column " + column + " . Data will be not selected.\n", "red")
                                 # Sinon
                                 else:
-                                    self.modelemainwindow.log("Data type in column " + column + " : " + str(self.dataframe[column].dtype) + " does not match the type of the variable : " + key + " : " + self.xarray_dataset[key].attrs['dtype'] + " . Data will be not selected.")
+                                    self.controleurlogs.log("Data type in column " + column + " : " + str(self.dataframe[column].dtype) + " does not match the type of the variable : " + key + " : " + self.xarray_dataset[key].attrs['dtype'] + " . Data will be not selected.\n")
+                                    self.controleurlogs.addColoredText("Data type in column " + column + " : " + str(self.dataframe[column].dtype) + " does not match the type of the variable : " + key + " : " + self.xarray_dataset[key].attrs['dtype'] + " . Data will be not selected.\n", "red")
 
 
     def check_datetime_format(self: Self):
         
         # Si le dataframe est vide
         if self.dataframe.empty:
-            self.modelemainwindow.log("Empty dataframe.")
+            self.controleurlogs.log("Empty dataframe.\n")
+            self.controleurlogs.addColoredText("Empty dataframe.\n", "red")
             self.dataframe = pd.DataFrame()
         # Sinon
         else:
@@ -122,7 +117,8 @@ class modeleNetcdf:
                             modeleNetcdf.datetime_catalog.append(self.dataframe[column].iloc[:].tolist())
                         # Sinon
                         else:
-                            self.modelemainwindow.log("Less than 10 data are present in column " + column + " . Data will be not selected.")
+                            self.controleurlogs.log("Less than 10 data are present in column " + column + " . Data will be not selected.\n")
+                            self.controleurlogs.addColoredText("Less than 10 data are present in column " + column + " . Data will be not selected.\n", "red")
             # Si le catalogue contient une liste de noms possibles pour la variable datetime et une liste de données temporelles
             if len(modeleNetcdf.datetime_catalog) == 2:
                 # Parcours de la première donnée temporelle jusqu'à la dernière dans la liste
@@ -145,17 +141,20 @@ class modeleNetcdf:
                         modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%H:%M:%S"))    
                     # Si la donnée temporelle est une chaîne de caractères
                     elif isinstance(modeleNetcdf.datetime_catalog[1][i], str):
-                        # Si la donnée temporelle n'est pas au format 'YYYY-MM-DD HH:MM:SS', 'YYYY-MM-DD' ou 'HH:MM:SS'
-                        if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]) (?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False:
+                        # Si la donnée temporelle n'est pas au format 'YYYY-MM-DD HH:MM:SS', 'YYYY-MM-DDTHH:MM:SS', 'YYYY-MM-DD' et 'HH:MM:SS'
+                        if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]) (?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])T(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False:
                             # La donnée temporelle est nulle
                             modeleNetcdf.datetime_catalog[1][i] = str('')
                     # Sinon le type de donnée n'est pas correct
                     else:
-                        self.modelemainwindow.log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.")
+                        self.controleurlogs.log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n")
+                        self.controleurlogs.addColoredText("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n", "red")
                         # La donnée temporelle est nulle
                         modeleNetcdf.datetime_catalog[1][i] = str('')  
                 # Ajout des données temporelles de la liste dans le tableau de données associé à la clé
-                self.xarray_dataset['datetime'].values = np.array(modeleNetcdf.datetime_catalog[1])  
+                self.xarray_dataset['datetime'].values = np.array(modeleNetcdf.datetime_catalog[1])
+                # Technique de slicing pour retirer la liste de données temporelles
+                modeleNetcdf.datetime_catalog = modeleNetcdf.datetime_catalog[:-1]
             # Si le catalogue contient une liste de noms possibles pour la variable datetime et 2 listes de données temporelles
             elif len(modeleNetcdf.datetime_catalog) == 3:
                 # Parcours de la première donnée temporelle jusqu'à la dernière dans la liste
@@ -250,18 +249,22 @@ class modeleNetcdf:
                                     modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[2][i] + " " + modeleNetcdf.datetime_catalog[1][i]
                         # Si la donnée temporelle est une chaîne de caractères qui n'est pas au format 'YYYY-MM-DD HH:MM:SS', 'YYYY-MM-DD' ou 'HH:MM:SS'
                         elif bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]) (?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False:
-                            self.modelemainwindow.log("Date format not recognized for " + str(modeleNetcdf.datetime_catalog[1][i]) + " . Data will be cleared.")
+                            self.controleurlogs.log("Date format not recognized for " + str(modeleNetcdf.datetime_catalog[1][i]) + " . Data will be cleared.\n")
+                            self.controleurlogs.addColoredText("Date format not recognized for " + str(modeleNetcdf.datetime_catalog[1][i]) + " . Data will be cleared.\n", "red")
                             # La donnée temporelle est nulle
                             modeleNetcdf.datetime_catalog[1][i] = str('')
                     # Sinon le type de donnée n'est pas correct
                     else:
-                        self.modelemainwindow.log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.")
+                        self.controleurlogs.log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n")
+                        self.controleurlogs.addColoredText("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n", "red")
                         # La donnée temporelle est nulle
                         modeleNetcdf.datetime_catalog[1][i] = str('') 
                 # Technique de slicing pour retirer toutes les listes de données temporelles sauf la première
                 modeleNetcdf.datetime_catalog = modeleNetcdf.datetime_catalog[:-(len(modeleNetcdf.datetime_catalog)-2)]
                 # Ajout des données temporelles de la liste dans le tableau de données associé à la clé
                 self.xarray_dataset['datetime'].values = np.array(modeleNetcdf.datetime_catalog[1])
+                # Technique de slicing pour retirer la liste de données temporelles
+                modeleNetcdf.datetime_catalog = modeleNetcdf.datetime_catalog[:-1]
 
 
     def adapt_xarray_dataset(self: Self):
@@ -290,13 +293,13 @@ class modeleNetcdf:
     
     
     @staticmethod
-    def create_xarray_dataset(dataframe: pd.DataFrame):
+    def create_xarray_dataset(dataframe: pd.DataFrame, catalog_path: str):
         
         # Initialisation du dataset xarray
         xarray_dataset = xr.Dataset()
         
         # Chargement le fichier JSON
-        with open('./catalog.json', 'r') as f:
+        with open(catalog_path, "r") as f:
             catalog = json.load(f)
             
         # Accès à chaque valeur de chaque attribut du catalogue
@@ -305,7 +308,7 @@ class modeleNetcdf:
         global_attribute_catalog = catalog['global_attribute']
         
         for dimension in dimension_catalog:
-            xarray_dataset.coords[dimension] = np.arange(dataframe.shape[0])
+            xarray_dataset.coords[dimension] = np.arange(0, dataframe.shape[0])
         
         for variable_name, variable_data in variable_catalog.items():
             xarray_dataset[variable_name] = xr.DataArray(np.zeros(dataframe.shape[0]), dims=variable_data['dimension'])
@@ -328,12 +331,19 @@ class modeleNetcdf:
 if __name__ == '__main__':
     
     from vueMainwindow import vueMainwindow
+    from vueLogs import vueLogs
+    from controleurLogs import controleurLogs
+    from controleurToolbar import controleurToolbar
     from vueToolbar import vueToolbar
     import sys
     from PyQt6.QtWidgets import QApplication
     
     app = QApplication(sys.argv)
     vuemainwindow = vueMainwindow()
+    
+    vuelogs = vueLogs(vuemainwindow)
+    controleurlogs = controleurLogs(vuelogs)
+    
     vuetoolbar = vueToolbar(vuemainwindow)
     controleurtoolbar = controleurToolbar(vuetoolbar)
     controleurtoolbar.import_option()
@@ -342,9 +352,9 @@ if __name__ == '__main__':
     dataframe = controleurtoolbar.dataframe
     
     # Initialisation du dataset xarray
-    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe)
+    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, './profil_catalog.json')
     
-    modelenetcdf = modeleNetcdf(dataframe, xarray_dataset)
+    modelenetcdf = modeleNetcdf(controleurlogs, dataframe, xarray_dataset)
     modelenetcdf.check_dataframe_integrity()
     modelenetcdf.check_datetime_format()
     modelenetcdf.adapt_xarray_dataset()

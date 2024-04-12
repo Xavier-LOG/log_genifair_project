@@ -11,19 +11,11 @@ class modeleMainwindow:
     
     def __init__(self):
         
-        self.logs = []
         self.screen_width = 0
         self.screen_height = 0
     
     
     # Définition des méthodes
-    
-    
-    def log(self, message):
-        
-        if len(self.logs) > 10:
-            self.logs = []
-        self.logs.append(message)
 
 
     def set_screen_resolution(self, width, height):

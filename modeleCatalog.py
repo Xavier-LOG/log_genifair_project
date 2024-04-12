@@ -4,6 +4,7 @@
 
 
 import json
+import os
 
 
 
@@ -21,7 +22,7 @@ class modeleCatalog:
     
     def __init__(self):
         
-        self.catalog_name = ""
+        self.catalog_path = ""
     
     
     # Définition des méthodes
@@ -29,14 +30,17 @@ class modeleCatalog:
     
     def read_json(self):
         
-        # Chargement le fichier JSON
-        with open('./' + self.catalog_name, 'r') as f:
-            catalog = json.load(f)
+        catalog = {}
+        if self.catalog_path != "":
+            if os.path.getsize(self.catalog_path) != 0:
+                # Chargement le fichier JSON
+                with open(self.catalog_path, 'r') as f:
+                    catalog = json.load(f)
         return catalog
     
     
     def write_json(self, catalog):
         
         # Ecriture du fichier JSON 
-        with open('./' + self.catalog_name, "w") as f:
+        with open(self.catalog_path, "w") as f:
             json.dump(catalog, f, indent = 4)

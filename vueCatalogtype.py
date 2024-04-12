@@ -46,55 +46,63 @@ class vueCatalogtype(QWidget):
         # Layout associé à l'instance de la classe vueCatalogtype
         self.vuecatalogtype_layout = QVBoxLayout(self)
         
-        self.vuecatalogtype_groupbox = QGroupBox("Catalog Type")
-        self.vuecatalogtype_groupbox_layout = QVBoxLayout()
+        self.groupbox = QGroupBox("Catalog Type")
+        self.groupbox_layout = QVBoxLayout()
         
-        self.vuecatalogtype_groupbox_checkbox_layout = QHBoxLayout()
-        self.vuecatalogtype_groupbox_trajectory_catalog_checkbox = QCheckBox("Trajectory Catalog")
-        self.vuecatalogtype_groupbox_time_series_catalog_checkbox = QCheckBox("Time Series Catalog")
-        self.vuecatalogtype_groupbox_profil_catalog_checkbox = QCheckBox("Profil Catalog")
+        self.groupbox_checkbox_layout = QHBoxLayout()
+        self.groupbox_trajectory_catalog_checkbox = QCheckBox("Trajectory Catalog")
+        self.groupbox_time_series_catalog_checkbox = QCheckBox("Time Series Catalog")
+        self.groupbox_profil_catalog_checkbox = QCheckBox("Profil Catalog")
+        self.groupbox_sampling_catalog_checkbox = QCheckBox("Sampling Catalog")
         
-        self.vuecatalogtype_groupbox_trajectory_catalog_checkbox.setEnabled(True)
-        self.vuecatalogtype_groupbox_time_series_catalog_checkbox.setEnabled(True)
-        self.vuecatalogtype_groupbox_profil_catalog_checkbox.setEnabled(True)
+        self.groupbox_trajectory_catalog_checkbox.setEnabled(True)
+        self.groupbox_time_series_catalog_checkbox.setEnabled(True)
+        self.groupbox_profil_catalog_checkbox.setEnabled(True)
+        self.groupbox_sampling_catalog_checkbox.setEnabled(True)
         
-        self.vuecatalogtype_groupbox_checkbox_layout.addWidget(self.vuecatalogtype_groupbox_trajectory_catalog_checkbox)
-        self.vuecatalogtype_groupbox_checkbox_layout.addWidget(self.vuecatalogtype_groupbox_time_series_catalog_checkbox)
-        self.vuecatalogtype_groupbox_checkbox_layout.addWidget(self.vuecatalogtype_groupbox_profil_catalog_checkbox)
+        self.groupbox_checkbox_layout.addWidget(self.groupbox_trajectory_catalog_checkbox)
+        self.groupbox_checkbox_layout.addWidget(self.groupbox_time_series_catalog_checkbox)
+        self.groupbox_checkbox_layout.addWidget(self.groupbox_profil_catalog_checkbox)
+        self.groupbox_checkbox_layout.addWidget(self.groupbox_sampling_catalog_checkbox)
         
-        self.vuecatalogtype_groupbox_button_layout = QHBoxLayout()
-        self.vuecatalogtype_groupbox_confirm_button = QPushButton("Confirm")
-        self.vuecatalogtype_groupbox_cancel_button = QPushButton("Cancel")
+        self.groupbox_button_layout = QHBoxLayout()
+        self.groupbox_confirm_button = QPushButton("Confirm")
+        self.groupbox_cancel_button = QPushButton("Cancel")
         
-        self.vuecatalogtype_groupbox_confirm_button.setEnabled(False)
-        self.vuecatalogtype_groupbox_cancel_button.setEnabled(False)
+        self.groupbox_confirm_button.setEnabled(False)
+        self.groupbox_cancel_button.setEnabled(False)
         
-        self.vuecatalogtype_groupbox_button_layout.addWidget(self.vuecatalogtype_groupbox_confirm_button)
-        self.vuecatalogtype_groupbox_button_layout.addWidget(self.vuecatalogtype_groupbox_cancel_button)
+        self.groupbox_button_layout.addWidget(self.groupbox_confirm_button)
+        self.groupbox_button_layout.addWidget(self.groupbox_cancel_button)
         
-        self.vuecatalogtype_groupbox_catalog_restore_layout = QHBoxLayout()
-        self.vuecatalogtype_groupbox_catalog_restore_button = QPushButton("Restore")
+        self.groupbox_open_layout = QHBoxLayout()
+        self.groupbox_restore_button = QPushButton("Restore")
+        self.groupbox_open_button = QPushButton("Open")
         
-        self.vuecatalogtype_groupbox_catalog_restore_button.setEnabled(False)
+        self.groupbox_restore_button.setEnabled(False)
+        self.groupbox_open_button.setEnabled(False)
         
-        self.vuecatalogtype_groupbox_catalog_restore_layout.addWidget(self.vuecatalogtype_groupbox_catalog_restore_button)
+        self.groupbox_open_layout.addWidget(self.groupbox_restore_button)
+        self.groupbox_open_layout.addWidget(self.groupbox_open_button)
         
-        self.vuecatalogtype_groupbox_layout.addLayout(self.vuecatalogtype_groupbox_checkbox_layout)
-        self.vuecatalogtype_groupbox_layout.addLayout(self.vuecatalogtype_groupbox_button_layout)
-        self.vuecatalogtype_groupbox_layout.addLayout(self.vuecatalogtype_groupbox_catalog_restore_layout)
-        self.vuecatalogtype_groupbox.setLayout(self.vuecatalogtype_groupbox_layout)
+        self.groupbox_layout.addLayout(self.groupbox_checkbox_layout)
+        self.groupbox_layout.addLayout(self.groupbox_button_layout)
+        self.groupbox_layout.addLayout(self.groupbox_open_layout)
+        self.groupbox.setLayout(self.groupbox_layout)
         
-        self.vuecatalogtype_layout.addWidget(self.vuecatalogtype_groupbox)
+        self.vuecatalogtype_layout.addWidget(self.groupbox)
     
     
     def connect_signals(self):
         
-        self.vuecatalogtype_groupbox_trajectory_catalog_checkbox.toggled.connect(self.controleurcatalogtype.trajectory_catalog)
-        self.vuecatalogtype_groupbox_time_series_catalog_checkbox.toggled.connect(self.controleurcatalogtype.timeseries_catalog)
-        self.vuecatalogtype_groupbox_profil_catalog_checkbox.toggled.connect(self.controleurcatalogtype.profil_catalog)
-        self.vuecatalogtype_groupbox_confirm_button.clicked.connect(self.controleurcatalogtype.confirm)
-        self.vuecatalogtype_groupbox_cancel_button.clicked.connect(self.controleurcatalogtype.cancel)
-        self.vuecatalogtype_groupbox_catalog_restore_button.clicked.connect(self.controleurcatalogtype.restore)
+        self.groupbox_trajectory_catalog_checkbox.toggled.connect(self.controleurcatalogtype.trajectory_catalog)
+        self.groupbox_time_series_catalog_checkbox.toggled.connect(self.controleurcatalogtype.timeseries_catalog)
+        self.groupbox_profil_catalog_checkbox.toggled.connect(self.controleurcatalogtype.profil_catalog)
+        self.groupbox_sampling_catalog_checkbox.toggled.connect(self.controleurcatalogtype.sampling_catalog)
+        self.groupbox_confirm_button.clicked.connect(self.controleurcatalogtype.confirm)
+        self.groupbox_cancel_button.clicked.connect(self.controleurcatalogtype.cancel)
+        self.groupbox_restore_button.clicked.connect(self.controleurcatalogtype.restore)
+        self.groupbox_open_button.clicked.connect(self.controleurcatalogtype.open)
 
 
 

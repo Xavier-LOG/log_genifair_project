@@ -36,11 +36,10 @@ class vueCatalog(QWidget):
     def __init__(self, parent):
         
         super().__init__(parent)
-        self.mainwindow = parent
+        self.vuemainwindow = parent
         self.modelecatalog = modeleCatalog()
-        # vueCatalogviewer doit être initialisé avant vueCatalogtype pour pouvoir charger le type de catalogue
-        self.vuecatalogviewer = vueCatalogviewer(self)
         self.vuecatalogtype = vueCatalogtype(self)
+        self.vuecatalogviewer = vueCatalogviewer(self)
         self.vuecatalogsettings = vueCatalogsettings(self)
         self.controleurcatalog = controleurCatalog(self)
         self.vuecatalogviewer.setEnabled(False)
@@ -57,32 +56,33 @@ class vueCatalog(QWidget):
         # Layout associé à l'instance de la classe vueCatalog
         self.vuecatalog_layout = QVBoxLayout(self)
         
-        self.vuecatalog_groupbox = QGroupBox("Catalog")
-        self.vuecatalog_groupbox_layout = QVBoxLayout()
+        self.groupbox = QGroupBox("Catalog")
+        self.groupbox_layout = QVBoxLayout()
         
-        self.vuecatalog_groupbox_viewersettings_layout = QHBoxLayout()
+        self.groupbox_viewersettings_layout = QHBoxLayout()
 
-        self.vuecatalog_groupbox_viewersettings_layout.addWidget(self.vuecatalogviewer)
-        self.vuecatalog_groupbox_viewersettings_layout.addWidget(self.vuecatalogsettings)
+        self.groupbox_viewersettings_layout.addWidget(self.vuecatalogviewer)
+        self.groupbox_viewersettings_layout.addWidget(self.vuecatalogsettings)
 
-        self.vuecatalog_save_button = QPushButton("Save Catalog")
-        self.vuecatalog_confirm_button = QPushButton("Confirm Catalog")
+        self.save_button = QPushButton("Save Catalog")
+        self.confirm_button = QPushButton("Confirm Catalog")
         
-        self.vuecatalog_save_button.setEnabled(False)
-        self.vuecatalog_confirm_button.setEnabled(False)
+        self.save_button.setEnabled(False)
+        self.confirm_button.setEnabled(False)
 
-        self.vuecatalog_groupbox_layout.addWidget(self.vuecatalogtype)
-        self.vuecatalog_groupbox_layout.addLayout(self.vuecatalog_groupbox_viewersettings_layout)
-        self.vuecatalog_groupbox_layout.addWidget(self.vuecatalog_save_button)
-        self.vuecatalog_groupbox_layout.addWidget(self.vuecatalog_confirm_button)
-        self.vuecatalog_groupbox.setLayout(self.vuecatalog_groupbox_layout)
+        self.groupbox_layout.addWidget(self.vuecatalogtype)
+        self.groupbox_layout.addLayout(self.groupbox_viewersettings_layout)
+        self.groupbox_layout.addWidget(self.save_button)
+        self.groupbox_layout.addWidget(self.confirm_button)
+        self.groupbox.setLayout(self.groupbox_layout)
         
-        self.vuecatalog_layout.addWidget(self.vuecatalog_groupbox)
+        self.vuecatalog_layout.addWidget(self.groupbox)
     
     
     def connect_signals(self):
         
-        self.vuecatalog_save_button.clicked.connect(self.controleurcatalog.save)
+        self.save_button.clicked.connect(self.controleurcatalog.save)
+        self.confirm_button.clicked.connect(self.controleurcatalog.confirm)
 
 
 
