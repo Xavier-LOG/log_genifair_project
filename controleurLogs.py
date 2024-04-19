@@ -19,23 +19,22 @@ class controleurLogs:
     # Constructeur par défaut
     
     
-    def __init__(self, vueLogs):
+    def __init__(self, vuelogs):
         
-        self.vueLogs = vueLogs
+        self.vuelogs = vuelogs
         self.logs = []
-    
-    
+        
     # Définition des méthodes
 
 
-    def log(self, message):
+    def add_log(self, log):
         
         if len(self.logs) % 10 == 0:
-            self.vueLogs.groupbox_textarea.setPlainText("")
-        self.logs.append(message)
+            self.vuelogs.groupbox_textarea.setPlainText("")
+        self.logs.append(log)
 
     
-    def addColoredText(self, text, color):
+    def add_colored_log(self, log, color):
         
         format = QTextCharFormat()
         if color == "red":
@@ -44,7 +43,6 @@ class controleurLogs:
             format.setForeground(QColor("orange"))
         else:
             format.setForeground(QColor("green"))
-
-        cursor = self.vueLogs.groupbox_textarea.textCursor()
+        cursor = self.vuelogs.groupbox_textarea.textCursor()
         cursor.movePosition(QTextCursor.MoveOperation.End)
-        cursor.insertText(text, format)
+        cursor.insertText(log, format)

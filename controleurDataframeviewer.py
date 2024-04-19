@@ -23,27 +23,21 @@ class controleurDataframeviewer:
         
         super().__init__()
         self.vuedataframeviewer = vuedataframeviewer
-        self.controleurlogs = self.vuedataframeviewer.vueconversion.vuemainwindow.vuelogs.controleurlogs
-        self.signal = self.vuedataframeviewer.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.signal
-        self.signal.connect(self.load_dataframe)
     
     
     # Définition des méthodes
     
     
-    def load_dataframe(self, obj):
-
-        self.controleurlogs.log("Dataframe has been loaded.\n")
-        self.controleurlogs.addColoredText("Dataframe has been loaded.\n", "green")
+    def load_dataframe(self):
         
-        self.vuedataframeviewer.vueconversion.vuemainwindow.tabwidget.setTabEnabled(1, True)
-        self.vuedataframeviewer.vueconversion.vuemainwindow.tabwidget.setCurrentIndex(1)
-        self.vuedataframeviewer.vueconversion.setEnabled(True)
         # Chargement du dataframe dans vueDataframeviewer
-        self.vuedataframeviewer.groupbox_tablewidget.setRowCount(len(obj[0].columns))
-        self.vuedataframeviewer.groupbox_tablewidget.setColumnCount(len(obj[0].index))
-        self.vuedataframeviewer.groupbox_tablewidget.setHorizontalHeaderLabels(list(obj[0].columns))
-        for row in range(len(obj[0].index)):
-            for col in range(len(obj[0].columns)):
-                item = str(obj[0].iloc[row, col])
+        self.vuedataframeviewer.groupbox_tablewidget.setRowCount(len(self.vuedataframeviewer.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[0].columns))
+        self.vuedataframeviewer.groupbox_tablewidget.setColumnCount(len(self.vuedataframeviewer.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[0].index))
+        self.vuedataframeviewer.groupbox_tablewidget.setHorizontalHeaderLabels(list(self.vuedataframeviewer.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[0].columns))
+        for row in range(len(self.vuedataframeviewer.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[0].index)):
+            for col in range(len(self.vuedataframeviewer.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[0].columns)):
+                item = str(self.vuedataframeviewer.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[0].iloc[row, col])
                 self.vuedataframeviewer.groupbox_tablewidget.setItem(row, col, QTableWidgetItem(item))
+
+        self.vuedataframeviewer.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Dataframe has been loaded.\n")
+        self.vuedataframeviewer.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Dataframe has been loaded.\n", "green")

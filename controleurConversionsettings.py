@@ -13,9 +13,7 @@ from modeleNetcdf import modeleNetcdf
 
 
 
-import pandas as pd
 from PyQt6.QtWidgets import QFileDialog
-from PyQt6.QtCore import pyqtSignal, QObject
 
 
 
@@ -25,10 +23,7 @@ from PyQt6.QtCore import pyqtSignal, QObject
 
 
 
-class controleurConversionsettings(QObject):
-
-
-    signal_modelenetcdf = pyqtSignal(modeleNetcdf)
+class controleurConversionsettings:
 
 
     # Constructeur par défaut
@@ -38,47 +33,34 @@ class controleurConversionsettings(QObject):
         
         super().__init__()
         self.vueconversionsettings = vueconversionsettings
-        self.controleurlogs = self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs
-        self.dataframe = pd.DataFrame()
-        self.catalog_path = ""
-        self.file = ""
-        self.signal = self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.signal
-        self.signal.connect(self.set_attrs)
     
     
     # Définition des méthodes
     
     
-    def set_attrs(self, obj):
-        
-        self.dataframe = obj[0]
-        self.catalog_path = obj[1]
-        self.file = obj[2]
-    
-    
     def convert(self):
 
-        modelenetcdf = modeleNetcdf(self.controleurlogs, self.dataframe, modeleNetcdf.create_xarray_dataset(self.dataframe, self.catalog_path))
-        modelenetcdf.check_dataframe_integrity()
-        modelenetcdf.check_datetime_format()
-        modelenetcdf.adapt_xarray_dataset()
-        if modelenetcdf.get_xarray_dataset():
-            self.signal_modelenetcdf.emit(modelenetcdf)
-            self.controleurlogs.log("Netcdf file has been created. Please, select a save location to proceed.\n")
-            self.controleurlogs.addColoredText("Netcdf file has been created. Please, select a save location to proceed.\n", "green")
-            file_path, _ = QFileDialog.getSaveFileName(self.vueconversionsettings, "Save NetCDF File", self.file[:self.file.find(".")] + ".nc", "NetCDF File (*.nc)")
-            if file_path:
-                if file_path.endswith(".nc"):
-                    with open(file_path, "w") as f:
-                        modelenetcdf.get_xarray_dataset().to_netcdf(file_path)
-                        self.controleurlogs.log("Netcdf file has been saved. Click on Cancel in Arrange Data to convert a new file again.\n")
-                        self.controleurlogs.addColoredText("Netcdf file has been saved. Click on Cancel in Arrange Data to convert a new file again.\n", "green")
-                else:
-                    self.controleurlogs.log("Incorrect file format. Click on Cancel in Arrange Data to convert a new file again.\n")
-                    self.controleurlogs.addColoredText("Incorrect file format. Click on Cancel in Arrange Data to convert a new file again.\n", "red")
+        file_path, _ = QFileDialog.getSaveFileName(self.vueconversionsettings, "Save NetCDF File", self.vueconversionsettings.vueconversion.vuemainwindow.vuecatalog.modelecatalog.path_list_files[1][0][:self.vueconversionsettings.vueconversion.vuemainwindow.vuecatalog.modelecatalog.path_list_files[1][0].find(".")] + ".nc", "NetCDF File (*.nc)")
+        if file_path:
+            if file_path.endswith(".nc"):
+                for i in range(0, len(self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list)):
+                    conversionlogs = self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs
+                    dataframe = self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[i]
+                    catalog_path = self.vueconversionsettings.vueconversion.vuemainwindow.vuecatalog.modelecatalog.path_list_files[0]
+                    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, catalog_path)
+                    modelenetcdf = modeleNetcdf(conversionlogs, dataframe, xarray_dataset)
+                    modelenetcdf.check_dataframe_integrity()
+                    modelenetcdf.check_datetime_format()
+                    modelenetcdf.adapt_xarray_dataset()
+                    if modelenetcdf.get_xarray_dataset():
+                        modelenetcdf.get_xarray_dataset().to_netcdf(str(file_path[:file_path.find(".")]) + "_" + str(i + 1) + ".nc")
+                        if i == len(self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list) - 1:
+                            self.vueconversionsettings.vueconversion.vuenetcdfviewer.controleurnetcdfviewer.load_netcdf(modelenetcdf)
+                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Netcdf files have been saved. Click on Cancel in Arrange Data to convert a new file again.\n")
+                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Netcdf files have been saved. Click on Cancel in Arrange Data to convert a new file again.\n", "green")
             else:
-                self.controleurlogs.log("NetCDF file has not been saved. Click on Cancel in Arrange Data to convert a new file again.\n")
-                self.controleurlogs.addColoredText("NetCDF file has not been saved. Click on Cancel in Arrange Data to convert a new file again.\n", "red")
+                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect file format. Click on Cancel in Arrange Data to convert a new file again.\n")
+                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect file format. Click on Cancel in Arrange Data to convert a new file again.\n", "red")
         else:
-            self.controleurlogs.log("Incorrect file content. Click on Cancel in Arrange Data to convert a new file again.\n")
-            self.controleurlogs.addColoredText("Incorrect file content. Click on Cancel in Arrange Data to convert a new file again.\n", "red")
+            self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("NetCDF file has not been saved. Click on Cancel in Arrange Data to convert a new file again.\n")
+            self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("NetCDF file has not been saved. Click on Cancel in Arrange Data to convert a new file again.\n", "red")

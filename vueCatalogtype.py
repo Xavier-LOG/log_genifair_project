@@ -24,14 +24,14 @@ from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QPushButton, QChe
 
 
 class vueCatalogtype(QWidget):
-    
+
     
     # Constructeur par défaut
-    
+
     
     def __init__(self, parent):
         
-        super().__init__(parent)
+        super().__init__(parent)        
         self.vuecatalog = parent
         self.controleurcatalogtype = controleurCatalogtype(self)
         self.init_ui()
@@ -39,7 +39,7 @@ class vueCatalogtype(QWidget):
 
 
     # Définition des méthodes
-    
+
     
     def init_ui(self):
 
@@ -91,7 +91,7 @@ class vueCatalogtype(QWidget):
         self.groupbox.setLayout(self.groupbox_layout)
         
         self.vuecatalogtype_layout.addWidget(self.groupbox)
-    
+
     
     def connect_signals(self):
         

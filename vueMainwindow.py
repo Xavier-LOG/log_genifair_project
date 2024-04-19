@@ -33,11 +33,11 @@ class vueMainwindow(QMainWindow):
     
     
     # Constructeur par défaut
-    
+
     
     def __init__(self):
         
-        super().__init__()
+        super().__init__()        
         self.modelemainwindow = modeleMainwindow()
         self.modelemainwindow.screen_width = QApplication.primaryScreen().availableGeometry().width()
         self.modelemainwindow.screen_height = QApplication.primaryScreen().availableGeometry().height()

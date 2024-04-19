@@ -64,16 +64,16 @@ class vueCatalog(QWidget):
         self.groupbox_viewersettings_layout.addWidget(self.vuecatalogviewer)
         self.groupbox_viewersettings_layout.addWidget(self.vuecatalogsettings)
 
-        self.save_button = QPushButton("Save Catalog")
-        self.confirm_button = QPushButton("Confirm Catalog")
+        self.groupbox_save_button = QPushButton("Save Catalog")
+        self.groupbox_confirm_button = QPushButton("Confirm Catalog")
         
-        self.save_button.setEnabled(False)
-        self.confirm_button.setEnabled(False)
+        self.groupbox_save_button.setEnabled(False)
+        self.groupbox_confirm_button.setEnabled(False)
 
         self.groupbox_layout.addWidget(self.vuecatalogtype)
         self.groupbox_layout.addLayout(self.groupbox_viewersettings_layout)
-        self.groupbox_layout.addWidget(self.save_button)
-        self.groupbox_layout.addWidget(self.confirm_button)
+        self.groupbox_layout.addWidget(self.groupbox_save_button)
+        self.groupbox_layout.addWidget(self.groupbox_confirm_button)
         self.groupbox.setLayout(self.groupbox_layout)
         
         self.vuecatalog_layout.addWidget(self.groupbox)
@@ -81,8 +81,8 @@ class vueCatalog(QWidget):
     
     def connect_signals(self):
         
-        self.save_button.clicked.connect(self.controleurcatalog.save)
-        self.confirm_button.clicked.connect(self.controleurcatalog.confirm)
+        self.groupbox_save_button.clicked.connect(self.controleurcatalog.save)
+        self.groupbox_confirm_button.clicked.connect(self.controleurcatalog.confirm)
 
 
 

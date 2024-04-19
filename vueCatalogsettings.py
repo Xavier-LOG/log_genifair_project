@@ -559,6 +559,7 @@ class vueCatalogsettings(QWidget):
 
         self.groupbox = QGroupBox("Catalog Settings")
         self.groupbox_layout = QVBoxLayout()
+        self.button = QPushButton("Fill Catalog With File")
         self.tabwidget = QTabWidget()
         self.dimension_tabwidget = DimensionTabWidget()
         self.variable_tabwidget = VariableTabWidget()
@@ -568,6 +569,7 @@ class vueCatalogsettings(QWidget):
         self.tabwidget.addTab(self.variable_tabwidget, "Variable")
         self.tabwidget.addTab(self.attribute_tabwidget, "Global Information")
 
+        self.groupbox_layout.addWidget(self.button)
         self.groupbox_layout.addWidget(self.tabwidget)
         self.groupbox.setLayout(self.groupbox_layout)
         
@@ -575,6 +577,8 @@ class vueCatalogsettings(QWidget):
     
     
     def connect_signals(self):
+        
+        self.button.clicked.connect(self.controleurcatalogsettings.fill_catalog)
         
         self.dimension_tabwidget.add_name_button.clicked.connect(self.controleurcatalogsettings.dimension_name_add)
         

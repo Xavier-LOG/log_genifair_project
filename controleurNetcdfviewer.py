@@ -13,8 +13,6 @@ class controleurNetcdfviewer:
         
         super().__init__()
         self.vuenetcdfviewer = vuenetcdfviewer
-        self.signal = self.vuenetcdfviewer.vueconversion.vueconversionsettings.controleurconversionsettings.signal_modelenetcdf
-        self.signal.connect(self.load_netcdf)
         
     
     # Définition des méthodes

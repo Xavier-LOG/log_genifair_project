@@ -1,3 +1,13 @@
+# Importation des bibliothèques
+
+
+
+
+import os
+
+
+
+
 # Définition de la classe controleurCatalogviewer
 
 
@@ -13,10 +23,6 @@ class controleurCatalogviewer:
         
         super().__init__()
         self.vuecatalogviewer = vuecatalogviewer
-        self.modelecatalog = self.vuecatalogviewer.vuecatalog.modelecatalog
-        self.controleurlogs = self.vuecatalogviewer.vuecatalog.vuemainwindow.vuelogs.controleurlogs
-        self.signal = self.vuecatalogviewer.vuecatalog.vuecatalogtype.controleurcatalogtype.signal
-        self.signal.connect(self.load_catalog)
 
     
     # Définition des méthodes
@@ -25,16 +31,16 @@ class controleurCatalogviewer:
     def load_catalog(self):
         
         # Mise à jour du catalogue dans la vue
-        self.vuecatalogviewer.textarea.setPlainText("")
+        self.vuecatalogviewer.groupbox_textarea.setPlainText("")
         
-        catalog = self.modelecatalog.read_json()
+        file_path: str = self.vuecatalogviewer.vuecatalog.modelecatalog.path_list_files[0]
+        catalog = self.vuecatalogviewer.vuecatalog.modelecatalog.read_json()
             
         if catalog:
-
-            self.controleurlogs.log("Catalog has been loaded.\n")
-            self.controleurlogs.addColoredText("Catalog has been loaded.\n", "green")
             
-            self.vuecatalogviewer.textarea.appendPlainText("\n" + self.vuecatalogviewer.vuecatalog.modelecatalog.catalog_path[:-5][2:].replace("_", " ").capitalize() + " : " + "\n")
+            catalog_name = file_path[:-5][2:].replace("_", " ").capitalize()
+            
+            self.vuecatalogviewer.groupbox_textarea.appendPlainText("\n" + os.path.basename(catalog_name) + " : " + "\n")
             
             # Accès à chaque valeur de chaque attribut du catalogue
             variable_catalog = catalog['variable']
@@ -42,19 +48,22 @@ class controleurCatalogviewer:
             global_attribute_catalog = catalog['global_attribute']
         
             # Affichage des dimensions du catalogue
-            self.vuecatalogviewer.textarea.appendPlainText(str("\nDimensions :\n"))
+            self.vuecatalogviewer.groupbox_textarea.appendPlainText(str("\nDimensions :\n"))
             for dimension in dimension_catalog:
-                self.vuecatalogviewer.textarea.appendPlainText(str(f"\t{dimension}"))
+                self.vuecatalogviewer.groupbox_textarea.appendPlainText(str(f"\t{dimension}"))
         
             # Affichage des variables du catalogue
-            self.vuecatalogviewer.textarea.appendPlainText("\nVariables :")
+            self.vuecatalogviewer.groupbox_textarea.appendPlainText("\nVariables :")
             for variable_name, variable_data in variable_catalog.items():
-                self.vuecatalogviewer.textarea.appendPlainText("\n\t" + str(variable_name) + "(" + str(variable_data['dimension']) + ")")
-                self.vuecatalogviewer.textarea.appendPlainText(str("\tVariable Information :"))
+                self.vuecatalogviewer.groupbox_textarea.appendPlainText("\n\t" + str(variable_name) + "(" + str(variable_data['dimension']) + ")")
+                self.vuecatalogviewer.groupbox_textarea.appendPlainText(str("\tVariable Information :"))
                 for attribute_name, attribute_value in variable_data['attribute'].items():
-                    self.vuecatalogviewer.textarea.appendPlainText(str(f"\t\t{attribute_name} : {attribute_value}"))
+                    self.vuecatalogviewer.groupbox_textarea.appendPlainText(str(f"\t\t{attribute_name} : {attribute_value}"))
         
             # Affichage des attributs globaux du catalogue
-            self.vuecatalogviewer.textarea.appendPlainText(str("\nGlobal Information :\n"))
+            self.vuecatalogviewer.groupbox_textarea.appendPlainText(str("\nGlobal Information :\n"))
             for global_attribute_name, global_attribute_value in global_attribute_catalog.items():
-                self.vuecatalogviewer.textarea.appendPlainText(str(f"\t{global_attribute_name} : {global_attribute_value}"))
+                self.vuecatalogviewer.groupbox_textarea.appendPlainText(str(f"\t{global_attribute_name} : {global_attribute_value}"))
+            
+            self.vuecatalogviewer.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Catalog has been loaded.\n")
+            self.vuecatalogviewer.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Catalog has been loaded.\n", "green")

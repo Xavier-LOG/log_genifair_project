@@ -18,51 +18,67 @@ class controleurCatalog:
 
 
     # Constructeur par défaut
-        
+
     
     def __init__(self, vuecatalog):
         
-        super().__init__()
+        super().__init__()        
         self.vuecatalog = vuecatalog
-        self.modelecatalog = self.vuecatalog.modelecatalog
-        self.controleurlogs = self.vuecatalog.vuemainwindow.vuelogs.controleurlogs
+        self.signal = self.vuecatalog.vuemainwindow.vuetoolbar.controleurtoolbar.signal
+        self.signal.connect(self.modify_path_list_files)
     
     
     # Définition des méthodes
     
     
-    def save(self):
+    def modify_path_list_files(self, obj):
         
-        catalog = self.modelecatalog.read_json()
-        # Si le catalogue existe
-        if catalog:
-            file_path, _ = QFileDialog.getSaveFileName(self.vuecatalog, "Save File", ".json", "JSON file (*.json)")
-            if file_path:
-                if file_path.endswith(".json"):
-                    with open(file_path, "w") as f:
-                        json.dump(catalog, f, indent = 4)
-                    self.controleurlogs.log("File has been saved.\n")
-                    self.controleurlogs.addColoredText("File has been saved.\n", "green")
+        self.vuecatalog.modelecatalog.path_list_files[1] = obj[0]
+    
+    
+    def save(self):
+    
+        file_path, _ = QFileDialog.getSaveFileName(self.vuecatalog, "Save File", ".json", "JSON file (*.json)")
+        if file_path and file_path.endswith(".json"):
+            catalog = self.vuecatalog.modelecatalog.read_json()
+            # Si le catalogue existe
+            if catalog:
+                with open(file_path, "w") as f:
+                    json.dump(catalog, f, indent = 4)
+                self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Files have been saved.\n")
+                self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Files have been saved.\n", "green")
+            # Sinon
+            else:
+                self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown catalog.\n")
+                self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown catalog.\n", "red")
         # Sinon
         else:
-            self.controleurlogs.log("Unknown catalog type.\n")
-            self.controleurlogs.addColoredText("Unknown catalog type.\n", "red")
+            self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown catalog type.\n")
+            self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown catalog type.\n", "red")
     
     
     def confirm(self):
         
-        catalog = self.modelecatalog.read_json()
-        # Si le catalogue existe
-        if catalog:
-            self.controleurlogs.log("Catalog confirmed. Please, import file(s) to proceed data.\n")
-            self.controleurlogs.addColoredText("Catalog confirmed. Please, import file(s) to proceed data.\n", "green")
-            self.vuecatalog.vuecatalogtype.groupbox_restore_button.setEnabled(False)
-            self.vuecatalog.vuecatalogtype.groupbox_open_button.setEnabled(False)
-            self.vuecatalog.vuecatalogsettings.setEnabled(False)
-            self.vuecatalog.save_button.setEnabled(False)
-            self.vuecatalog.confirm_button.setEnabled(False)
-            self.vuecatalog.vuemainwindow.vuetoolbar.menu_file.setEnabled(True)
+        catalog = self.vuecatalog.modelecatalog.read_json()
+        if self.vuecatalog.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list:
+            # Si le catalogue existe
+            if catalog:
+                self.vuecatalog.vuecatalogtype.groupbox_restore_button.setEnabled(False)
+                self.vuecatalog.vuecatalogtype.groupbox_open_button.setEnabled(False)
+                self.vuecatalog.vuecatalogsettings.setEnabled(False)
+                self.vuecatalog.groupbox_save_button.setEnabled(False)
+                self.vuecatalog.groupbox_confirm_button.setEnabled(False)
+                self.vuecatalog.vuemainwindow.tabwidget.setTabEnabled(1, True)
+                self.vuecatalog.vuemainwindow.tabwidget.setCurrentIndex(1)
+                self.vuecatalog.vuemainwindow.vueconversion.setEnabled(True)
+                self.vuecatalog.vuemainwindow.vueconversion.vuedataframeviewer.controleurdataframeviewer.load_dataframe()
+                self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Catalog confirmed.\n")
+                self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Catalog confirmed.\n", "green")
+            # Sinon
+            else:        
+                self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown catalog type.\n")
+                self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown catalog type.\n", "red")
         # Sinon
-        else:
-            self.controleurlogs.log("Unknown catalog type.\n")
-            self.controleurlogs.addColoredText("Unknown catalog type.\n", "red")
+        else:        
+            self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown file(s).\n")
+            self.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown file(s).\n", "red")

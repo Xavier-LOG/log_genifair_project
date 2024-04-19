@@ -27,19 +27,19 @@ class vueLogs(QWidget):
     
     
     # Constructeur par défaut
-    
+
     
     def __init__(self, parent):
         
-        super().__init__(parent)
+        super().__init__(parent)        
         self.vuemainwindow = parent
         self.controleurlogs = controleurLogs(self)
         self.init_ui()
     
     
     # Définition des méthodes
-    
-    
+
+
     def init_ui(self):
         
         # Layout associé à l'instance de la classe vueLogs
