@@ -69,6 +69,8 @@ class vueToolbar(QToolBar):
         self.addWidget(self.menu_options_button)
         self.addWidget(self.menu_help_button)
         
+        self.menu_file_button.setEnabled(False)
+        
     
     def connect_signals(self):
         

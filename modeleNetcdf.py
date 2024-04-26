@@ -48,16 +48,20 @@ class modeleNetcdf:
             self.dataframe = pd.DataFrame()
         # Sinon
         else:
-            # Parcours de chaque colonne du dataframe
-            for column in self.dataframe.columns:
-                # Si le nom de la colonne du dataframe en minuscule sans espace blanc n'est pas dans la première liste du catalogue
-                if column.replace(' ', '').lower() not in modeleNetcdf.datetime_catalog[0]:
-                    # Parcours de chaque clé du dataset xarray pour la colonne du dataframe
-                    for key in list(self.xarray_dataset.data_vars.keys()):
-                        # Si les noms de la variable du fichier netCDF sont renseignés
-                        if 'long_name' in self.xarray_dataset[key].attrs.keys() and 'standard_name' in self.xarray_dataset[key].attrs.keys(): 
-                            # Si un des mots de la liste des noms possibles de la clé est le nom de la colonne du dataframe
-                            if modeleNetcdf.check_names([self.xarray_dataset[key].attrs['long_name'], self.xarray_dataset[key].attrs['standard_name']], column) == True:
+            # Initialisation d'une liste qui contiendra des listes de noms de colonne possibles à chaque nom de colonne du dataframe
+            column_name_list = []
+            # Initialisation d'une variable qui représentera le nombre de listes de noms de colonne possibles vérifiées
+            list_checked = 0
+            # Parcours de chaque clé du dataset xarray pour la colonne du dataframe
+            for key in list(self.xarray_dataset.data_vars.keys()):
+                # Parcours de chaque colonne du dataframe
+                for column in self.dataframe.columns:
+                    # Si le nom de la colonne du dataframe en minuscule sans espace blanc n'est pas dans la première liste du catalogue
+                    if column.replace(' ', '').lower() not in modeleNetcdf.datetime_catalog[0]:
+                        # Si le tableau de données est de dimension 1 et si un des mots de la liste des noms possibles de la clé est le nom de la colonne du dataframe
+                        if self.xarray_dataset[key].values.ndim == 1 and modeleNetcdf.check_names([self.xarray_dataset[key].attrs['long_name'], self.xarray_dataset[key].attrs['standard_name']], column) == True:
+                            # Si les noms de la variable du fichier netCDF sont renseignés
+                            if 'long_name' in self.xarray_dataset[key].attrs.keys() and 'standard_name' in self.xarray_dataset[key].attrs.keys():
                                 # Si le type des données du fichier netCDF est bien précisé
                                 if 'dtype' in self.xarray_dataset[key].attrs.keys():
                                     # Si les données de la colonne du dataframe sont du même type que celui des données du fichier netCDF ou si une colonne du dataframe est vide
@@ -100,10 +104,84 @@ class modeleNetcdf:
                                 else:
                                     self.controleurlogs.add_log("Data type in column " + column + " not specified for the variable " + key + " . Data will be not selected.\n")
                                     self.controleurlogs.add_colored_log("Data type in column " + column + " not specified for the variable " + key + " . Data will be not selected.\n", "red")
-                        # Sinon
-                        else:
-                            self.controleurlogs.add_log("Unknown names for the variable " + key + " . Data will be not selected.\n")
-                            self.controleurlogs.add_colored_log("Unknown names for the variable " + key + " . Data will be not selected.\n", "red")
+                            # Sinon
+                            else:
+                                self.controleurlogs.add_log("Unknown names for the variable " + key + " . Data will be not selected.\n")
+                                self.controleurlogs.add_colored_log("Unknown names for the variable " + key + " . Data will be not selected.\n", "red")
+                        # Si le tableau de données est de dimension 2, si la clé est contenu dans le nom de colonne
+                        elif self.xarray_dataset[key].values.ndim == 2 and key.split('_')[0] in column:
+                            # Si la liste de données de la colonne du dataframe contient au minimum 10 données
+                            if len(self.dataframe[column].iloc[:].tolist()) >= 10:
+                                # Si la liste existe
+                                if column_name_list:
+                                    # Pour chaque liste de la liste
+                                    for part in column_name_list:
+                                        # Si le nom de la colonne du dataframe n'est pas dans la liste
+                                        if column not in part:
+                                            # La liste est vérifiée
+                                            list_checked += 1
+                                    # Si toutes les listes ont été vérifiées
+                                    if list_checked == len(column_name_list):
+                                        # Réinitialisation de la variable
+                                        list_checked = 0
+                                        # Si la clé est latitude
+                                        if key == 'latitude':
+                                            # Si les données de la colonne du dataframe sont des valeurs de latitude
+                                            if all(self.dataframe[column].between(-90.0, 90.0)):
+                                                # Initialisation de l'indice de la colonne du dataframe
+                                                index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
+                                                # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
+                                                self.xarray_dataset[key].values = np.array(self.dataframe.iloc[:self.xarray_dataset[key].values.shape[0], index: index + self.xarray_dataset[key].values.shape[1]])
+                                                # Si la liste des noms de colonne possibles n'est pas dans la liste
+                                                if [column for column in self.dataframe.columns if key in column] not in column_name_list:
+                                                    # Ajout de la liste
+                                                    column_name_list.append([column for column in self.dataframe.columns if key in column])
+                                            # Sinon
+                                            else:
+                                                self.controleurlogs.add_log("Latitude values are not between -90 and 90.\n")
+                                                self.controleurlogs.add_colored_log("Latitude values are not between -90 and 90.\n", "red")
+                                        # Si la clé est longitude
+                                        elif key == 'longitude':
+                                            # Si les données de la colonne du dataframe sont des valeurs de longitude
+                                            if all(self.dataframe[column].between(-180.0, 180.0)):    
+                                                # Initialisation de l'indice de la colonne du dataframe
+                                                index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
+                                                # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
+                                                self.xarray_dataset[key].values = np.array(self.dataframe.iloc[:self.xarray_dataset[key].values.shape[0], index: index + self.xarray_dataset[key].values.shape[1]])
+                                                # Si la liste des noms de colonne possibles n'est pas dans la liste
+                                                if [column for column in self.dataframe.columns if key in column] not in column_name_list:
+                                                    # Ajout de la liste
+                                                    column_name_list.append([column for column in self.dataframe.columns if key in column])
+                                            # Sinon
+                                            else:
+                                                self.controleurlogs.add_log("Longitude values are not between -180 and 180.\n")
+                                                self.controleurlogs.add_colored_log("Longitude values are not between -180 and 180.\n", "red")
+                                        # Sinon
+                                        else:
+                                            # Initialisation de l'indice de la colonne du dataframe
+                                            index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
+                                            # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
+                                            self.xarray_dataset[key].values = np.array(self.dataframe.iloc[:self.xarray_dataset[key].values.shape[0], index: index + self.xarray_dataset[key].values.shape[1]])
+                                            # Si la liste des noms de colonne possibles n'est pas dans la liste
+                                            if [column for column in self.dataframe.columns if key in column] not in column_name_list:
+                                                # Ajout de la liste
+                                                column_name_list.append([column for column in self.dataframe.columns if key in column])
+                                    # Sinon
+                                    else:
+                                        # Réinitialisation de la variable
+                                        list_checked = 0
+                                # Sinon
+                                else:
+                                    # Initialisation de l'indice de la colonne du dataframe
+                                    index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
+                                    # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
+                                    self.xarray_dataset[key].values = np.array(self.dataframe.iloc[:self.xarray_dataset[key].values.shape[0], index: index + self.xarray_dataset[key].values.shape[1]])
+                                    # Ajout de la liste
+                                    column_name_list.append([column for column in self.dataframe.columns if key in column])
+                            # Sinon
+                            else:
+                                self.controleurlogs.add_log("Less than 10 data are present in column " + column + " . Data will be not selected.\n")
+                                self.controleurlogs.add_colored_log("Less than 10 data are present in column " + column + " . Data will be not selected.\n", "red")
 
 
     def check_datetime_format(self: Self):
@@ -299,7 +377,7 @@ class modeleNetcdf:
                 self.xarray_dataset[key].attrs.clear()
                 # Suppression de la variable
                 del self.xarray_dataset[key]
-
+    
 
     def get_xarray_dataset(self: Self):
         
@@ -315,26 +393,193 @@ class modeleNetcdf:
     
     
     @staticmethod
-    def check_names(name_list: list[str], name: str):
+    def get_index_as_int(dataframe: pd.DataFrame, column_name: str):
+        index = dataframe.columns.get_loc(column_name)
+        if isinstance(index, int):
+            return index
+        elif isinstance(index, slice):
+            return 0
+        else:
+            return int(index[0])
     
-        # Modification du nom de la colonne du dataframe en modifiant les caractères spéciaux, les espaces blancs et en le mettant en minuscule
-        name = re.sub(r'[^a-zA-Z0-9\s_]', '', name).replace(' ', '_').lower()
+    
+    @staticmethod
+    def check_names(variable_name_list: list[str], column_name: str):
+        
+        column_name = re.sub(r'[^a-zA-Z0-9\s_]', '', column_name).replace(' ','_').lower()
+        
         # Initialisation d'un indice
         i = 0
         # Tant que l'indice est inférieur à la longueur de la liste des noms possibles d'une clé du dataset xarray
-        while i < len(name_list):
-            # Si l'élément de la liste en minuscule est contenu dans le nom de la colonne du dataframe
-            if name_list[i].lower() in name:
+        while i < len(variable_name_list):
+            # Si le nom est égal au nom de la colonne du dataframe
+            if variable_name_list[i] == column_name:
                 # Fin de la boucle
-                i = len(name_list)
+                i = len(variable_name_list)
+                # Retourne Vrai
+                return True
+            # Si le nom est contenu dans le nom de la colonne du dataframe en minuscule de même longueur que celle du nom
+            elif variable_name_list[i] in column_name[:len(variable_name_list[i])]:
+                # Fin de la boucle
+                i = len(variable_name_list)
                 # Retourne Vrai
                 return True
             # Sinon
             else:
                 # Incrémentation de l'indice
                 i += 1
+        
         # Retourne Faux
         return False
+    
+    
+    @staticmethod
+    def create_xarray_dataset_dimension(catalog: dict, xarray_dataset: xr.Dataset, dataframe: pd.DataFrame):
+            
+        # Parcours de chaque nom de dimension dans le catalogue
+        for dimension_name in catalog['dimension']:
+            # Si la valeur de la dimension est une liste et si elle est vide
+            if isinstance(catalog['dimension'][dimension_name]['values'], list) and len(catalog['dimension'][dimension_name]['values']) == 0:
+                # Ajout de la dimension et de son tableau numpy de valeurs dans le dataset xarray où chaque valeur correspond à un indice de ligne du dataframe
+                xarray_dataset.coords[dimension_name] = np.arange(0, len(dataframe.index))
+            # Si la valeur de la dimension est une liste et si elle contient une ou plusieurs valeurs
+            elif isinstance(catalog['dimension'][dimension_name]['values'], list) and len(catalog['dimension'][dimension_name]['values']) > 0:
+                # Ajout de la dimension spécifique et de sa liste de valeurs sous forme de tableau numpy dans le dataset xarray
+                xarray_dataset.coords[dimension_name] = np.array(catalog['dimension'][dimension_name]['values'])
+        
+
+    @staticmethod
+    def create_xarray_dataset_variable(catalog: dict, xarray_dataset: xr.Dataset, dataframe: pd.DataFrame):
+    
+        # Initialisation d'un dictionnaire dont chacune de ses clés sera le nom d'une variable et dont chacune de ses valeurs sera une liste d'une ou de plusieurs dimensions de la variable si celles-ci contiennent chacune un tableau de valeurs spécifiques
+        specific_dimension_variable_dict: dict = {}
+    
+        # Parcours de chaque nom de variable dans le catalogue
+        for variable_name in catalog['variable']:
+            # Initialisation d'une liste de dimensions de la variable contenant les noms des dimensions de la variable
+            variable_dimension_list: list = catalog['variable'][variable_name]['dimension']
+            # Si la liste contient 1 dimension
+            if len(variable_dimension_list) == 1:
+                # Si la dimension de la variable est une liste et si elle est vide
+                if isinstance(catalog['dimension'][variable_dimension_list[0]]['values'], list) and len(catalog['dimension'][variable_dimension_list[0]]['values']) == 0:
+                    # Ajout de la variable et de ses informations dans le dataset xarray
+                    xarray_dataset[variable_name] = xr.DataArray(np.zeros(len(dataframe.index)), dims=variable_dimension_list[0])
+                    # Parcours des attributs de la variable
+                    for attribute_name, attribute_value in catalog['variable'][variable_name]['attribute'].items():
+                        # Ajout de l'attribut de la variable et de ses informations dans le dataset xarray
+                        xarray_dataset[variable_name].attrs[attribute_name] = attribute_value
+                # Si la dimension de la variable est une liste et si elle contient une ou plusieurs valeurs
+                elif isinstance(catalog['dimension'][variable_dimension_list[0]]['values'], list) and len(catalog['dimension'][variable_dimension_list[0]]['values']) > 0:
+                    # Ajout du nom de la seconde dimension à la liste
+                    variable_dimension_list.append("index")
+                    # Ajout d'un tableau numpy de valeurs dans la liste où chaque valeur correspond à un indice de ligne du dataframe
+                    variable_dimension_list.append(np.arange(0, len(dataframe.index)))
+                    # Initialisation d'une clé de dictionnaire associée à une liste contenant la dimension spécifique
+                    specific_dimension_variable_dict[variable_name] = variable_dimension_list
+            # Si la liste contient 2 dimensions
+            elif len(variable_dimension_list) == 2:
+                # Si les deux dimensions de la variable sont des listes et si elles contiennent une ou plusieurs valeurs
+                if isinstance(catalog['dimension'][variable_dimension_list[0]]['values'], list) and isinstance(catalog['dimension'][variable_dimension_list[1]]['values'], list) and len(catalog['dimension'][variable_dimension_list[0]]['values']) > 0 and len(catalog['dimension'][variable_dimension_list[1]]['values']) > 0:
+                    # Ajout d'une liste de valeurs sous forme de tableau numpy de la seconde dimension spécifique à la liste
+                    variable_dimension_list.append(np.array(catalog['dimension'][variable_dimension_list[1]]['values']))
+                    # Initialisation d'une clé de dictionnaire associée à une liste contenant la dimension spécifique
+                    specific_dimension_variable_dict[variable_name] = variable_dimension_list
+            
+        # Si le dictionnaire des variables de dimension spécifique existe
+        if specific_dimension_variable_dict:
+            modeleNetcdf.insert_bidimensional_variable(specific_dimension_variable_dict, xarray_dataset, catalog)
+
+
+    @staticmethod
+    def insert_bidimensional_variable(specific_dimension_variable_dict: dict, xarray_dataset: xr.Dataset, catalog: dict):        
+            
+        # Initialisation d'un dictionnaire dont chacune de ses clés sera le nom de la dimension spécifique commune à une ou plusieurs variables et dont chacune de ses valeurs sera une liste contenant le nom de la seconde dimension spécifique et son tableau numpy de valeurs
+        common_dimension_dict = {}
+        # Parcours de chaque clé dans le dictionnaire des variables de dimension spécifique
+        for specific_dimension_variable_name in specific_dimension_variable_dict:
+            # Initialisation d'une variable qui représentera le nombre de clés parcourues dans le dictionnaire des dimensions spécifiques communes à une ou plusieurs variables
+            key_checked = 0
+            # Si le dictionnaire des dimensions spécifiques communes à une ou plusieurs variables est vide
+            if common_dimension_dict == {}:
+                # Initialisation de la clé du dictionnaire associée à une liste contenant le nom de la seconde dimension spécifique et son tableau numpy de valeurs
+                common_dimension_dict[specific_dimension_variable_dict[specific_dimension_variable_name][0]] = [specific_dimension_variable_dict[specific_dimension_variable_name][1], specific_dimension_variable_dict[specific_dimension_variable_name][2]]
+                # Ajout de la seconde dimension spécifique et de son tableau numpy de valeurs dans le dataset xarray
+                xarray_dataset.coords[specific_dimension_variable_dict[specific_dimension_variable_name][1]] = specific_dimension_variable_dict[specific_dimension_variable_name][2]
+            else:
+                # Parcours de chaque clé dans le dictionnaire des dimensions spécifiques communes à une ou plusieurs variables
+                for common_dimension_name in common_dimension_dict:
+                    # Si l'ordre des deux dimensions spécifiques est différent entre les deux dictionnaires
+                    if [specific_dimension_variable_dict[specific_dimension_variable_name][0], specific_dimension_variable_dict[specific_dimension_variable_name][1]] != [common_dimension_name, common_dimension_dict[common_dimension_name][0]]:
+                        # La clé est parcourue
+                        key_checked += 1
+                # Si toutes les clés du dictionnaire des dimensions spécifiques communes à une ou plusieurs variables ont été parcourues
+                if key_checked == len(list(common_dimension_dict.keys())):
+                    # Initialisation de la clé du dictionnaire associée à une liste contenant le nom de la seconde dimension spécifique et son tableau numpy de valeurs
+                    common_dimension_dict[specific_dimension_variable_dict[specific_dimension_variable_name][0]] = [specific_dimension_variable_dict[specific_dimension_variable_name][1], specific_dimension_variable_dict[specific_dimension_variable_name][2]]
+                    # Ajout de la seconde dimension spécifique et de son tableau numpy de valeurs dans le dataset xarray
+                    xarray_dataset.coords[specific_dimension_variable_dict[specific_dimension_variable_name][1]] = specific_dimension_variable_dict[specific_dimension_variable_name][2]
+                    
+        # Parcours de chaque clé dans le dictionnaire des dimensions spécifiques communes à une ou plusieurs variables
+        for common_dimension_name in common_dimension_dict:
+            # Initialisation d'une liste qui contiendra les noms de variable ayant une dimension spécifique filtrés (composés uniquement de lettres)
+            filtered_variable_name_list = []
+            # Initialisation d'un dictionnaire dont chacune de ses clés sera le nom commun à un ou plusieurs noms de variable filtrés et dont chacune de ses valeurs sera le nombres d'occurrences du nom commun dans la liste des noms de variable filtrés
+            common_filtered_variable_name_dict = {}
+            # Initialisation d'une liste de tableaux numpy de valeurs d'une variable
+            variable_array_list = []
+            # Parcours de chaque clé dans le dictionnaire des variables de dimension spécifique
+            for specific_dimension_variable_name in specific_dimension_variable_dict:
+                # Si les deux dimensions spécifiques du dictionnaire sont dans le dictionnaire des dimensions spécifiques communes à une ou plusieurs variables
+                if specific_dimension_variable_dict[specific_dimension_variable_name][0] == common_dimension_name and specific_dimension_variable_dict[specific_dimension_variable_name][1] == common_dimension_dict[common_dimension_name][0]:
+                    # Initialisation d'une liste de mots constituant le nom de la variable de la dimension spécifique
+                    variable_name_words_list = re.split(r'[\d\W\s_]+', specific_dimension_variable_name)
+                    # Filtration de la liste pour ne garder que des mots
+                    variable_name_words_list = [word for word in variable_name_words_list if word]
+                    # Ajout du premier mot de la liste dans la liste des noms de variable filtrés
+                    filtered_variable_name_list.append(variable_name_words_list[0])       
+                    
+            # Parcours de chaque nom de variable filtré dans la liste
+            for filtered_variable_name in filtered_variable_name_list:
+                # Initialisation d'une variable qui représentera le nombre de clés parcourues dans le dictionnaire des noms communs de variable
+                key_checked = 0
+                # Si le dictionnaire des noms communs de variable est vide
+                if common_filtered_variable_name_dict == {}:
+                    # Initialisation de la clé du dictionnaire associée au nombre d'occurrences du nom de la variable filtré dans la liste
+                    common_filtered_variable_name_dict[filtered_variable_name] = filtered_variable_name_list.count(filtered_variable_name)
+                # Sinon
+                else:
+                    # Parcours de chaque clé du dictionnaire des noms communs de variable
+                    for common_filtered_variable_name in common_filtered_variable_name_dict:
+                        # Si le nom de variable filtré n'est pas la clé
+                        if filtered_variable_name != common_filtered_variable_name:
+                            # La clé est parcourue
+                            key_checked += 1
+                    # Si toutes les clés du dictionnaire des noms communs de variable ont été parcourues
+                    if key_checked == len(list(common_filtered_variable_name_dict.keys())):
+                        # Initialisation de la clé du dictionnaire associée au nombre d'occurrences du nom de la variable filtré dans la liste
+                        common_filtered_variable_name_dict[filtered_variable_name] = filtered_variable_name_list.count(filtered_variable_name)
+
+            # Parcours de chaque clé du dictionnaire des noms communs de variable
+            for common_filtered_variable_name in common_filtered_variable_name_dict:
+                # Si le nombre d'occurrences du nom commun est égal au nombre de valeurs présentes dans la liste de valeurs de la dimension spécifique ou s'il est égal à 1
+                if common_filtered_variable_name_dict[common_filtered_variable_name] == len(catalog['dimension'][common_dimension_name]['values']) or common_filtered_variable_name_dict[common_filtered_variable_name] == 1:
+                    # Parcours du nombre d'occurrences
+                    for i in range(0, len(catalog['dimension'][common_dimension_name]['values'])):
+                        # Ajout d'un tableau numpy de zéros de la longueur de la taille du tableau numpy de la deuxième dimension spécifique
+                        variable_array_list.append(np.zeros(common_dimension_dict[common_dimension_name][1].shape[0]))
+                    # Combinaison de N tableaux numpy de zéros, où N représente le nombre de valeurs dans la liste de valeurs de la dimension spécifique
+                    combined_variable_array = np.vstack(variable_array_list)
+                    # Ajout de la variable et de ses informations dans le dataset xarray
+                    xarray_dataset[common_filtered_variable_name + "_" + common_dimension_name[0].lower() + common_dimension_dict[common_dimension_name][0][0].lower()] = xr.DataArray(combined_variable_array, dims=[common_dimension_name, common_dimension_dict[common_dimension_name][0]])
+
+
+    @staticmethod
+    def create_xarray_dataset_global_attribute(catalog: dict, xarray_dataset: xr.Dataset):
+    
+        # Parcours de chaque nom d'attribut global dans le catalogue
+        for global_attribute_name in catalog['global_attribute']:
+            # Ajout de l'attribut global et de ses informations dans le dataset xarray
+            xarray_dataset.attrs[global_attribute_name] = catalog['global_attribute'][global_attribute_name]
     
     
     @staticmethod
@@ -343,28 +588,19 @@ class modeleNetcdf:
         # Initialisation du dataset xarray
         xarray_dataset = xr.Dataset()
         
-        # Chargement le fichier JSON
+        # Chargement du fichier JSON
         with open(catalog_path, "r") as f:
             catalog = json.load(f)
-            
-        # Accès à chaque valeur de chaque attribut du catalogue
-        variable_catalog = catalog['variable']
-        dimension_catalog = catalog['dimension']
-        global_attribute_catalog = catalog['global_attribute']
         
-        for dimension in dimension_catalog:
-            xarray_dataset.coords[dimension] = np.arange(0, dataframe.shape[0])
-        
-        for variable_name, variable_data in variable_catalog.items():
-            xarray_dataset[variable_name] = xr.DataArray(np.zeros(dataframe.shape[0]), dims=variable_data['dimension'])
-            for attribute_name, attribute_value in variable_data['attribute'].items():
-                xarray_dataset[variable_name].attrs[attribute_name] = attribute_value
-        
-        for global_attribute_name, global_attribute_value in global_attribute_catalog.items():
-            xarray_dataset.attrs[global_attribute_name] = global_attribute_value
-    
-        return xarray_dataset
+        modeleNetcdf.create_xarray_dataset_dimension(catalog, xarray_dataset, dataframe)
 
+        modeleNetcdf.create_xarray_dataset_variable(catalog, xarray_dataset, dataframe)
+        
+        modeleNetcdf.create_xarray_dataset_global_attribute(catalog, xarray_dataset)
+        
+        # Retourne le dataset xarray
+        return xarray_dataset
+        
 
 
 
@@ -397,7 +633,7 @@ if __name__ == '__main__':
     dataframe = controleurtoolbar.dataframe_list[0]
     
     # Initialisation du dataset xarray
-    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, './profil_catalog.json')
+    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, 'C:/Users/ssaph/Desktop/catalog.json')
     
     modelenetcdf = modeleNetcdf(controleurlogs, dataframe, xarray_dataset)
     modelenetcdf.check_dataframe_integrity()
