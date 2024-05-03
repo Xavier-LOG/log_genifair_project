@@ -24,6 +24,6 @@ class controleurFileviewer:
         
         self.vuefileviewer.groupbox_textarea.setPlainText("")
         
-        for file_path in self.vuefileviewer.vuemainwindow.vuecatalog.modelecatalog.path_list_files[1]:
+        for file_path in self.vuefileviewer.vuemainwindow.vuearrangement.modelearrangement.path_list_files[1]:
             self.vuefileviewer.groupbox_textarea.appendPlainText("\n" + str(file_path))
         

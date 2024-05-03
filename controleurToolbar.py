@@ -53,16 +53,16 @@ class controleurToolbar(QObject):
 
     def import_validation(self):
         
-        # vueToolbar est instanciée avant vueCatalog et vueConversion. Donc émission d'un signal.
-        # Emission d'un signal sous forme de liste vers controleurCatalog en premier (pour remplacer la deuxième valeur de path_list_files de modeleCatalog par self.file_list), 
+        # vueToolbar est instanciée avant vueArrangement et vueConversion. Donc émission d'un signal.
+        # Emission d'un signal sous forme de liste vers controleurArrangement en premier (pour remplacer la deuxième valeur de path_list_files de modeleArrangement par self.file_list), 
         # puis vers controleurFileviewer en deuxième (pour afficher la liste des fichiers importés avec la deuxième valeur de path_list_files désormais modifiée), 
-        # puis vers controleurCatalogsettings en troisième (pour remplacer dataframe de controleurCatalogsettings par la première valeur de self.dataframe_list)
+        # puis vers controleurArrangementsettings en troisième (pour remplacer dataframe de controleurArrangementsettings par la première valeur de self.dataframe_list)
         # puis vers controleurDataframeviewer en quatrième (pour afficher uniquement la première valeur de self.dataframe_list)
         # puis vers controleurConversionsettings en dernier (pour convertir tous les dataframes pandas en fichier netCDF)
         self.signal.emit([self.file_list, self.dataframe_list])
         self.vuetoolbar.menu_file_button.setEnabled(False)
-        self.vuetoolbar.vuemainwindow.vuecatalog.vuecatalogsettings.button.setEnabled(True)
-        self.vuetoolbar.vuemainwindow.vuecatalog.groupbox_confirm_button.setEnabled(True)
+        self.vuetoolbar.vuemainwindow.vuearrangement.vuearrangementsettings.button.setEnabled(True)
+        self.vuetoolbar.vuemainwindow.vuearrangement.groupbox_confirm_button.setEnabled(True)
         self.vuetoolbar.vuemainwindow.vuelogs.controleurlogs.add_log("Files have been imported.\n")
         self.vuetoolbar.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Files have been imported.\n", "green")
 

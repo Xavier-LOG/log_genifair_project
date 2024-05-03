@@ -3,7 +3,7 @@
 
 
 
-from controleurCatalogsettings import controleurCatalogsettings
+from controleurArrangementsettings import controleurArrangementsettings
 
 
 
@@ -67,7 +67,33 @@ class DimensionTabWidget(QWidget):
         self.add_name_layout.addWidget(self.add_name_button)
         self.add_name_groupbox.setLayout(self.add_name_layout)
         
+        self.add_value_groupbox = QGroupBox()
+        self.add_value_layout = QVBoxLayout()
+        self.add_value_dimension_label = QLabel("Dimension Name")
+        self.add_value_dimension_lineedit = QLineEdit("Enter Dimension Name")
+        self.add_value_dimension_confirm_button = QPushButton("Confirm")
+        self.add_value_dimension_cancel_button = QPushButton("Cancel")
+        self.add_value_label = QLabel("New Dimension Value")
+        self.add_value_lineedit = QLineEdit("Example : 5.0nm, 10.0nm for [5.0nm, 10.0nm]")
+        self.add_value_button = QPushButton("Add New Dimension Value")
+        
+        self.add_value_dimension_lineedit.setEnabled(True)
+        self.add_value_dimension_confirm_button.setEnabled(True)
+        self.add_value_dimension_cancel_button.setEnabled(False)
+        self.add_value_lineedit.setEnabled(False)
+        self.add_value_button.setEnabled(False)
+        
+        self.add_value_layout.addWidget(self.add_value_dimension_label)
+        self.add_value_layout.addWidget(self.add_value_dimension_lineedit)
+        self.add_value_layout.addWidget(self.add_value_dimension_confirm_button)
+        self.add_value_layout.addWidget(self.add_value_dimension_cancel_button)
+        self.add_value_layout.addWidget(self.add_value_label)
+        self.add_value_layout.addWidget(self.add_value_lineedit)
+        self.add_value_layout.addWidget(self.add_value_button)
+        self.add_value_groupbox.setLayout(self.add_value_layout)
+        
         self.add_tabwidget.addTab(self.add_name_groupbox, "Name")
+        self.add_tabwidget.addTab(self.add_value_groupbox, "Value")
         
         return self.add_tabwidget
     
@@ -101,7 +127,33 @@ class DimensionTabWidget(QWidget):
         self.modify_name_layout.addWidget(self.modify_new_name_modify_button)
         self.modify_name_groupbox.setLayout(self.modify_name_layout)
         
+        self.modify_value_groupbox = QGroupBox()
+        self.modify_value_layout = QVBoxLayout()
+        self.modify_value_dimension_label = QLabel("Dimension Name")
+        self.modify_value_dimension_lineedit = QLineEdit("Enter Dimension Name")
+        self.modify_value_dimension_confirm_button = QPushButton("Confirm")
+        self.modify_value_dimension_cancel_button = QPushButton("Cancel")
+        self.modify_new_value_label = QLabel("New Dimension Value")
+        self.modify_new_value_lineedit = QLineEdit("Enter New Dimension Value")
+        self.modify_new_value_modify_button = QPushButton("Modify Dimension Value")
+        
+        self.modify_value_dimension_lineedit.setEnabled(True)
+        self.modify_value_dimension_confirm_button.setEnabled(True)
+        self.modify_value_dimension_cancel_button.setEnabled(False)
+        self.modify_new_value_lineedit.setEnabled(False)
+        self.modify_new_value_modify_button.setEnabled(False)
+        
+        self.modify_value_layout.addWidget(self.modify_value_dimension_label)
+        self.modify_value_layout.addWidget(self.modify_value_dimension_lineedit)
+        self.modify_value_layout.addWidget(self.modify_value_dimension_confirm_button)
+        self.modify_value_layout.addWidget(self.modify_value_dimension_cancel_button)
+        self.modify_value_layout.addWidget(self.modify_new_value_label)
+        self.modify_value_layout.addWidget(self.modify_new_value_lineedit)
+        self.modify_value_layout.addWidget(self.modify_new_value_modify_button)
+        self.modify_value_groupbox.setLayout(self.modify_value_layout)
+        
         self.modify_tabwidget.addTab(self.modify_name_groupbox, "Name")
+        self.modify_tabwidget.addTab(self.modify_value_groupbox, "Value")
         
         return self.modify_tabwidget
     
@@ -121,7 +173,19 @@ class DimensionTabWidget(QWidget):
         self.delete_name_layout.addWidget(self.delete_name_button)
         self.delete_name_groupbox.setLayout(self.delete_name_layout)
         
+        self.delete_value_groupbox = QGroupBox()
+        self.delete_value_layout = QVBoxLayout()
+        self.delete_value_dimension_label = QLabel("Dimension Name")
+        self.delete_value_dimension_lineedit = QLineEdit("Enter Dimension Name")
+        self.delete_value_button = QPushButton("Delete Dimension Value")
+        
+        self.delete_value_layout.addWidget(self.delete_value_dimension_label)
+        self.delete_value_layout.addWidget(self.delete_value_dimension_lineedit)
+        self.delete_value_layout.addWidget(self.delete_value_button)
+        self.delete_value_groupbox.setLayout(self.delete_value_layout)
+        
         self.delete_tabwidget.addTab(self.delete_name_groupbox, "Name")
+        self.delete_tabwidget.addTab(self.delete_value_groupbox, "Value")
         
         return self.delete_tabwidget
 
@@ -529,12 +593,12 @@ class AttributeTabWidget(QWidget):
 
 
 
-# Définition de la classe vueCatalogsettings
+# Définition de la classe vueArrangementsettings
 
 
 
 
-class vueCatalogsettings(QWidget):
+class vueArrangementsettings(QWidget):
     
     
     # Constructeur par défaut
@@ -543,8 +607,8 @@ class vueCatalogsettings(QWidget):
     def __init__(self, parent):
         
         super().__init__(parent)
-        self.vuecatalog = parent
-        self.controleurcatalogsettings = controleurCatalogsettings(self)
+        self.vuearrangement = parent
+        self.controleurarrangementsettings = controleurArrangementsettings(self)
         self.init_ui()
         self.connect_signals()
     
@@ -554,12 +618,12 @@ class vueCatalogsettings(QWidget):
     
     def init_ui(self):
         
-        # Layout associé à l'instance de la classe vueCatalogsettings
-        self.vuecatalogsettings_layout = QVBoxLayout(self)
+        # Layout associé à l'instance de la classe vueArrangementsettings
+        self.vuearrangementsettings_layout = QVBoxLayout(self)
 
-        self.groupbox = QGroupBox("Catalog Settings")
+        self.groupbox = QGroupBox("Arrangement Settings")
         self.groupbox_layout = QVBoxLayout()
-        self.button = QPushButton("Fill Catalog With File")
+        self.button = QPushButton("Create Specific Arrangement With File")
         self.tabwidget = QTabWidget()
         self.dimension_tabwidget = DimensionTabWidget()
         self.variable_tabwidget = VariableTabWidget()
@@ -573,56 +637,63 @@ class vueCatalogsettings(QWidget):
         self.groupbox_layout.addWidget(self.tabwidget)
         self.groupbox.setLayout(self.groupbox_layout)
         
-        self.vuecatalogsettings_layout.addWidget(self.groupbox)
+        self.vuearrangementsettings_layout.addWidget(self.groupbox)
     
     
     def connect_signals(self):
         
-        self.button.clicked.connect(self.controleurcatalogsettings.fill_catalog)
+        self.button.clicked.connect(self.controleurarrangementsettings.fill_arrangement)
         
-        self.dimension_tabwidget.add_name_button.clicked.connect(self.controleurcatalogsettings.dimension_name_add)
+        self.dimension_tabwidget.add_name_button.clicked.connect(self.controleurarrangementsettings.dimension_name_add)
+        self.dimension_tabwidget.add_value_dimension_confirm_button.clicked.connect(self.controleurarrangementsettings.dimension_value_add_confirm)
+        self.dimension_tabwidget.add_value_dimension_cancel_button.clicked.connect(self.controleurarrangementsettings.dimension_value_add_cancel)
+        self.dimension_tabwidget.add_value_button.clicked.connect(self.controleurarrangementsettings.dimension_value_add)
         
-        self.dimension_tabwidget.modify_name_confirm_button.clicked.connect(self.controleurcatalogsettings.dimension_name_modify_confirm)
-        self.dimension_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurcatalogsettings.dimension_name_modify_cancel)
-        self.dimension_tabwidget.modify_new_name_modify_button.clicked.connect(self.controleurcatalogsettings.dimension_name_modify)
+        self.dimension_tabwidget.modify_name_confirm_button.clicked.connect(self.controleurarrangementsettings.dimension_value_modify_confirm)
+        self.dimension_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurarrangementsettings.dimension_value_modify_cancel)
+        self.dimension_tabwidget.modify_new_name_modify_button.clicked.connect(self.controleurarrangementsettings.dimension_value_modify)
+        self.dimension_tabwidget.modify_value_dimension_confirm_button.clicked.connect(self.controleurarrangementsettings.dimension_value_modify_confirm)
+        self.dimension_tabwidget.modify_value_dimension_cancel_button.clicked.connect(self.controleurarrangementsettings.dimension_value_modify_cancel)
+        self.dimension_tabwidget.modify_new_value_modify_button.clicked.connect(self.controleurarrangementsettings.dimension_value_modify)
         
-        self.dimension_tabwidget.delete_name_button.clicked.connect(self.controleurcatalogsettings.dimension_name_delete)
+        self.dimension_tabwidget.delete_name_button.clicked.connect(self.controleurarrangementsettings.dimension_name_delete)
+        self.dimension_tabwidget.delete_value_button.clicked.connect(self.controleurarrangementsettings.dimension_value_delete)
         
-        self.variable_tabwidget.add_name_button.clicked.connect(self.controleurcatalogsettings.variable_name_add)
-        self.variable_tabwidget.add_attribute_variable_confirm_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_add_confirm)
-        self.variable_tabwidget.add_attribute_variable_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_add_cancel)
-        self.variable_tabwidget.add_attribute_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_add)
+        self.variable_tabwidget.add_name_button.clicked.connect(self.controleurarrangementsettings.variable_name_add)
+        self.variable_tabwidget.add_attribute_variable_confirm_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_add_confirm)
+        self.variable_tabwidget.add_attribute_variable_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_add_cancel)
+        self.variable_tabwidget.add_attribute_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_add)
         
-        self.variable_tabwidget.modify_name_confirm_button.clicked.connect(self.controleurcatalogsettings.variable_name_modify_confirm)
-        self.variable_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_name_modify_cancel)
-        self.variable_tabwidget.modify_new_name_modify_button.clicked.connect(self.controleurcatalogsettings.variable_name_modify)
-        self.variable_tabwidget.modify_attribute_variable_confirm_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_variable_modify_confirm)
-        self.variable_tabwidget.modify_attribute_variable_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_variable_modify_cancel)
-        self.variable_tabwidget.modify_attribute_confirm_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_modify_confirm)
-        self.variable_tabwidget.modify_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_modify_cancel)
-        self.variable_tabwidget.modify_new_attribute_modify_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_modify)
+        self.variable_tabwidget.modify_name_confirm_button.clicked.connect(self.controleurarrangementsettings.variable_name_modify_confirm)
+        self.variable_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_name_modify_cancel)
+        self.variable_tabwidget.modify_new_name_modify_button.clicked.connect(self.controleurarrangementsettings.variable_name_modify)
+        self.variable_tabwidget.modify_attribute_variable_confirm_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_variable_modify_confirm)
+        self.variable_tabwidget.modify_attribute_variable_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_variable_modify_cancel)
+        self.variable_tabwidget.modify_attribute_confirm_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_modify_confirm)
+        self.variable_tabwidget.modify_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_modify_cancel)
+        self.variable_tabwidget.modify_new_attribute_modify_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_modify)
         
-        self.variable_tabwidget.delete_name_button.clicked.connect(self.controleurcatalogsettings.variable_name_delete)
-        self.variable_tabwidget.delete_attribute_confirm_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_delete_confirm)
-        self.variable_tabwidget.delete_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_delete_cancel)
-        self.variable_tabwidget.delete_attribute_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_delete)
+        self.variable_tabwidget.delete_name_button.clicked.connect(self.controleurarrangementsettings.variable_name_delete)
+        self.variable_tabwidget.delete_attribute_confirm_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_delete_confirm)
+        self.variable_tabwidget.delete_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_delete_cancel)
+        self.variable_tabwidget.delete_attribute_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_delete)
         
-        self.attribute_tabwidget.add_name_button.clicked.connect(self.controleurcatalogsettings.global_attribute_name_add)
-        self.attribute_tabwidget.add_value_attribute_confirm_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_add_confirm)
-        self.attribute_tabwidget.add_value_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_add_cancel)
-        self.attribute_tabwidget.add_value_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_add)
+        self.attribute_tabwidget.add_name_button.clicked.connect(self.controleurarrangementsettings.global_attribute_name_add)
+        self.attribute_tabwidget.add_value_attribute_confirm_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_add_confirm)
+        self.attribute_tabwidget.add_value_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_add_cancel)
+        self.attribute_tabwidget.add_value_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_add)
         
-        self.attribute_tabwidget.modify_name_confirm_button.clicked.connect(self.controleurcatalogsettings.global_attribute_name_modify_confirm)
-        self.attribute_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurcatalogsettings.global_attribute_name_modify_cancel)
-        self.attribute_tabwidget.modify_new_name_modify_button.clicked.connect(self.controleurcatalogsettings.global_attribute_name_modify)
-        self.attribute_tabwidget.modify_value_attribute_confirm_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_modify_confirm)
-        self.attribute_tabwidget.modify_value_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_modify_cancel)
-        self.attribute_tabwidget.modify_new_value_modify_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_modify)
+        self.attribute_tabwidget.modify_name_confirm_button.clicked.connect(self.controleurarrangementsettings.global_attribute_name_modify_confirm)
+        self.attribute_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurarrangementsettings.global_attribute_name_modify_cancel)
+        self.attribute_tabwidget.modify_new_name_modify_button.clicked.connect(self.controleurarrangementsettings.global_attribute_name_modify)
+        self.attribute_tabwidget.modify_value_attribute_confirm_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_modify_confirm)
+        self.attribute_tabwidget.modify_value_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_modify_cancel)
+        self.attribute_tabwidget.modify_new_value_modify_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_modify)
         
-        self.attribute_tabwidget.delete_name_button.clicked.connect(self.controleurcatalogsettings.global_attribute_name_delete)
-        self.attribute_tabwidget.delete_value_attribute_confirm_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_delete_confirm)
-        self.attribute_tabwidget.delete_value_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_delete_cancel)
-        self.attribute_tabwidget.delete_value_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_delete)
+        self.attribute_tabwidget.delete_name_button.clicked.connect(self.controleurarrangementsettings.global_attribute_name_delete)
+        self.attribute_tabwidget.delete_value_attribute_confirm_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_delete_confirm)
+        self.attribute_tabwidget.delete_value_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_delete_cancel)
+        self.attribute_tabwidget.delete_value_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_delete)
 
 
 
@@ -635,14 +706,14 @@ class vueCatalogsettings(QWidget):
 if __name__ == "__main__":
     
     from vueMainwindow import vueMainwindow
-    from vueCatalog import vueCatalog
+    from vueArrangement import vueArrangement
     import sys
     from PyQt6.QtWidgets import QApplication, QMainWindow
     
     app = QApplication(sys.argv)
     mainwindow = QMainWindow()
     vuemainwindow = vueMainwindow()
-    vuecatalog = vueCatalog(vuemainwindow)
-    mainwindow.setCentralWidget(vueCatalogsettings(vuecatalog))
+    vuearrangement = vueArrangement(vuemainwindow)
+    mainwindow.setCentralWidget(vueArrangementsettings(vuearrangement))
     mainwindow.show()
     sys.exit(app.exec())

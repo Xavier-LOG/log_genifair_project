@@ -40,14 +40,14 @@ class controleurConversionsettings:
     
     def convert(self):
 
-        file_path, _ = QFileDialog.getSaveFileName(self.vueconversionsettings, "Save NetCDF File", self.vueconversionsettings.vueconversion.vuemainwindow.vuecatalog.modelecatalog.path_list_files[1][0][:self.vueconversionsettings.vueconversion.vuemainwindow.vuecatalog.modelecatalog.path_list_files[1][0].find(".")] + ".nc", "NetCDF File (*.nc)")
+        file_path, _ = QFileDialog.getSaveFileName(self.vueconversionsettings, "Save NetCDF File", self.vueconversionsettings.vueconversion.vuemainwindow.vuearrangement.modelearrangement.path_list_files[1][0][:self.vueconversionsettings.vueconversion.vuemainwindow.vuearrangement.modelearrangement.path_list_files[1][0].find(".")] + ".nc", "NetCDF File (*.nc)")
         if file_path:
             if file_path.endswith(".nc"):
                 for i in range(0, len(self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list)):
                     conversionlogs = self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs
                     dataframe = self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[i]
-                    catalog_path = self.vueconversionsettings.vueconversion.vuemainwindow.vuecatalog.modelecatalog.path_list_files[0]
-                    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, catalog_path)
+                    arrangement_path = self.vueconversionsettings.vueconversion.vuemainwindow.vuearrangement.modelearrangement.path_list_files[0]
+                    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, arrangement_path)
                     modelenetcdf = modeleNetcdf(conversionlogs, dataframe, xarray_dataset)
                     modelenetcdf.check_dataframe_integrity()
                     modelenetcdf.check_datetime_format()

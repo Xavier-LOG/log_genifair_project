@@ -5,7 +5,7 @@
 
 from modeleMainwindow import modeleMainwindow
 from vueToolbar import vueToolbar
-from vueCatalog import vueCatalog
+from vueArrangement import vueArrangement
 from vueLogs import vueLogs
 from vueFileviewer import vueFileviewer
 from vueConversion import vueConversion
@@ -45,7 +45,7 @@ class vueMainwindow(QMainWindow):
         self.setMinimumSize(self.modelemainwindow.screen_width, self.modelemainwindow.screen_height)
         self.vuelogs = vueLogs(self)
         self.vuetoolbar = vueToolbar(self)
-        self.vuecatalog = vueCatalog(self)
+        self.vueArrangement = vueArrangement(self)
         self.vuefileviewer = vueFileviewer(self)
         self.vueconversion = vueConversion(self)
         self.init_ui()
@@ -67,7 +67,7 @@ class vueMainwindow(QMainWindow):
         self.vuemainwindow_vertical_tabwidget_layout = QVBoxLayout()
         self.tabwidget = QTabWidget()
         
-        self.tabwidget.addTab(self.vuecatalog, "Arrange Data")
+        self.tabwidget.addTab(self.vueArrangement, "Arrange Data")
         self.tabwidget.addTab(self.vueconversion, "Process Data")
         self.tabwidget.setTabEnabled(1, False)
         
