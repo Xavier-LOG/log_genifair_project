@@ -32,7 +32,7 @@ class controleurArrangementtype:
     def trajectory_arrangement(self):
         
         if self.vuearrangementtype.groupbox_trajectory_arrangement_checkbox.isChecked():
-            self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files[0] = "./trajectory_arrangement.json"
+            self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files[0] = "./trajectory_catalog.json"
             self.vuearrangementtype.groupbox_trajectory_arrangement_checkbox.setEnabled(True)
             self.vuearrangementtype.groupbox_time_series_arrangement_checkbox.setEnabled(False)
             self.vuearrangementtype.groupbox_profile_arrangement_checkbox.setEnabled(False)
@@ -41,8 +41,8 @@ class controleurArrangementtype:
             self.vuearrangementtype.groupbox_cancel_button.setEnabled(True)
             self.vuearrangementtype.groupbox_restore_button.setEnabled(False)
             self.vuearrangementtype.groupbox_open_button.setEnabled(False)
-            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Trajectory arrangement has been selected.\n")
-            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Trajectory arrangement has been selected.\n", "green")
+            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Trajectory catalog has been selected.\n")
+            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Trajectory catalog has been selected.\n", "green")
         else:
             self.vuearrangementtype.groupbox_trajectory_arrangement_checkbox.setEnabled(True)
             self.vuearrangementtype.groupbox_time_series_arrangement_checkbox.setEnabled(True)
@@ -57,7 +57,7 @@ class controleurArrangementtype:
     def timeseries_arrangement(self):
         
         if self.vuearrangementtype.groupbox_time_series_arrangement_checkbox.isChecked():
-            self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files[0] = "./timeseries_arrangement.json"
+            self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files[0] = "./timeseries_catalog.json"
             self.vuearrangementtype.groupbox_trajectory_arrangement_checkbox.setEnabled(False)
             self.vuearrangementtype.groupbox_time_series_arrangement_checkbox.setEnabled(True)
             self.vuearrangementtype.groupbox_profile_arrangement_checkbox.setEnabled(False)
@@ -66,8 +66,8 @@ class controleurArrangementtype:
             self.vuearrangementtype.groupbox_cancel_button.setEnabled(True)
             self.vuearrangementtype.groupbox_restore_button.setEnabled(False)
             self.vuearrangementtype.groupbox_open_button.setEnabled(False)
-            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Timeseries arrangement has been selected.\n")
-            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Timeseries arrangement has been selected.\n", "green")
+            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Timeseries catalog has been selected.\n")
+            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Timeseries catalog has been selected.\n", "green")
         else:
             self.vuearrangementtype.groupbox_trajectory_arrangement_checkbox.setEnabled(True)
             self.vuearrangementtype.groupbox_time_series_arrangement_checkbox.setEnabled(True)
@@ -82,7 +82,7 @@ class controleurArrangementtype:
     def profile_arrangement(self):
         
         if self.vuearrangementtype.groupbox_profile_arrangement_checkbox.isChecked():
-            self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files[0] = "./profile_arrangement.json"
+            self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files[0] = "./profile_catalog.json"
             self.vuearrangementtype.groupbox_trajectory_arrangement_checkbox.setEnabled(False)
             self.vuearrangementtype.groupbox_time_series_arrangement_checkbox.setEnabled(False)
             self.vuearrangementtype.groupbox_profile_arrangement_checkbox.setEnabled(True)
@@ -91,8 +91,8 @@ class controleurArrangementtype:
             self.vuearrangementtype.groupbox_cancel_button.setEnabled(True)
             self.vuearrangementtype.groupbox_restore_button.setEnabled(False)
             self.vuearrangementtype.groupbox_open_button.setEnabled(False)
-            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Profile arrangement has been selected.\n")
-            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Profile arrangement has been selected.\n", "green")
+            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Profile catalog has been selected.\n")
+            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Profile catalog has been selected.\n", "green")
         else:
             self.vuearrangementtype.groupbox_trajectory_arrangement_checkbox.setEnabled(True)
             self.vuearrangementtype.groupbox_time_series_arrangement_checkbox.setEnabled(True)
@@ -107,7 +107,7 @@ class controleurArrangementtype:
     def sample_arrangement(self):
         
         if self.vuearrangementtype.groupbox_sample_arrangement_checkbox.isChecked():
-            self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files[0] = "./sample_arrangement.json"
+            self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files[0] = "./sample_catalog.json"
             self.vuearrangementtype.groupbox_trajectory_arrangement_checkbox.setEnabled(False)
             self.vuearrangementtype.groupbox_time_series_arrangement_checkbox.setEnabled(False)
             self.vuearrangementtype.groupbox_profile_arrangement_checkbox.setEnabled(False)
@@ -116,8 +116,8 @@ class controleurArrangementtype:
             self.vuearrangementtype.groupbox_cancel_button.setEnabled(True)
             self.vuearrangementtype.groupbox_restore_button.setEnabled(False)
             self.vuearrangementtype.groupbox_open_button.setEnabled(False)
-            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Sample arrangement has been selected.\n")
-            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Sample arrangement has been selected.\n", "green")
+            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Sample catalog has been selected.\n")
+            self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Sample catalog has been selected.\n", "green")
         else:
             self.vuearrangementtype.groupbox_trajectory_arrangement_checkbox.setEnabled(True)
             self.vuearrangementtype.groupbox_time_series_arrangement_checkbox.setEnabled(True)
@@ -146,8 +146,8 @@ class controleurArrangementtype:
         self.vuearrangementtype.groupbox_open_button.setEnabled(True)
         self.vuearrangementtype.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
         self.vuearrangementtype.vuearrangement.vuemainwindow.vuetoolbar.menu_file_button.setEnabled(True)
-        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Arrangement type confirmed. Please, set arrangement settings or confirm arrangement to process data.\n")
-        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Arrangement type confirmed. Please, set arrangement settings or confirm arrangement to process data.\n", "green")
+        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Catalog type confirmed. Please, set catalog settings or confirm catalog to process data.\n")
+        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Catalog type confirmed. Please, set catalog settings or confirm catalog to process data.\n", "green")
     
     
     def cancel(self):
@@ -181,29 +181,29 @@ class controleurArrangementtype:
         self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files = ["", []]
         self.vuearrangementtype.vuearrangement.vuemainwindow.vuetoolbar.controleurtoolbar.file_list = []
         self.vuearrangementtype.vuearrangement.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list = []
-        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Arrangement has been cancelled. Please, choose a new arrangement type to proceed.\n")
-        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Arrangement has been cancelled. Please, choose a new arrangement type to proceed.\n", "orange")
+        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Catalog has been cancelled. Please, choose a new catalog type to proceed.\n")
+        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Catalog has been cancelled. Please, choose a new catalog type to proceed.\n", "orange")
     
     
     def restore(self):
         
         arrangement = {}
         if self.vuearrangementtype.groupbox_trajectory_arrangement_checkbox.isChecked():
-            arrangement_path = './trajectory_arrangement.json'
+            arrangement_path = './trajectory_catalog.json'
         elif self.vuearrangementtype.groupbox_time_series_arrangement_checkbox.isChecked():
-            arrangement_path = './timeseries_arrangement.json'
+            arrangement_path = './timeseries_catalog.json'
         elif self.vuearrangementtype.groupbox_profile_arrangement_checkbox.isChecked():
-            arrangement_path = './profile_arrangement.json'
+            arrangement_path = './profile_catalog.json'
         elif self.vuearrangementtype.groupbox_sample_arrangement_checkbox.isChecked():
-            arrangement_path = './sample_arrangement.json'
+            arrangement_path = './sample_catalog.json'
             
         with open(arrangement_path[:-5] + "_save.json", 'r') as f:
             arrangement = json.load(f)
         with open(self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files[0], 'w') as f:
             json.dump(arrangement, f, indent = 4)
         self.vuearrangementtype.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
-        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Default arrangement has been restored for the selected arrangement. Please, set arrangement settings or confirm arrangement to process data.")
-        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Default arrangement has been restored for the selected arrangement. Please, set arrangement settings or confirm arrangement to process data.", "green")
+        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Default catalog has been restored for the selected catalog. Please, set catalog settings or confirm catalog to process data.")
+        self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Default catalog has been restored for the selected catalog. Please, set catalog settings or confirm catalog to process data.", "green")
     
     
     def open(self):
@@ -213,5 +213,5 @@ class controleurArrangementtype:
             if file_path.endswith(".json"):
                 self.vuearrangementtype.vuearrangement.modelearrangement.path_list_files[0] = str(file_path)
                 self.vuearrangementtype.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
-                self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Selected arrangement has been opened. Please, set arrangement settings or confirm arrangement to process data.\n")
-                self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Selected arrangement has been opened. Please, set arrangement settings or confirm arrangement to process data.\n", "green")
+                self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Selected catalog has been opened. Please, set catalog settings or confirm catalog to process data.\n")
+                self.vuearrangementtype.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Selected catalog has been opened. Please, set catalog settings or confirm catalog to process data.\n", "green")

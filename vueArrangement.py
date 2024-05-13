@@ -56,7 +56,7 @@ class vueArrangement(QWidget):
         # Layout associé à l'instance de la classe vueArrangement
         self.vuearrangement_layout = QVBoxLayout(self)
         
-        self.groupbox = QGroupBox("Arrangement")
+        self.groupbox = QGroupBox("Catalog")
         self.groupbox_layout = QVBoxLayout()
         
         self.groupbox_viewersettings_layout = QHBoxLayout()
@@ -64,8 +64,8 @@ class vueArrangement(QWidget):
         self.groupbox_viewersettings_layout.addWidget(self.vuearrangementviewer)
         self.groupbox_viewersettings_layout.addWidget(self.vuearrangementsettings)
 
-        self.groupbox_save_button = QPushButton("Save Arrangement")
-        self.groupbox_confirm_button = QPushButton("Confirm Arrangement")
+        self.groupbox_save_button = QPushButton("Save Catalog")
+        self.groupbox_confirm_button = QPushButton("Confirm Catalog")
         
         self.groupbox_save_button.setEnabled(False)
         self.groupbox_confirm_button.setEnabled(False)

@@ -23,7 +23,7 @@ class modeleNetcdf:
     
     
     # Initialisation d'un catalogue sous forme d'une liste contenant une liste de noms possibles pour la variable datetime du fichier netCDF et une liste de données temporelles
-    datetime_catalog: list[list] = [['datetime', 'date', 'time', 'temps', 'heure', 'hour', 'minute', 'min', 'seconde', 'sec', 'YYYY/MM/DD', 'DD/MM/YYYY', 'HH:MM:SS']]
+    datetime_catalog: list[list] = [['datetime', 'date', 'time', 'temps', 'heure', 'hour', 'minute', 'seconde', 'yyyy-mm-ddthh:mm:ss', 'yyyy/mm/ddthh:mm:ss', 'yyyy-mm-dd hh:mm:ss', 'yyyy/mm/dd hh:mm:ss', 'yyyy-mm-dd', 'yyyy/mm/dd', 'dd-mm-yyyy', 'dd/mm/yyyy', 'hh:mm:ss', 'hh:mm:ss.sss']]
     
     
     # Constructeur par défaut
@@ -52,24 +52,22 @@ class modeleNetcdf:
             for key in list(self.xarray_dataset.data_vars.keys()):
                 # Initialisation d'une liste qui contiendra des listes de noms de colonne possibles à chaque nom de colonne du dataframe
                 column_name_list = []
-                # Initialisation d'une liste qui contiendra les valeurs de la deuxième dimension d'une variable du dataset xarray
-                dimension_value_list = []
                 # Initialisation d'une liste qui contiendra les premiers indices des lignes de la colonne de la deuxième dimension de la variable qui contiennent les valeurs de la deuxième dimension
                 index_list = []
                 # Initialisation d'une variable qui représentera le nombre de listes de noms de colonne possibles vérifiées
                 list_checked = 0
                 # Parcours de chaque colonne du dataframe
                 for column in self.dataframe.columns:
-                    # Si le nom de la colonne du dataframe en minuscule sans espace blanc n'est pas dans la première liste du catalogue
-                    if column.replace(' ', '').lower() not in modeleNetcdf.datetime_catalog[0]:
+                    # Si le nom de la colonne du dataframe filtré ne commence pas ou ne finit pas par un mot de la première liste du catalogue
+                    if [word for word in modeleNetcdf.datetime_catalog[0] if not re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith(word) and not re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().endswith(word)]:
                         # Si les noms de la variable du fichier netCDF sont renseignés
-                        if ':long_name' in self.xarray_dataset[key].attrs.keys() and ':standard_name' in self.xarray_dataset[key].attrs.keys() and ':sdn_parameter_name' in self.xarray_dataset[key].attrs.keys():
+                        if 'long_name' in self.xarray_dataset[key].attrs.keys() and 'standard_name' in self.xarray_dataset[key].attrs.keys() and 'sdn_parameter_name' in self.xarray_dataset[key].attrs.keys():
                             # Si le type des données du fichier netCDF est bien précisé
-                            if ':dtype' in self.xarray_dataset[key].attrs.keys():
+                            if 'dtype' in self.xarray_dataset[key].attrs.keys():
                                 # Si le tableau de données est de dimension 1 et si un des mots de la liste des noms possibles de la clé est le nom de la colonne du dataframe
-                                if self.xarray_dataset[key].values.ndim == 1 and modeleNetcdf.check_names([self.xarray_dataset[key].attrs[':standard_name'], self.xarray_dataset[key].attrs[':long_name'], self.xarray_dataset[key].attrs[':sdn_parameter_name'], self.xarray_dataset[key].attrs['column_name']], column) == True:
+                                if self.xarray_dataset[key].values.ndim == 1 and modeleNetcdf.check_names([self.xarray_dataset[key].attrs['standard_name'], self.xarray_dataset[key].attrs['long_name'], self.xarray_dataset[key].attrs['sdn_parameter_name'], self.xarray_dataset[key].attrs['column_name']], column) == True:
                                     # Si les données de la colonne du dataframe sont du même type que celui des données du fichier netCDF ou si une colonne du dataframe est vide
-                                    if self.dataframe[column].dtype == self.xarray_dataset[key].attrs[':dtype'] or self.dataframe[column].isna().all() == True:
+                                    if self.dataframe[column].dtype == self.xarray_dataset[key].attrs['dtype'] or self.dataframe[column].isna().all() == True:
                                         # Si la liste de données de la colonne du dataframe contient au minimum 10 données
                                         if len(self.dataframe[column].iloc[:].tolist()) >= 10:
                                             # Si la clé est latitude
@@ -126,10 +124,16 @@ class modeleNetcdf:
                                                     if all(self.dataframe[column].between(-90.0, 90.0)):
                                                         # Initialisation de l'indice de la colonne du dataframe
                                                         index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
-                                                        # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
-                                                        for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
-                                                            # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
-                                                            index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
+                                                        # Si la deuxième dimension de la variable n'est pas 'index' existe et que la longueur est inférieure au nombre de lignes du dataframe
+                                                        if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index):
+                                                            # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
+                                                            for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
+                                                                # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
+                                                                index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
+                                                        # Si la deuxième dimension de la variable est 'index' et que la longueur est égale au nombre de lignes du dataframe
+                                                        elif self.xarray_dataset[key].dims[1] == "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] == len(self.dataframe.index):
+                                                            # Initialisation d'une liste d'indices de ligne
+                                                            index_list = [i for i in range(0, len(self.dataframe.index))]
                                                         # Si les tableaux numpy sont de même taille
                                                         if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape:
                                                             # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
@@ -148,10 +152,16 @@ class modeleNetcdf:
                                                     if all(self.dataframe[column].between(-180.0, 180.0)):    
                                                         # Initialisation de l'indice de la colonne du dataframe
                                                         index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
-                                                        # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
-                                                        for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
-                                                            # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
-                                                            index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
+                                                        # Si la deuxième dimension de la variable n'est pas 'index' existe et que la longueur est inférieure au nombre de lignes du dataframe
+                                                        if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index):
+                                                            # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
+                                                            for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
+                                                                # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
+                                                                index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
+                                                        # Si la deuxième dimension de la variable est 'index' et que la longueur est égale au nombre de lignes du dataframe
+                                                        elif self.xarray_dataset[key].dims[1] == "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] == len(self.dataframe.index):
+                                                            # Initialisation d'une liste d'indices de ligne
+                                                            index_list = [i for i in range(0, len(self.dataframe.index))]
                                                         # Si les tableaux numpy sont de même taille
                                                         if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape:
                                                             # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
@@ -168,10 +178,16 @@ class modeleNetcdf:
                                                 else:
                                                     # Initialisation de l'indice de la colonne du dataframe
                                                     index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
-                                                    # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
-                                                    for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
-                                                        # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
-                                                        index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
+                                                    # Si la deuxième dimension de la variable n'est pas 'index' existe et que la longueur est inférieure au nombre de lignes du dataframe
+                                                    if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index):
+                                                        # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
+                                                        for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
+                                                            # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
+                                                            index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
+                                                    # Si la deuxième dimension de la variable est 'index' et que la longueur est égale au nombre de lignes du dataframe
+                                                    elif self.xarray_dataset[key].dims[1] == "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] == len(self.dataframe.index):
+                                                        # Initialisation d'une liste d'indices de ligne
+                                                        index_list = [i for i in range(0, len(self.dataframe.index))]
                                                     # Si les tableaux numpy sont de même taille
                                                     if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape:
                                                         # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
@@ -188,10 +204,16 @@ class modeleNetcdf:
                                         else:
                                             # Initialisation de l'indice de la colonne du dataframe
                                             index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
-                                            # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
-                                            for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
-                                                # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
-                                                index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
+                                            # Si la deuxième dimension de la variable n'est pas 'index' existe et que la longueur est inférieure au nombre de lignes du dataframe
+                                            if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index):
+                                                # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
+                                                for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
+                                                    # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
+                                                    index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
+                                            # Si la deuxième dimension de la variable est 'index' et que la longueur est égale au nombre de lignes du dataframe
+                                            elif self.xarray_dataset[key].dims[1] == "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] == len(self.dataframe.index):
+                                                # Initialisation d'une liste d'indices de ligne
+                                                index_list = [i for i in range(0, len(self.dataframe.index))]
                                             # Si les tableaux numpy sont de même taille
                                             if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape:
                                                 # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
@@ -221,12 +243,16 @@ class modeleNetcdf:
             self.dataframe = pd.DataFrame()
         # Sinon
         else:
-            # Parcours de chaque colonne du dataframe
-            for column in self.dataframe.columns:
-                # Parcours de chaque élément de la première liste du catalogue
-                for element in modeleNetcdf.datetime_catalog[0]:
-                    # Si l'élément du catalogue est contenu dans le nom de la colonne du dataframe en minuscule sans espace blanc et si le catalogue ne contient pas plus de 3 listes
-                    if element in column.replace(' ', '').lower() and len(modeleNetcdf.datetime_catalog) < 3:
+            # Si le catalogue a une liste de données temporelles
+            if len(modeleNetcdf.datetime_catalog) > 1:
+                # Technique de slicing pour retirer la liste de données temporelles
+                modeleNetcdf.datetime_catalog = modeleNetcdf.datetime_catalog[:-1]
+            # Si la variable 'time' est présente dans le dataset xarray
+            if 'time' in list(self.xarray_dataset.data_vars.keys()):
+                # Parcours de chaque colonne du dataframe
+                for column in self.dataframe.columns:
+                    # Si le nom de la colonne du dataframe filtré ne commence pas ou ne finit pas par un mot de la première liste du catalogue et si le catalogue ne contient pas plus de 3 listes
+                    if [word for word in modeleNetcdf.datetime_catalog[0] if re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith(word) or re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().endswith(word)] and len(modeleNetcdf.datetime_catalog) < 3:
                         # Si la liste de données de la colonne du dataframe contient au minimum 10 données
                         if len(self.dataframe[column].iloc[:].tolist()) >= 10:
                             # Ajout des données de la colonne du dataframe dans le catalogue
@@ -235,56 +261,98 @@ class modeleNetcdf:
                         else:
                             self.controleurlogs.add_log("Less than 10 data are present in column " + column + " . Data will be not selected.\n")
                             self.controleurlogs.add_colored_log("Less than 10 data are present in column " + column + " . Data will be not selected.\n", "red")
-            # Si le catalogue contient une liste de noms possibles pour la variable datetime et une liste de données temporelles
-            if len(modeleNetcdf.datetime_catalog) == 2:
-                # Parcours de la première donnée temporelle jusqu'à la dernière dans la liste
-                for i in range(0, len(modeleNetcdf.datetime_catalog[1])):
-                    # Si la donnée temporelle est au format timestamp
-                    if isinstance(modeleNetcdf.datetime_catalog[1][i], pd.Timestamp):
-                        # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
-                        modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d %H:%M:%S"))
-                    # Si la donnée temporelle est au format datetime
-                    elif isinstance(modeleNetcdf.datetime_catalog[1][i], datetime):
-                        # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
-                        modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d %H:%M:%S"))   
-                    # Si la donnée temporelle est au format date
-                    elif isinstance(modeleNetcdf.datetime_catalog[1][i], date):
-                        # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
-                        modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d"))
-                    # Si la donnée temporelle est au format time
-                    elif isinstance(modeleNetcdf.datetime_catalog[1][i], time):
-                        # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
-                        modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%H:%M:%S"))    
-                    # Si la donnée temporelle est une chaîne de caractères
-                    elif isinstance(modeleNetcdf.datetime_catalog[1][i], str):
-                        # Si la donnée temporelle n'est pas au format 'YYYY-MM-DD HH:MM:SS', 'YYYY-MM-DDTHH:MM:SS', 'YYYY-MM-DD' et 'HH:MM:SS'
-                        if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]) (?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])T(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False:
+                # Si le catalogue contient une liste de noms possibles pour la variable datetime et une liste de données temporelles
+                if len(modeleNetcdf.datetime_catalog) == 2:
+                    # Parcours de la première donnée temporelle jusqu'à la dernière dans la liste
+                    for i in range(0, len(modeleNetcdf.datetime_catalog[1])):
+                        # Si la donnée temporelle est au format timestamp
+                        if isinstance(modeleNetcdf.datetime_catalog[1][i], pd.Timestamp):
+                            # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                            modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d %H:%M:%S"))
+                        # Si la donnée temporelle est au format datetime
+                        elif isinstance(modeleNetcdf.datetime_catalog[1][i], datetime):
+                            # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                            modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d %H:%M:%S"))   
+                        # Si la donnée temporelle est au format date
+                        elif isinstance(modeleNetcdf.datetime_catalog[1][i], date):
+                            # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
+                            modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d"))
+                        # Si la donnée temporelle est au format time
+                        elif isinstance(modeleNetcdf.datetime_catalog[1][i], time):
+                            # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
+                            modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%H:%M:%S"))    
+                        # Si la donnée temporelle est une chaîne de caractères
+                        elif isinstance(modeleNetcdf.datetime_catalog[1][i], str):
+                            # Si la donnée temporelle n'est pas au format 'YYYY-MM-DD HH:MM:SS', 'YYYY-MM-DDTHH:MM:SS', 'YYYY-MM-DD' et 'HH:MM:SS'
+                            if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]) (?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])T(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False:
+                                # La donnée temporelle est nulle
+                                modeleNetcdf.datetime_catalog[1][i] = str('')
+                            # Si la donnée temporelle est au format 'YYYY-MM-DD HH:MM:SS.SSS', 'YYYY-MM-DDTHH:MM:SS.SSS' ou 'HH:MM:SS.SSS'
+                            elif bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]) (?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', modeleNetcdf.datetime_catalog[1][i])) == True or bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])T(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', modeleNetcdf.datetime_catalog[1][i])) == True or bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', modeleNetcdf.datetime_catalog[1][i])) == True:
+                                # Conversion de la donnée temporelle en chaîne de caractères sans les millisecondes
+                                modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i][:-4])
+                        # Sinon le type de donnée n'est pas correct
+                        else:
+                            self.controleurlogs.add_log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n")
+                            self.controleurlogs.add_colored_log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n", "red")
                             # La donnée temporelle est nulle
                             modeleNetcdf.datetime_catalog[1][i] = str('')
-                    # Sinon le type de donnée n'est pas correct
-                    else:
-                        self.controleurlogs.add_log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n")
-                        self.controleurlogs.add_colored_log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n", "red")
-                        # La donnée temporelle est nulle
-                        modeleNetcdf.datetime_catalog[1][i] = str('')
-                # Parcours de chaque clé du dataset xarray
-                for key in list(self.xarray_dataset.data_vars.keys()):
-                    # Si la clé du dataset xarray en minuscule est un des éléments de la première liste du catalogue
-                    if key.lower() in modeleNetcdf.datetime_catalog[0]:
-                        # Ajout des données temporelles de la liste dans le tableau de données associé à la clé
-                        self.xarray_dataset[key].values = np.array(modeleNetcdf.datetime_catalog[1])
-                        # Sortie de boucle
-                        break
-                # Technique de slicing pour retirer la liste de données temporelles
-                modeleNetcdf.datetime_catalog = modeleNetcdf.datetime_catalog[:-1]
-            # Si le catalogue contient une liste de noms possibles pour la variable datetime et 2 listes de données temporelles
-            elif len(modeleNetcdf.datetime_catalog) == 3:
-                # Parcours de la première donnée temporelle jusqu'à la dernière dans la liste
-                for i in range(0, len(modeleNetcdf.datetime_catalog[1])):
-                    # Si la donnée temporelle est au format timestamp
-                    if isinstance(modeleNetcdf.datetime_catalog[1][i], pd.Timestamp):
-                        # Si la donnée temporelle est au format 'YYYY-MM-DD'
-                        if str(modeleNetcdf.datetime_catalog[1][i].strftime("%H:%M:%S")) == '00:00:00':
+                    # Ajout des données temporelles de la liste dans le tableau de données associé à la clé
+                    self.xarray_dataset['time'].values = np.array(modeleNetcdf.datetime_catalog[1])
+                    # Technique de slicing pour retirer la liste de données temporelles
+                    modeleNetcdf.datetime_catalog = modeleNetcdf.datetime_catalog[:-1]
+                # Si le catalogue contient une liste de noms possibles pour la variable datetime et 2 listes de données temporelles
+                elif len(modeleNetcdf.datetime_catalog) == 3:
+                    # Parcours de la première donnée temporelle jusqu'à la dernière dans la liste
+                    for i in range(0, len(modeleNetcdf.datetime_catalog[1])):
+                        # Si la donnée temporelle est au format timestamp
+                        if isinstance(modeleNetcdf.datetime_catalog[1][i], pd.Timestamp):
+                            # Si la donnée temporelle est au format 'HH:MM:SS'
+                            if str(modeleNetcdf.datetime_catalog[1][i].strftime("%H:%M:%S")) == '00:00:00':
+                                # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
+                                modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d"))
+                                # Si la donnée temporelle de la deuxième liste est au format time
+                                if isinstance(modeleNetcdf.datetime_catalog[2][i], time):
+                                    # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
+                                    modeleNetcdf.datetime_catalog[2][i] = str(modeleNetcdf.datetime_catalog[2][i].strftime("%H:%M:%S"))
+                                    # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                    modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
+                                # Si la donnée temporelle de la deuxième liste est au format datetime
+                                elif isinstance(modeleNetcdf.datetime_catalog[2][i], datetime):
+                                    # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
+                                    modeleNetcdf.datetime_catalog[2][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%H:%M:%S"))
+                                    # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                    modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
+                                # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
+                                elif isinstance(modeleNetcdf.datetime_catalog[2][i], str):
+                                    # Si la donnée temporelle n'est pas au format 'HH:MM:SS'
+                                    if bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[2][i])) == False:
+                                        # La donnée temporelle est nulle
+                                        modeleNetcdf.datetime_catalog[2][i] = str('')
+                                        # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                        modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
+                                    # Si la donnée temporelle est au format 'HH:MM:SS.SSS'
+                                    elif bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', modeleNetcdf.datetime_catalog[2][i])) == True:
+                                        # Conversion de la donnée temporelle en chaîne de caractères sans les millisecondes
+                                        modeleNetcdf.datetime_catalog[2][i] = str(modeleNetcdf.datetime_catalog[2][i][:-4])
+                                        # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                        modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
+                                # Sinon le type de donnée n'est pas correct
+                                else:
+                                    self.controleurlogs.add_log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n")
+                                    self.controleurlogs.add_colored_log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n", "red")
+                                    # La donnée temporelle est nulle
+                                    modeleNetcdf.datetime_catalog[1][i] = str('')
+                            # Sinon la donnée temporelle est dans un autre format
+                            else:
+                                # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d %H:%M:%S"))
+                        # Si la donnée temporelle est au format datetime
+                        elif isinstance(modeleNetcdf.datetime_catalog[1][i], datetime):
+                            # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                            modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d %H:%M:%S"))
+                        # Si la donnée temporelle est au format date
+                        elif isinstance(modeleNetcdf.datetime_catalog[1][i], date):
                             # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
                             modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d"))
                             # Si la donnée temporelle de la deuxième liste est au format time
@@ -299,64 +367,22 @@ class modeleNetcdf:
                                 if bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[2][i])) == True:
                                     # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
                                     modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
-                        # Sinon la donnée temporelle est au format 'YYYY-MM-DD HH:MM:SS'
-                        else:
-                            # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
-                            modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d %H:%M:%S"))
-                    # Si la donnée temporelle est au format datetime
-                    elif isinstance(modeleNetcdf.datetime_catalog[1][i], datetime):
-                        # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
-                        modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d %H:%M:%S"))
-                    # Si la donnée temporelle est au format date
-                    elif isinstance(modeleNetcdf.datetime_catalog[1][i], date):
-                        # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
-                        modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%Y-%m-%d"))
-                        # Si la donnée temporelle de la deuxième liste est au format time
-                        if isinstance(modeleNetcdf.datetime_catalog[2][i], time):
-                            # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
-                            modeleNetcdf.datetime_catalog[2][i] = str(modeleNetcdf.datetime_catalog[2][i].strftime("%H:%M:%S"))   
-                            # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
-                            modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
-                        # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
-                        elif isinstance(modeleNetcdf.datetime_catalog[2][i], str):
-                            # Si la donnée temporelle est au format 'HH:MM:SS'
-                            if bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[2][i])) == True:
-                                # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
-                                modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
-                    # Si la donnée temporelle est au format time
-                    elif isinstance(modeleNetcdf.datetime_catalog[1][i], time):
-                        # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
-                        modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%H:%M:%S"))
-                        # Si la donnée temporelle de la deuxième liste est au format date
-                        if isinstance(modeleNetcdf.datetime_catalog[2][i], date):
-                            # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
-                            modeleNetcdf.datetime_catalog[2][i] = str(modeleNetcdf.datetime_catalog[2][i].strftime("%Y-%m-%d"))   
-                            # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
-                            modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[2][i] + " " + modeleNetcdf.datetime_catalog[1][i]
-                        # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
-                        elif isinstance(modeleNetcdf.datetime_catalog[2][i], str):
-                            # Si la donnée temporelle est au format 'YYYY-MM-DD'
-                            if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[2][i])) == True:
-                                # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
-                                modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[2][i] + " " + modeleNetcdf.datetime_catalog[1][i]
-                    # Si la donnée temporelle est une chaîne de caractères
-                    elif isinstance(modeleNetcdf.datetime_catalog[1][i], str):                
-                        # Si la donnée temporelle est une chaîne de caractères au format 'YYYY-MM-DD'    
-                        if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[1][i])) == True:
-                            # Si la donnée temporelle de la deuxième liste est au format time
-                            if isinstance(modeleNetcdf.datetime_catalog[2][i], time):
-                                # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
-                                modeleNetcdf.datetime_catalog[2][i] = str(modeleNetcdf.datetime_catalog[2][i].strftime("%H:%M:%S"))   
-                                # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
-                                modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
-                            # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
-                            elif isinstance(modeleNetcdf.datetime_catalog[2][i], str):
-                                # Si la donnée temporelle de la deuxième liste est une chaîne de caractères au format 'HH:MM:SS'
-                                if bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[2][i])) == True:
+                                # Si la donnée temporelle est au format 'HH:MM:SS.SSS'
+                                elif bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', modeleNetcdf.datetime_catalog[2][i])) == True:
+                                    # Conversion de la donnée temporelle en chaîne de caractères sans les millisecondes
+                                    modeleNetcdf.datetime_catalog[2][i] = str(modeleNetcdf.datetime_catalog[2][i][:-4])
                                     # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
                                     modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
-                        # Si la donnée temporelle est une chaîne de caractères au format 'HH:MM:SS'    
-                        elif bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == True:
+                            # Si la donnée temporelle de la deuxième liste est au format timestamp
+                            elif isinstance(modeleNetcdf.datetime_catalog[2][i], pd.Timestamp):
+                                # Si la donnée temporelle est au format 'HH:MM:SS'
+                                if str(modeleNetcdf.datetime_catalog[2][i].strftime("%H:%M:%S")) == '00:00:00':
+                                    # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                    modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
+                        # Si la donnée temporelle est au format time
+                        elif isinstance(modeleNetcdf.datetime_catalog[1][i], time):
+                            # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
+                            modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i].strftime("%H:%M:%S"))
                             # Si la donnée temporelle de la deuxième liste est au format date
                             if isinstance(modeleNetcdf.datetime_catalog[2][i], date):
                                 # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
@@ -365,34 +391,84 @@ class modeleNetcdf:
                                 modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[2][i] + " " + modeleNetcdf.datetime_catalog[1][i]
                             # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
                             elif isinstance(modeleNetcdf.datetime_catalog[2][i], str):
-                                # Si la donnée temporelle de la deuxième liste est une chaîne de caractères au format 'YYYY-MM-DD'
-                                if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[2][i])) == True:
+                                # Si la donnée temporelle est une chaîne de caractères au format 'YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY' ou 'DD/MM/YYYY'
+                                if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[2][i])) == True or bool(re.match(r'^(?:\d{4})/(?:0[1-9]|1[0-2])/(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[2][i])) == True or bool(re.match(r'^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-(?:\d{4})$', modeleNetcdf.datetime_catalog[2][i])) == True or bool(re.match(r'^(?:0[1-9]|[1-2][0-9]|3[0-1])/(?:0[1-9]|1[0-2])/(?:\d{4})$', modeleNetcdf.datetime_catalog[2][i])) == True:
+                                    # Si la donnée temporelle est une chaîne de caractères au format 'YYYY/MM/DD', 'DD-MM-YYYY' ou 'DD/MM/YYYY'
+                                    if bool(re.match(r'^(?:\d{4})/(?:0[1-9]|1[0-2])/(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[2][i])) == True or bool(re.match(r'^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-(?:\d{4})$', modeleNetcdf.datetime_catalog[2][i])) == True or bool(re.match(r'^(?:0[1-9]|[1-2][0-9]|3[0-1])/(?:0[1-9]|1[0-2])/(?:\d{4})$', modeleNetcdf.datetime_catalog[2][i])) == True:
+                                        modeleNetcdf.datetime_catalog[2][i] = modeleNetcdf.datetime_catalog[2][i].replace('/', '-')
+                                        # Conversion de la donnée temporelle en objet datetime
+                                        modeleNetcdf.datetime_catalog[2][i] = datetime.strptime(modeleNetcdf.datetime_catalog[2][i], '%d-%m-%Y')
+                                        # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
+                                        modeleNetcdf.datetime_catalog[2][i] = modeleNetcdf.datetime_catalog[2][i].strftime('%Y-%m-%d')
                                     # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
                                     modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[2][i] + " " + modeleNetcdf.datetime_catalog[1][i]
-                        # Si la donnée temporelle est une chaîne de caractères qui n'est pas au format 'YYYY-MM-DD HH:MM:SS', 'YYYY-MM-DD' ou 'HH:MM:SS'
-                        elif bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]) (?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[1][i])) == False and bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False:
-                            self.controleurlogs.add_log("Date format not recognized for " + str(modeleNetcdf.datetime_catalog[1][i]) + " . Data will be cleared.\n")
-                            self.controleurlogs.add_colored_log("Date format not recognized for " + str(modeleNetcdf.datetime_catalog[1][i]) + " . Data will be cleared.\n", "red")
+                        # Si la donnée temporelle est une chaîne de caractères
+                        elif isinstance(modeleNetcdf.datetime_catalog[1][i], str):                
+                            # Si la donnée temporelle est une chaîne de caractères au format 'YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY' ou 'DD/MM/YYYY'
+                            if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[1][i])) == True or bool(re.match(r'^(?:\d{4})/(?:0[1-9]|1[0-2])/(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[1][i])) == True or bool(re.match(r'^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-(?:\d{4})$', modeleNetcdf.datetime_catalog[1][i])) == True or bool(re.match(r'^(?:0[1-9]|[1-2][0-9]|3[0-1])/(?:0[1-9]|1[0-2])/(?:\d{4})$', modeleNetcdf.datetime_catalog[1][i])) == True:
+                                # Si la donnée temporelle est une chaîne de caractères au format 'YYYY/MM/DD', 'DD-MM-YYYY' ou 'DD/MM/YYYY'
+                                if bool(re.match(r'^(?:\d{4})/(?:0[1-9]|1[0-2])/(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[1][i])) == True or bool(re.match(r'^(?:0[1-9]|[1-2][0-9]|3[0-1])-(?:0[1-9]|1[0-2])-(?:\d{4})$', modeleNetcdf.datetime_catalog[1][i])) == True or bool(re.match(r'^(?:0[1-9]|[1-2][0-9]|3[0-1])/(?:0[1-9]|1[0-2])/(?:\d{4})$', modeleNetcdf.datetime_catalog[1][i])) == True:
+                                    modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i].replace('/', '-')
+                                    # Conversion de la donnée temporelle en objet datetime
+                                    modeleNetcdf.datetime_catalog[1][i] = datetime.strptime(modeleNetcdf.datetime_catalog[1][i], '%d-%m-%Y')
+                                    # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
+                                    modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i].strftime('%Y-%m-%d')
+                                # Si la donnée temporelle de la deuxième liste est au format time
+                                if isinstance(modeleNetcdf.datetime_catalog[2][i], time):
+                                    # Conversion de la donnée temporelle en chaîne de caractères au format 'HH:MM:SS'
+                                    modeleNetcdf.datetime_catalog[2][i] = str(modeleNetcdf.datetime_catalog[2][i].strftime("%H:%M:%S"))   
+                                    # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                    modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
+                                # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
+                                elif isinstance(modeleNetcdf.datetime_catalog[2][i], str):
+                                    # Si la donnée temporelle de la deuxième liste est une chaîne de caractères au format 'HH:MM:SS'
+                                    if bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[2][i])) == True:
+                                        # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                        modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
+                                    # Si la donnée temporelle de la deuxième liste est au format 'HH:MM:SS.SSS'
+                                    elif bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', modeleNetcdf.datetime_catalog[2][i])) == True:
+                                        # Conversion de la donnée temporelle en chaîne de caractères sans les millisecondes
+                                        modeleNetcdf.datetime_catalog[2][i] = str(modeleNetcdf.datetime_catalog[2][i][:-4])
+                                        # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                        modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[1][i] + " " + modeleNetcdf.datetime_catalog[2][i]
+                            # Si la donnée temporelle est une chaîne de caractères au format 'HH:MM:SS' ou 'HH:MM:SS.SSS'
+                            elif bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == True or bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', modeleNetcdf.datetime_catalog[1][i])) == True:
+                                # Si la donnée temporelle est une chaîne de caractères au format 'HH:MM:SS.SSS'
+                                if bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', modeleNetcdf.datetime_catalog[1][i])) == True:
+                                    # Conversion de la donnée temporelle en chaîne de caractères sans les millisecondes
+                                    modeleNetcdf.datetime_catalog[1][i] = str(modeleNetcdf.datetime_catalog[1][i][:-4])
+                                # Si la donnée temporelle de la deuxième liste est au format date
+                                if isinstance(modeleNetcdf.datetime_catalog[2][i], date):
+                                    # Conversion de la donnée temporelle en chaîne de caractères au format 'YYYY-MM-DD'
+                                    modeleNetcdf.datetime_catalog[2][i] = str(modeleNetcdf.datetime_catalog[2][i].strftime("%Y-%m-%d"))   
+                                    # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                    modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[2][i] + " " + modeleNetcdf.datetime_catalog[1][i]
+                                # Si la donnée temporelle de la deuxième liste est une chaîne de caractères
+                                elif isinstance(modeleNetcdf.datetime_catalog[2][i], str):
+                                    # Si la donnée temporelle de la deuxième liste est une chaîne de caractères au format 'YYYY-MM-DD'
+                                    if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$', modeleNetcdf.datetime_catalog[2][i])) == True:
+                                        # Concaténation pour obtenir une chaîne de caractères au format 'YYYY-MM-DD HH:MM:SS'
+                                        modeleNetcdf.datetime_catalog[1][i] = modeleNetcdf.datetime_catalog[2][i] + " " + modeleNetcdf.datetime_catalog[1][i]
+                            # Si la donnée temporelle est une chaîne de caractères qui n'est pas au format 'YYYY-MM-DD HH:MM:SS'
+                            elif bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]) (?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$', modeleNetcdf.datetime_catalog[1][i])) == False:
+                                self.controleurlogs.add_log("Date format not recognized for " + str(modeleNetcdf.datetime_catalog[1][i]) + " . Data will be cleared.\n")
+                                self.controleurlogs.add_colored_log("Date format not recognized for " + str(modeleNetcdf.datetime_catalog[1][i]) + " . Data will be cleared.\n", "red")
+                                # La donnée temporelle est nulle
+                                modeleNetcdf.datetime_catalog[1][i] = str('')
+                        # Sinon le type de donnée n'est pas correct
+                        else:
+                            self.controleurlogs.add_log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n")
+                            self.controleurlogs.add_colored_log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n", "red")
                             # La donnée temporelle est nulle
-                            modeleNetcdf.datetime_catalog[1][i] = str('')
-                    # Sinon le type de donnée n'est pas correct
-                    else:
-                        self.controleurlogs.add_log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n")
-                        self.controleurlogs.add_colored_log("Incorrect data type for " + str(modeleNetcdf.datetime_catalog[1][i]) + " : " + str(type(modeleNetcdf.datetime_catalog[1][i])) + " . Data will be cleared.\n", "red")
-                        # La donnée temporelle est nulle
-                        modeleNetcdf.datetime_catalog[1][i] = str('') 
-                # Technique de slicing pour retirer toutes les listes de données temporelles sauf la première liste de données temporelles
-                modeleNetcdf.datetime_catalog = modeleNetcdf.datetime_catalog[:-(len(modeleNetcdf.datetime_catalog)-2)]
-                # Parcours de chaque clé du dataset xarray
-                for key in list(self.xarray_dataset.data_vars.keys()):
-                    # Si la clé du dataset xarray en minuscule est un des éléments de la première liste du catalogue
-                    if key.lower() in modeleNetcdf.datetime_catalog[0]:
-                        # Ajout des données temporelles de la liste dans le tableau de données associé à la clé
-                        self.xarray_dataset[key].values = np.array(modeleNetcdf.datetime_catalog[1])
-                        # Sortie de boucle
-                        break
-                # Technique de slicing pour retirer la liste de données temporelles
-                modeleNetcdf.datetime_catalog = modeleNetcdf.datetime_catalog[:-1]
+                            modeleNetcdf.datetime_catalog[1][i] = str('') 
+                    # Technique de slicing pour retirer toutes les listes de données temporelles sauf la première liste de données temporelles
+                    modeleNetcdf.datetime_catalog = modeleNetcdf.datetime_catalog[:-(len(modeleNetcdf.datetime_catalog)-2)]
+                    # Ajout des données temporelles de la liste dans le tableau de données associé à la clé
+                    self.xarray_dataset['time'].values = np.array(modeleNetcdf.datetime_catalog[1])
+            # Sinon la variable 'time' n'existe pas
+            else:
+                self.controleurlogs.add_log("Please, create 'time' variable with no value to process dates.\n")
+                self.controleurlogs.add_colored_log("Please, create 'time' variable with no value to process dates.\n", "red")
 
 
     def adapt_xarray_dataset(self: Self):
@@ -443,7 +519,7 @@ class modeleNetcdf:
             # Si la clé contient des caractères spéciaux
             if re.search(r'[^A-Za-z0-9_]', key):
                 # Initialisation d'une variable qui contient des lettres, des chiffres ou des underscore
-                new_key = re.sub(r'[^A-Za-z0-9_]', '_', key)
+                new_key = re.sub(r'[^A-Za-z0-9_]', '', key)
                 # Initialisation de la clé dans le dictionnaire
                 new_key_dict[key] = new_key
             # Sinon
@@ -457,57 +533,59 @@ class modeleNetcdf:
     @staticmethod
     def check_names(variable_name_list: list[str], column_name: str):
         
-        # Parcours de la liste des noms possibles de la variable
-        for i in range(0, len(variable_name_list)):
-            # Suppression des espaces blancs
-            variable_name_list[i] = variable_name_list[i].replace(' ', '_').lower()
-            # Si le nom commence par sea_water
-            if variable_name_list[i].startswith("sea_water_"):
-                # Suppression de sea_water du nom
-                variable_name_list[i] = variable_name_list[i][len("sea_water_"):]
+        # Si la liste des noms possibles de la variable existe
+        if variable_name_list:
+            # Parcours de la liste des noms possibles de la variable sauf column_name
+            for i in range(0, len(variable_name_list) - 1):
+                # Suppression des espaces blancs
+                variable_name_list[i] = variable_name_list[i].replace(' ', '_').lower()
+                # Si le nom commence par sea_water
+                if variable_name_list[i].startswith("sea_water_"):
+                    # Suppression de sea_water du nom
+                    variable_name_list[i] = variable_name_list[i][len("sea_water_"):]
         
-        # Si column_name est le nom de la colonne du dataframe
-        if variable_name_list[3] == column_name:
-            # Retourne Vrai
-            return True
-        # Sinon
-        else:
-            # Initialisation d'un indice
-            i = 0
-            # Initialisation d'une variable qui représente le nom de la colonne du dataframe filtré
-            filtered_column_name = ""
-            # Initialisation d'une liste
-            column_name_list = re.split(r'[\d\W\s]+', column_name)
-            # Tant que l'indice est inférieur à la longueur de la liste
-            while i < len(column_name_list):
-                # Si la longueur de l'élément de la liste est supérieure à 2 et si l'élément contient des lettres, des chiffres ou des underscores
-                if len(column_name_list[i]) > 2 and bool(re.match(r'^[a-zA-Z0-9_]*$', column_name_list[i])) == True:
-                    # Filtration du nom de la colonne
-                    filtered_column_name = column_name_list[i].strip("_").lower()
-                    # Fin de la boucle
-                    i = len(column_name_list)
-                # Sinon
-                else:
-                    # Incrémentation de l'indice
-                    i += 1
-            # Si le nom de la colonne du dataframe filtré existe
-            if filtered_column_name:
+            # Si column_name est le nom de la colonne du dataframe
+            if variable_name_list[3] == column_name:
+                # Retourne Vrai
+                return True
+            # Sinon
+            else:
+                # Initialisation d'un indice
                 i = 0
+                # Initialisation d'une variable qui représente le nom de la colonne du dataframe filtré
+                filtered_column_name = ""
+                # Initialisation d'une liste
+                column_name_list = re.split(r'[\d\W\s]+', column_name)
                 # Tant que l'indice est inférieur à la longueur de la liste
-                while i < len(variable_name_list):
-                    # Si le nom de la colonne du dataframe commence ou se termine par l'un des noms possibles de la variable
-                    if column_name.startswith(variable_name_list[i]) or column_name.endswith(variable_name_list[i]):
+                while i < len(column_name_list):
+                    # Si la longueur de l'élément de la liste est supérieure à 2 et si l'élément contient des lettres, des chiffres ou des underscores
+                    if len(column_name_list[i]) > 2 and bool(re.match(r'^[a-zA-Z0-9_]*$', column_name_list[i])) == True:
+                        # Filtration du nom de la colonne
+                        filtered_column_name = column_name_list[i].strip("_").lower()
                         # Fin de la boucle
-                        i = len(variable_name_list)
-                        # Retourne Vrai
-                        return True
+                        i = len(column_name_list)
                     # Sinon
                     else:
                         # Incrémentation de l'indice
                         i += 1
+                # Si le nom de la colonne du dataframe filtré existe
+                if filtered_column_name:
+                    i = 0
+                    # Tant que l'indice est inférieur à la longueur de la liste
+                    while i < len(variable_name_list):
+                        # Si le nom de la colonne du dataframe filtré commence ou se termine par l'un des noms possibles de la variable
+                        if filtered_column_name.startswith(variable_name_list[i]) or filtered_column_name.endswith(variable_name_list[i]):
+                            # Fin de la boucle
+                            i = len(variable_name_list)
+                            # Retourne Vrai
+                            return True
+                        # Sinon
+                        else:
+                            # Incrémentation de l'indice
+                            i += 1
 
-            # Retourne Faux
-            return False
+        # Retourne Faux
+        return False
     
     
     @staticmethod
@@ -543,8 +621,12 @@ class modeleNetcdf:
                     xarray_dataset[variable_name] = xr.DataArray(np.zeros(len(dataframe.index)), dims=variable_dimension_list[0])
                     # Parcours des attributs de la variable
                     for attribute_name, attribute_value in arrangement['variable'][variable_name]['attribute'].items():
-                        # Ajout de l'attribut de la variable et de ses informations dans le dataset xarray
-                        xarray_dataset[variable_name].attrs[attribute_name] = attribute_value
+                        if attribute_name[0] == ":":
+                            # Ajout de l'attribut de la variable et de ses informations dans le dataset xarray
+                            xarray_dataset[variable_name].attrs[attribute_name[1:]] = attribute_value
+                        else:
+                            # Ajout de l'attribut de la variable et de ses informations dans le dataset xarray
+                            xarray_dataset[variable_name].attrs[attribute_name] = attribute_value
                 # Si la dimension de la variable est une liste et si elle contient une ou plusieurs valeurs
                 elif isinstance(arrangement['dimension'][variable_dimension_list[0]]['values'], list) and len(arrangement['dimension'][variable_dimension_list[0]]['values']) > 0:
                     # Ajout du nom de la seconde dimension à la liste
@@ -662,8 +744,12 @@ class modeleNetcdf:
                     xarray_dataset[common_filtered_variable_name + "_" + common_dimension_element[0].lower() + common_dimension_element[1].lower()] = xr.DataArray(combined_variable_array, dims=[common_dimension_element[0], common_dimension_element[1]])
                     # Parcours des attributs de la première variable de dimension spécifique
                     for attribute_name, attribute_value in arrangement['variable'][common_filtered_variable_name_dict[common_filtered_variable_name][1]]['attribute'].items():
-                        # Ajout de l'attribut de la variable et de ses informations dans le dataset xarray
-                        xarray_dataset[common_filtered_variable_name + "_" + common_dimension_element[0].lower() + common_dimension_element[1].lower()].attrs[attribute_name] = attribute_value
+                        if attribute_name[0] == ":":
+                            # Ajout de l'attribut de la variable et de ses informations dans le dataset xarray
+                            xarray_dataset[common_filtered_variable_name + "_" + common_dimension_element[0].lower() + common_dimension_element[1].lower()].attrs[attribute_name[1:]] = attribute_value
+                        else:
+                            # Ajout de l'attribut de la variable et de ses informations dans le dataset xarray
+                            xarray_dataset[common_filtered_variable_name + "_" + common_dimension_element[0].lower() + common_dimension_element[1].lower()].attrs[attribute_name] = attribute_value
 
 
     @staticmethod
@@ -671,8 +757,12 @@ class modeleNetcdf:
     
         # Parcours de chaque nom d'attribut global dans l'agencement
         for global_attribute_name in arrangement['global_attribute']:
-            # Ajout de l'attribut global et de ses informations dans le dataset xarray
-            xarray_dataset.attrs[global_attribute_name] = arrangement['global_attribute'][global_attribute_name]
+            if global_attribute_name[0] == ":":
+                # Ajout de l'attribut global et de ses informations dans le dataset xarray
+                xarray_dataset.attrs[global_attribute_name[1:]] = arrangement['global_attribute'][global_attribute_name]
+            else:
+                # Ajout de l'attribut global et de ses informations dans le dataset xarray
+                xarray_dataset.attrs[global_attribute_name] = arrangement['global_attribute'][global_attribute_name]
     
     
     @staticmethod
@@ -726,7 +816,7 @@ if __name__ == '__main__':
     dataframe = controleurtoolbar.dataframe_list[0]
     
     # Initialisation du dataset xarray
-    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, 'C:/Users/ssaph/Desktop/arrangement.json')
+    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, './sample_catalog.json')
     
     modelenetcdf = modeleNetcdf(controleurlogs, dataframe, xarray_dataset)
     modelenetcdf.check_dataframe_integrity()

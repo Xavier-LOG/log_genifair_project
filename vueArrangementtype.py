@@ -46,14 +46,14 @@ class vueArrangementtype(QWidget):
         # Layout associé à l'instance de la classe vueArrangementtype
         self.vuearrangementtype_layout = QVBoxLayout(self)
         
-        self.groupbox = QGroupBox("Arrangement Type")
+        self.groupbox = QGroupBox("Catalog Type")
         self.groupbox_layout = QVBoxLayout()
         
         self.groupbox_checkbox_layout = QHBoxLayout()
-        self.groupbox_trajectory_arrangement_checkbox = QCheckBox("Trajectory Arrangement")
-        self.groupbox_time_series_arrangement_checkbox = QCheckBox("Time Series Arrangement")
-        self.groupbox_profile_arrangement_checkbox = QCheckBox("Profile Arrangement")
-        self.groupbox_sample_arrangement_checkbox = QCheckBox("Sample Arrangement")
+        self.groupbox_trajectory_arrangement_checkbox = QCheckBox("Trajectory Catalog")
+        self.groupbox_time_series_arrangement_checkbox = QCheckBox("Time Series Catalog")
+        self.groupbox_profile_arrangement_checkbox = QCheckBox("Profile Catalog")
+        self.groupbox_sample_arrangement_checkbox = QCheckBox("Sample Catalog")
         
         self.groupbox_trajectory_arrangement_checkbox.setEnabled(True)
         self.groupbox_time_series_arrangement_checkbox.setEnabled(True)

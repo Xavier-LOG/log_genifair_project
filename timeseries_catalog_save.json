@@ -191,7 +191,7 @@
     },
     "global_attribute": {
         ":_FillValue": "NaN",
-        ":coordinates": "Time",
+        ":coordinates": "Station, Time",
         ":date_created": "NaN",
         ":time_coverage_start": "NaN",
         ":time_coverage_end": "NaN",

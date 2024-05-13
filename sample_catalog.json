@@ -95,9 +95,9 @@
             }
         }
     },
-    "globale_attribute": {
+    "global_attribute": {
         ":_FillValue": "NaN",
-        ":coordinates": "Sample",
+        ":coordinates": "Station, Sample",
         ":date_created": "NaN",
         ":title": "Sample",
         ":project": "NaN",

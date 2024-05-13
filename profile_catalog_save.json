@@ -1,6 +1,6 @@
 {
     "dimension": {
-        "Time": {
+        "Depth": {
             "values": []
         },
         "Station": {
@@ -23,29 +23,28 @@
                 "column_name": "station_id"
             }
         },
-        "time": {
+        "depth": {
             "dimension": [
-                "Time"
+                "Depth"
             ],
             "attribute": {
-                ":axis": "T",
+                ":axis": "Z",
                 ":coverage_content_type": "coordinate",
-                ":dtype": "object",
-                ":units": "seconds since 1970-01-01 00:00:00",
-                ":origin": "01-JAN-1970 00:00:00",
-                ":calendar": "standard",
-                ":sdn_uom_name": "seconds",
-                ":sdn_uom_urn": "SDN:P06::UTBB",
-                ":standard_name": "time",
-                ":long_name": "Time",
-                ":sdn_parameter_name": "Elapsed time relative to 1970-01-01T00:00:00Z",
-                ":sdn_paramter_urn": "SDN:P01::ELTMEP01",
-                "column_name": "datetime"
+                ":dtype": "float64",
+                ":units": "meters",
+                ":sdn_uom_name": "meters",
+                ":sdn_uom_urn": "urn:sdn:parameter:meters",
+                ":standard_name": "depth",
+                ":long_name": "Depth",
+                ":sdn_parameter_name": "depth",
+                ":sdn_paramter_urn": "urn:sdn:parameter:depth",
+                ":positive": "down",
+                "column_name": "profondeur"
             }
         },
         "temperature": {
             "dimension": [
-                "Time"
+                "Depth"
             ],
             "attribute": {
                 ":dtype": "float64",
@@ -62,7 +61,7 @@
         },
         "salinity": {
             "dimension": [
-                "Time"
+                "Depth"
             ],
             "attribute": {
                 ":dtype": "float64",
@@ -78,7 +77,7 @@
         },
         "density": {
             "dimension": [
-                "Time"
+                "Depth"
             ],
             "attribute": {
                 ":dtype": "float64",
@@ -94,7 +93,7 @@
         },
         "fluorescence": {
             "dimension": [
-                "Time"
+                "Depth"
             ],
             "attribute": {
                 ":dtype": "float64",
@@ -110,7 +109,7 @@
         },
         "pressure": {
             "dimension": [
-                "Time"
+                "Depth"
             ],
             "attribute": {
                 ":dtype": "float64",
@@ -126,7 +125,7 @@
         },
         "dissolved_oxygen": {
             "dimension": [
-                "Time"
+                "Depth"
             ],
             "attribute": {
                 ":dtype": "float64",
@@ -142,7 +141,7 @@
         },
         "nitrate": {
             "dimension": [
-                "Time"
+                "Depth"
             ],
             "attribute": {
                 ":dtype": "float64",
@@ -158,7 +157,7 @@
         },
         "phosphate": {
             "dimension": [
-                "Time"
+                "Depth"
             ],
             "attribute": {
                 ":dtype": "float64",
@@ -174,7 +173,7 @@
         },
         "silicate": {
             "dimension": [
-                "Time"
+                "Depth"
             ],
             "attribute": {
                 ":dtype": "float64",
@@ -191,12 +190,9 @@
     },
     "global_attribute": {
         ":_FillValue": "NaN",
-        ":coordinates": "Time",
+        ":coordinates": "Station, Depth",
         ":date_created": "NaN",
-        ":time_coverage_start": "NaN",
-        ":time_coverage_end": "NaN",
-        ":update_interval": "NaN",
-        ":title": "Timeseries",
+        ":title": "Profile",
         ":project": "NaN",
         ":Conventions": "CF-1.6, SeaDataNet_1.0",
         ":institution": "NaN",
@@ -211,8 +207,8 @@
         ":contributor_name": "NaN",
         ":contributor_role": "NaN",
         ":contact": "NaN",
-        ":featureType": "TimeSeries",
-        ":cdm_data_type": "TimeSeries",
+        ":featureType": "profile",
+        ":cdm_data_type": "profile",
         ":comments": "NaN",
         ":history": "NaN"
     }

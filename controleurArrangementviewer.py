@@ -35,6 +35,7 @@ class controleurArrangementviewer:
         
         file_path: str = self.vuearrangementviewer.vuearrangement.modelearrangement.path_list_files[0]
         arrangement = self.vuearrangementviewer.vuearrangement.modelearrangement.read_json()
+        variable_type: str = ""
             
         if arrangement:
             
@@ -43,22 +44,26 @@ class controleurArrangementviewer:
             self.vuearrangementviewer.groupbox_textarea.appendPlainText("\n" + os.path.basename(arrangement_name) + " : " + "\n")
         
             # Affichage des dimensions de l'agencement
-            self.vuearrangementviewer.groupbox_textarea.appendPlainText(str("\ndimensions:"))
+            self.vuearrangementviewer.groupbox_textarea.appendPlainText(str("\nDimensions :\n"))
             for dimension_name in arrangement['dimension']:
-                self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t" + str(dimension_name) + " = " + str(len(arrangement['dimension'][dimension_name]['values'])) + ";")
-                self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t\t" + str(dimension_name) + " = " + str(arrangement['dimension'][dimension_name]['values']) + ";")
+                self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t" + str(dimension_name) + " ; ")
         
             # Affichage des variables de l'agencement
-            self.vuearrangementviewer.groupbox_textarea.appendPlainText("\nvariables:")
+            self.vuearrangementviewer.groupbox_textarea.appendPlainText("\nVariables :")
             for variable_name in arrangement['variable']:
-                self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t" + str(arrangement['variable'][variable_name]['attribute'][':dtype'][:-2]) + " " + str(variable_name) + "(" + str(arrangement['variable'][variable_name]['dimension']) + ");")
+                if str(arrangement['variable'][variable_name]['attribute'][':dtype']) != "object":
+                    variable_type = str(arrangement['variable'][variable_name]['attribute'][':dtype'][:-2])
+                else:
+                    variable_type = str(arrangement['variable'][variable_name]['attribute'][':dtype'])
+                self.vuearrangementviewer.groupbox_textarea.appendPlainText("\n\t" + variable_type + " " + str(variable_name) + "(" + str(arrangement['variable'][variable_name]['dimension']) + ");")
                 for attribute_name, attribute_value in arrangement['variable'][variable_name]['attribute'].items():
-                    self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t\t" + str(attribute_name) + " = " + str(attribute_value) + ";")
+                    if attribute_name != "column_name":
+                        self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t\t" + str(attribute_name[1:]) + " : " + str(attribute_value) + ";")
         
             # Affichage des attributs globaux de l'agencement
-            self.vuearrangementviewer.groupbox_textarea.appendPlainText(str("\nattributes:"))
+            self.vuearrangementviewer.groupbox_textarea.appendPlainText(str("\nGlobal Information :\n"))
             for global_attribute_name, global_attribute_value in arrangement['global_attribute'].items():
-                self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t" + str(global_attribute_name) + " = " + str(global_attribute_value) + ";")
+                self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t" + str(global_attribute_name[1:]) + " : " + str(global_attribute_value) + ";")
             
             self.vuearrangementviewer.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Arrangement has been loaded.\n")
             self.vuearrangementviewer.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Arrangement has been loaded.\n", "green")

@@ -45,7 +45,7 @@ class vueMainwindow(QMainWindow):
         self.setMinimumSize(self.modelemainwindow.screen_width, self.modelemainwindow.screen_height)
         self.vuelogs = vueLogs(self)
         self.vuetoolbar = vueToolbar(self)
-        self.vueArrangement = vueArrangement(self)
+        self.vuearrangement = vueArrangement(self)
         self.vuefileviewer = vueFileviewer(self)
         self.vueconversion = vueConversion(self)
         self.init_ui()
@@ -67,7 +67,7 @@ class vueMainwindow(QMainWindow):
         self.vuemainwindow_vertical_tabwidget_layout = QVBoxLayout()
         self.tabwidget = QTabWidget()
         
-        self.tabwidget.addTab(self.vueArrangement, "Arrange Data")
+        self.tabwidget.addTab(self.vuearrangement, "Arrange Data")
         self.tabwidget.addTab(self.vueconversion, "Process Data")
         self.tabwidget.setTabEnabled(1, False)
         

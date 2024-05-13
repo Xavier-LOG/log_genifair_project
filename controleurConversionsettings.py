@@ -48,6 +48,7 @@ class controleurConversionsettings:
                     dataframe = self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[i]
                     arrangement_path = self.vueconversionsettings.vueconversion.vuemainwindow.vuearrangement.modelearrangement.path_list_files[0]
                     xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, arrangement_path)
+                    xarray_dataset = modeleNetcdf.check_xarray_dataset(xarray_dataset)
                     modelenetcdf = modeleNetcdf(conversionlogs, dataframe, xarray_dataset)
                     modelenetcdf.check_dataframe_integrity()
                     modelenetcdf.check_datetime_format()

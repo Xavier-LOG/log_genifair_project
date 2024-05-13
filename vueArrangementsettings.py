@@ -13,7 +13,7 @@ from controleurArrangementsettings import controleurArrangementsettings
 
 
 
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QGroupBox, QTabWidget, QLineEdit
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QGroupBox, QTabWidget, QLineEdit, QScrollArea
 
 
 
@@ -41,13 +41,17 @@ class DimensionTabWidget(QWidget):
     def init_ui(self):
         
         self.dimensiontab_layout = QVBoxLayout()
+        self.dimensiontab_scrollarea = QScrollArea()
         self.tabwidget = QTabWidget()
         
         self.tabwidget.addTab(self.add_dimension(), "Add")
         self.tabwidget.addTab(self.modify_dimension(), "Modify")
         self.tabwidget.addTab(self.delete_dimension(), "Delete")
         
-        self.dimensiontab_layout.addWidget(self.tabwidget)
+        self.dimensiontab_scrollarea.setWidgetResizable(True)
+        self.dimensiontab_scrollarea.setWidget(self.tabwidget)
+        
+        self.dimensiontab_layout.addWidget(self.dimensiontab_scrollarea)
         
         self.setLayout(self.dimensiontab_layout)
     
@@ -215,13 +219,17 @@ class VariableTabWidget(QWidget):
     def init_ui(self):
         
         self.variabletab_layout = QVBoxLayout()
+        self.variabletab_scrollarea = QScrollArea()
         self.tabwidget = QTabWidget()
         
         self.tabwidget.addTab(self.add_variable(), "Add")
         self.tabwidget.addTab(self.modify_variable(), "Modify")
         self.tabwidget.addTab(self.delete_variable(), "Delete")
         
-        self.variabletab_layout.addWidget(self.tabwidget)
+        self.variabletab_scrollarea.setWidgetResizable(True)
+        self.variabletab_scrollarea.setWidget(self.tabwidget)
+        
+        self.variabletab_layout.addWidget(self.variabletab_scrollarea)
         
         self.setLayout(self.variabletab_layout)
     
@@ -433,13 +441,17 @@ class AttributeTabWidget(QWidget):
     def init_ui(self):
         
         self.attributetab_layout = QVBoxLayout()
+        self.attributetab_scrollarea = QScrollArea()
         self.tabwidget = QTabWidget()
         
         self.tabwidget.addTab(self.add_attribute(), "Add")
         self.tabwidget.addTab(self.modify_attribute(), "Modify")
         self.tabwidget.addTab(self.delete_attribute(), "Delete")
         
-        self.attributetab_layout.addWidget(self.tabwidget)
+        self.attributetab_scrollarea.setWidgetResizable(True)
+        self.attributetab_scrollarea.setWidget(self.tabwidget)
+        
+        self.attributetab_layout.addWidget(self.attributetab_scrollarea)
         
         self.setLayout(self.attributetab_layout)
     
@@ -621,9 +633,9 @@ class vueArrangementsettings(QWidget):
         # Layout associé à l'instance de la classe vueArrangementsettings
         self.vuearrangementsettings_layout = QVBoxLayout(self)
 
-        self.groupbox = QGroupBox("Arrangement Settings")
+        self.groupbox = QGroupBox("Catalog Settings")
         self.groupbox_layout = QVBoxLayout()
-        self.button = QPushButton("Create Specific Arrangement With File")
+        self.button = QPushButton("Create Specific Catalog With File")
         self.tabwidget = QTabWidget()
         self.dimension_tabwidget = DimensionTabWidget()
         self.variable_tabwidget = VariableTabWidget()

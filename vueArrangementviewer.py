@@ -46,7 +46,7 @@ class vueArrangementviewer(QWidget):
         # Layout associé à l'instance de la classe vueArrangementviewer
         self.vuearrangementviewer_layout = QVBoxLayout(self)
         
-        self.groupbox = QGroupBox("Arrangement Viewer")
+        self.groupbox = QGroupBox("Catalog Viewer")
         self.groupbox_layout = QVBoxLayout()
         
         self.groupbox_textarea.setReadOnly(True)

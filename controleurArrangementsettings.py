@@ -40,6 +40,7 @@ class controleurArrangementsettings:
     
     def fill_arrangement(self):
         
+        datetime_catalog: list[str] = ['datetime', 'date', 'time', 'temps', 'heure', 'hour', 'minute', 'seconde', 'yyyy-mm-ddthh:mm:ss', 'yyyy/mm/ddthh:mm:ss', 'yyyy-mm-dd hh:mm:ss', 'yyyy/mm/dd hh:mm:ss', 'yyyy-mm-dd', 'yyyy/mm/dd', 'dd-mm-yyyy', 'dd/mm/yyyy', 'hh:mm:ss', 'hh:mm:ss.sss']
         dimension_name: str = ""
         # Si les chemins de fichier existent
         if self.vuearrangementsettings.vuearrangement.modelearrangement.path_list_files[1]:
@@ -204,21 +205,46 @@ class controleurArrangementsettings:
                                     "column_name": "lon"
                                 }
                             }
-                        else:
-                            arrangement['variable'][re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower()] = {
-                                "dimension" : [dimension_name],
-                                "attribute" : {
-                                    ":dtype": str(self.dataframe[column].dtype),
-                                    ":units": "NaN",
-                                    ":sdn_uom_name": "NaN",
-                                    ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                                    ":standard_name": re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower(),
-                                    ":long_name": re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace('_', ' ').lower().capitalize(),
-                                    ":sdn_parameter_name": re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower(),
-                                    ":sdn_paramter_urn": "urn:sdn:parameter:" + str(re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower()),
-                                    "column_name": str(column)
+                        elif [word for word in datetime_catalog if re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith(word) or re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().endswith(word)]:
+                            if 'time' not in arrangement['variable']:
+                                arrangement['variable']['time'] = {
+                                    "dimension" : [dimension_name],
+                                    "attribute" : {
+                                        ":axis": "T",
+                                        ":coverage_content_type": "coordinate",
+                                        ":dtype": "object",
+                                        ":units": "seconds since 1970-01-01 00:00:00",
+                                        ":origin": "01-JAN-1970 00:00:00",
+                                        ":calendar": "standard",
+                                        ":sdn_uom_name": "seconds",
+                                        ":sdn_uom_urn": "SDN:P06::UTBB",
+                                        ":standard_name": "time",
+                                        ":long_name": "Time",
+                                        ":sdn_parameter_name": "Elapsed time relative to 1970-01-01T00:00:00Z",
+                                        ":sdn_paramter_urn": "SDN:P01::ELTMEP01",
+                                        "column_name": "datetime"
+                                    }
                                 }
-                            }
+                                arrangement['global_attribute'][':coordinates'] += ", " + dimension_name
+                                arrangement['global_attribute'][':time_coverage_start'] = "NaN"
+                                arrangement['global_attribute'][':time_coverage_end'] = "NaN"
+                                arrangement['global_attribute'][':update_interval'] = "NaN"
+                        else:
+                            if not re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith('unnamed'):
+                                arrangement['variable'][re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower()] = {
+                                    "dimension" : [dimension_name],
+                                    "attribute" : {
+                                        ":dtype": str(self.dataframe[column].dtype),
+                                        ":units": "NaN",
+                                        ":sdn_uom_name": "NaN",
+                                        ":sdn_uom_urn": "urn:sdn:parameter:NaN",
+                                        ":standard_name": re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower(),
+                                        ":long_name": re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace('_', ' ').lower().capitalize(),
+                                        ":sdn_parameter_name": re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower(),
+                                        ":sdn_paramter_urn": "urn:sdn:parameter:" + str(re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower()),
+                                        "column_name": str(column)
+                                    }
+                                }
                 self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
                 self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()            
             # Sinon
@@ -313,31 +339,33 @@ class controleurArrangementsettings:
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
-            # Parcours des valeurs de la dimension
-            for value in dimension_value.split(','):
-                # Si la valeur est un nombre entier ou flottant
-                if bool(re.match(r'^[\d.]+$', value)) == True:
-                    value_checked += 1
-            # Si toutes les valeurs de la dimension sont correctes
-            if value_checked == len(dimension_value.split(',')):
-                arrangement['dimension'][dimension_name]['values'] = [word.replace(' ', '') for word in dimension_value.split(',')]
-                self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
-                self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_lineedit.setEnabled(True)
-                self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_confirm_button.setEnabled(True)
-                self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_cancel_button.setEnabled(False)
-                self.vuearrangementsettings.dimension_tabwidget.add_value_lineedit.setEnabled(False)
-                self.vuearrangementsettings.dimension_tabwidget.add_value_button.setEnabled(False)
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Dimension value added.\n")
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Dimension value added.\n", "green")
+            # Si le nom de la dimension n'est pas vide, s'il ne contient aucun espace blanc, si le premier caractère est en majuscule et s'il est inclu dans l'agencement
+            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'] and dimension_name.lower() in arrangement['variable']:
+                # Parcours des valeurs de la dimension
+                for value in dimension_value.split(','):
+                    # Si la valeur est un nombre entier ou flottant
+                    if bool(re.match(r'^[\d\s.]+$', value)) == True:
+                        value_checked += 1
+                # Si toutes les valeurs de la dimension sont correctes
+                if value_checked == len(dimension_value.split(',')):
+                    arrangement['dimension'][dimension_name]['values'] = [word.replace(' ', '') for word in dimension_value.split(',')]
+                    self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
+                    self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
+                    self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_lineedit.setEnabled(True)
+                    self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_confirm_button.setEnabled(True)
+                    self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_cancel_button.setEnabled(False)
+                    self.vuearrangementsettings.dimension_tabwidget.add_value_lineedit.setEnabled(False)
+                    self.vuearrangementsettings.dimension_tabwidget.add_value_button.setEnabled(False)
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Dimension value added.\n")
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Dimension value added.\n", "green")
+                # Sinon
+                else:
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect dimension values.\n")
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect dimension values.\n", "red")
             # Sinon
             else:
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect dimension values.\n")
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect dimension values.\n", "red")
-        # Sinon
-        else:
-            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
-            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
             
     
     def dimension_name_modify_confirm(self):
@@ -460,7 +488,7 @@ class controleurArrangementsettings:
             # Parcours des valeurs de la dimension
             for value in dimension_value.split(','):
                 # Si la valeur est un nombre entier ou flottant
-                if bool(re.match(r'^[\d.]+$', value)) == True:
+                if bool(re.match(r'^[\d\s.]+$', value)) == True:
                     value_checked += 1
             # Si toutes les valeurs de la dimension sont correctes
             if value_checked == len(dimension_value.split(',')):
@@ -554,6 +582,7 @@ class controleurArrangementsettings:
     
     def variable_name_add(self):
         
+        datetime_catalog: list[str] = ['datetime', 'date', 'time', 'temps', 'heure', 'hour', 'minute', 'seconde', 'yyyy-mm-ddthh:mm:ss', 'yyyy/mm/ddthh:mm:ss', 'yyyy-mm-dd hh:mm:ss', 'yyyy/mm/dd hh:mm:ss', 'yyyy-mm-dd', 'yyyy/mm/dd', 'dd-mm-yyyy', 'dd/mm/yyyy', 'hh:mm:ss', 'hh:mm:ss.sss']
         variable_name: str = self.vuearrangementsettings.variable_tabwidget.add_name_lineedit.text()
         variable_dimension: str = self.vuearrangementsettings.variable_tabwidget.add_dimension_lineedit.text()
         variable_dimension_list: list = []
@@ -621,8 +650,8 @@ class controleurArrangementsettings:
                                 "column_name": "profondeur"
                             }
                         }
-                    elif [word for word in ['time', 'temps', 'date'] if variable_name.startswith(word) or variable_name.endswith(word)] and variable_name not in arrangement['variable']:
-                        arrangement['variable'][variable_name] = {
+                    elif [word for word in datetime_catalog if variable_name.startswith(word) or variable_name.endswith(word)] and 'time' not in arrangement['variable']:
+                        arrangement['variable']['time'] = {
                             "dimension" : variable_dimension_list,
                             "attribute" : {
                                 ":axis": "T",
@@ -633,13 +662,16 @@ class controleurArrangementsettings:
                                 ":calendar": "standard",
                                 ":sdn_uom_name": "seconds",
                                 ":sdn_uom_urn": "SDN:P06::UTBB",
-                                ":standard_name": variable_name,
-                                ":long_name": variable_name.replace('_', ' ').capitalize(),
+                                ":standard_name": "time",
+                                ":long_name": "Time",
                                 ":sdn_parameter_name": "Elapsed time relative to 1970-01-01T00:00:00Z",
                                 ":sdn_paramter_urn": "SDN:P01::ELTMEP01",
                                 "column_name": "datetime"
                             }
                         }
+                        arrangement['global_attribute'][':time_coverage_start'] = "NaN"
+                        arrangement['global_attribute'][':time_coverage_end'] = "NaN"
+                        arrangement['global_attribute'][':update_interval'] = "NaN"
                     else:
                         arrangement['variable'][variable_name] = {
                             "dimension" : variable_dimension_list,
@@ -748,14 +780,20 @@ class controleurArrangementsettings:
         if arrangement:
             # Si le nom de la variable n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule et s'il est inclu dans l'agencement
             if variable_name != "" and any(char.isspace() for char in variable_name) == False and variable_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', variable_name)) == True and variable_name in arrangement['variable']:
-                self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.modify_name_confirm_button.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.modify_new_name_lineedit.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.modify_dimension_lineedit.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.modify_new_name_modify_button.setEnabled(True)
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name selected.\n")
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name selected.\n", "green")
+                # Si la variable n'est pas une variable de dimension
+                if len(arrangement['variable'][variable_name]['dimension']) == 1 and (variable_name.capitalize() == arrangement['variable'][variable_name]['dimension'][0] or variable_name == "time"):
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("The dimension variable cannot be modified.\n")
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("The dimension variable cannot be modified.\n", "red")
+                # Sinon
+                else:
+                    self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.setEnabled(False)
+                    self.vuearrangementsettings.variable_tabwidget.modify_name_confirm_button.setEnabled(False)
+                    self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(True)
+                    self.vuearrangementsettings.variable_tabwidget.modify_new_name_lineedit.setEnabled(True)
+                    self.vuearrangementsettings.variable_tabwidget.modify_dimension_lineedit.setEnabled(True)
+                    self.vuearrangementsettings.variable_tabwidget.modify_new_name_modify_button.setEnabled(True)
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name selected.\n")
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name selected.\n", "green")
             # Sinon
             else:
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect variable name.\n")
@@ -786,30 +824,53 @@ class controleurArrangementsettings:
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
-            # Si le nom de la variable n'est pas vide, s'il ne contient aucun espace blanc et si la première lettre est en minuscule
-            if variable_name != "" and any(char.isspace() for char in variable_name) == False and variable_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', variable_name)) == True:
+            # Si le nom de la nouvelle variable n'est pas vide, s'il ne contient aucun espace blanc et si la première lettre est en minuscule
+            if variable_new_name != "" and any(char.isspace() for char in variable_new_name) == False and variable_new_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', variable_new_name)) == True:
                 dimension_name_list = [word.replace(' ', '') for word in dimension_name.split(',')]
                 for element in dimension_name_list:
                     if element in arrangement['dimension']:
                         dimension_name_checked += 1
                         
                 if dimension_name_checked == len(dimension_name_list):
-                    arrangement['variable'][variable_new_name] = {
-                        "dimension" : dimension_name_list,
-                        "attribute" : arrangement['variable'][variable_name]['attribute']
-                    }
-                    if variable_new_name != variable_name:
-                        del arrangement['variable'][variable_name]
-                    self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                    self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.setEnabled(True)
-                    self.vuearrangementsettings.variable_tabwidget.modify_name_confirm_button.setEnabled(True)
-                    self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(False)
-                    self.vuearrangementsettings.variable_tabwidget.modify_new_name_lineedit.setEnabled(False)
-                    self.vuearrangementsettings.variable_tabwidget.modify_dimension_lineedit.setEnabled(False)
-                    self.vuearrangementsettings.variable_tabwidget.modify_new_name_modify_button.setEnabled(False)
-                    self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
-                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name and dimension name modified.\n")
-                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name and dimension name modified.\n", "green")
+                    if len(arrangement['variable'][variable_name]['dimension']) == 1:
+                        if variable_new_name != "time" and variable_new_name.capitalize() != arrangement['variable'][variable_new_name]['dimension'][0]:
+                            arrangement['variable'][variable_new_name] = {
+                                "dimension" : dimension_name_list,
+                                "attribute" : arrangement['variable'][variable_name]['attribute']
+                            }
+                            if variable_new_name != variable_name:
+                                del arrangement['variable'][variable_name]
+                            self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
+                            self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.setEnabled(True)
+                            self.vuearrangementsettings.variable_tabwidget.modify_name_confirm_button.setEnabled(True)
+                            self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(False)
+                            self.vuearrangementsettings.variable_tabwidget.modify_new_name_lineedit.setEnabled(False)
+                            self.vuearrangementsettings.variable_tabwidget.modify_dimension_lineedit.setEnabled(False)
+                            self.vuearrangementsettings.variable_tabwidget.modify_new_name_modify_button.setEnabled(False)
+                            self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
+                            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name and dimension name modified.\n")
+                            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name and dimension name modified.\n", "green")
+                        # Sinon
+                        else:
+                            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("The variable cannot be assigned to 'time'. The default 'time' variable cannot be modified due to dates.\n")
+                            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("The variable cannot be assigned to 'time'. The default 'time' variable cannot be modified due to dates.\n", "red")    
+                    elif len(arrangement['variable'][variable_name]['dimension']) > 1:
+                        arrangement['variable'][variable_new_name] = {
+                            "dimension" : dimension_name_list,
+                            "attribute" : arrangement['variable'][variable_name]['attribute']
+                        }
+                        if variable_new_name != variable_name:
+                            del arrangement['variable'][variable_name]
+                        self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
+                        self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.setEnabled(True)
+                        self.vuearrangementsettings.variable_tabwidget.modify_name_confirm_button.setEnabled(True)
+                        self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(False)
+                        self.vuearrangementsettings.variable_tabwidget.modify_new_name_lineedit.setEnabled(False)
+                        self.vuearrangementsettings.variable_tabwidget.modify_dimension_lineedit.setEnabled(False)
+                        self.vuearrangementsettings.variable_tabwidget.modify_new_name_modify_button.setEnabled(False)
+                        self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
+                        self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name and dimension name modified.\n")
+                        self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name and dimension name modified.\n", "green")
                 # Sinon
                 else:
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect dimension.\n")
@@ -959,11 +1020,24 @@ class controleurArrangementsettings:
         if arrangement:
             # Si le nom de la variable n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule, s'il est inclu dans l'agencement et s'il y a au minimum plusieurs variables
             if variable_name != "" and any(char.isspace() for char in variable_name) == False and variable_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', variable_name)) == True and variable_name in arrangement['variable'] and len(arrangement['variable']) > 1:
-                del arrangement['variable'][variable_name]
-                self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable deleted.\n")
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable deleted.\n", "green")
+                if len(arrangement['variable'][variable_name]['dimension']) == 1:
+                    # Si le nom de la variable n'est pas celui d'une variable de dimension
+                    if variable_name != "time" and variable_name.capitalize() != arrangement['variable'][variable_name]['dimension'][0]:
+                        del arrangement['variable'][variable_name]
+                        self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
+                        self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
+                        self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable deleted.\n")
+                        self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable deleted.\n", "green")
+                    # Sinon
+                    else:
+                        self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("The variable " + variable_name + " of the dimension " + arrangement['variable'][variable_name]['dimension'][0] + " cannot be deleted.\n")
+                        self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("The variable " + variable_name + " of the dimension " + arrangement['variable'][variable_name]['dimension'][0] + " cannot be deleted.\n", "red")
+                elif len(arrangement['variable'][variable_name]['dimension']) > 1:
+                    del arrangement['variable'][variable_name]
+                    self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
+                    self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable deleted.\n")
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable deleted.\n", "green")
             # Sinon
             else:
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect variable name. The model structure must depend on at least 1 variable. Please enter a new variable first.\n")
