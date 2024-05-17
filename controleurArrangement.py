@@ -45,8 +45,8 @@ class controleurArrangement:
             if arrangement:
                 with open(file_path, "w") as f:
                     json.dump(arrangement, f, indent = 4)
-                self.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Files have been saved.\n")
-                self.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Files have been saved.\n", "green")
+                self.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Catalog has been saved.\n")
+                self.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Catalog has been saved.\n", "green")
             # Sinon
             else:
                 self.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement.\n")

@@ -4,6 +4,7 @@
 
 
 import os
+from PyQt6.QtCore import pyqtSignal, QObject
 
 
 
@@ -13,7 +14,10 @@ import os
 
 
 
-class controleurArrangementviewer:
+class controleurArrangementviewer(QObject):
+
+
+    signal = pyqtSignal(dict)
 
 
     # Constructeur par défaut
@@ -35,6 +39,7 @@ class controleurArrangementviewer:
         
         file_path: str = self.vuearrangementviewer.vuearrangement.modelearrangement.path_list_files[0]
         arrangement = self.vuearrangementviewer.vuearrangement.modelearrangement.read_json()
+        self.signal.emit(arrangement)
         variable_type: str = ""
             
         if arrangement:
@@ -44,9 +49,10 @@ class controleurArrangementviewer:
             self.vuearrangementviewer.groupbox_textarea.appendPlainText("\n" + os.path.basename(arrangement_name) + " : " + "\n")
         
             # Affichage des dimensions de l'agencement
-            self.vuearrangementviewer.groupbox_textarea.appendPlainText(str("\nDimensions :\n"))
+            self.vuearrangementviewer.groupbox_textarea.appendPlainText("\nDimensions :\n")
             for dimension_name in arrangement['dimension']:
                 self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t" + str(dimension_name) + " ; ")
+                self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t\t" + str(arrangement['dimension'][dimension_name]['values']) + " ; ")
         
             # Affichage des variables de l'agencement
             self.vuearrangementviewer.groupbox_textarea.appendPlainText("\nVariables :")
@@ -61,7 +67,7 @@ class controleurArrangementviewer:
                         self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t\t" + str(attribute_name[1:]) + " : " + str(attribute_value) + ";")
         
             # Affichage des attributs globaux de l'agencement
-            self.vuearrangementviewer.groupbox_textarea.appendPlainText(str("\nGlobal Information :\n"))
+            self.vuearrangementviewer.groupbox_textarea.appendPlainText("\nGlobal Information :\n")
             for global_attribute_name, global_attribute_value in arrangement['global_attribute'].items():
                 self.vuearrangementviewer.groupbox_textarea.appendPlainText("\t" + str(global_attribute_name[1:]) + " : " + str(global_attribute_value) + ";")
             

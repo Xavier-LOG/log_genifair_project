@@ -14,6 +14,8 @@ from modeleNetcdf import modeleNetcdf
 
 
 from PyQt6.QtWidgets import QFileDialog
+import re
+import os
 
 
 
@@ -54,11 +56,20 @@ class controleurConversionsettings:
                     modelenetcdf.check_datetime_format()
                     modelenetcdf.adapt_xarray_dataset()
                     if modelenetcdf.get_xarray_dataset():
-                        modelenetcdf.get_xarray_dataset().to_netcdf(str(file_path[:file_path.find(".")]) + "_" + str(i + 1) + ".nc")
-                        if i == len(self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list) - 1:
-                            self.vueconversionsettings.vueconversion.vuenetcdfviewer.controleurnetcdfviewer.load_netcdf(modelenetcdf)
-                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Netcdf files have been saved. Click on Cancel in Arrange Data to convert a new file again.\n")
-                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Netcdf files have been saved. Click on Cancel in Arrange Data to convert a new file again.\n", "green")
+                        if bool(re.search(r'[^\x00-\x7F]', str(os.path.dirname(str(file_path))))) == False:
+                            modelenetcdf.get_xarray_dataset().to_netcdf(str(file_path[:file_path.find(".")]) + "_" + str(i + 1) + ".nc")
+                            if i == len(self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list) - 1:
+                                self.vueconversionsettings.vueconversion.vuenetcdfviewer.controleurnetcdfviewer.load_netcdf(modelenetcdf)
+                                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Netcdf file has been saved.\n")
+                                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Netcdf file has been saved.\n", "green")
+                        else:
+                            self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("NetCDF file has not been saved. The file path contains accents.\n")
+                            self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("NetCDF file has not been saved. The file path contains accents.\n", "red")
+                    else:
+                        self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Empty dataframe.\n")
+                        self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Empty dataframe.\n", "red")
+                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Click on Cancel in Arrange Data to convert a new file again.\n")
+                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Click on Cancel in Arrange Data to convert a new file again.\n", "green")
             else:
                 self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect file format. Click on Cancel in Arrange Data to convert a new file again.\n")
                 self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect file format. Click on Cancel in Arrange Data to convert a new file again.\n", "red")

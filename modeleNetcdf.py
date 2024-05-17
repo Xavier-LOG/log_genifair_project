@@ -102,8 +102,8 @@ class modeleNetcdf:
                                     else:
                                         self.controleurlogs.add_log("Data type in column " + column + " : " + str(self.dataframe[column].dtype) + " does not match the type of the variable : " + key + " : " + self.xarray_dataset[key].attrs['dtype'] + " . Data will be not selected.\n")
                                         self.controleurlogs.add_colored_log("Data type in column " + column + " : " + str(self.dataframe[column].dtype) + " does not match the type of the variable : " + key + " : " + self.xarray_dataset[key].attrs['dtype'] + " . Data will be not selected.\n", "red")
-                                # Si le tableau de données est de dimension 2, si le nom de la colonne est contenu dans la clé
-                                elif self.xarray_dataset[key].values.ndim == 2 and column[:len(key.split('_')[0])] in key.split('_')[0]:
+                                # Si le tableau de données est de dimension 2, si le nom de la colonne filtré commence ou se termine par la clé
+                                elif self.xarray_dataset[key].values.ndim == 2 and (re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith(key.split('_')[0].lower()) or re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().endswith(key.split('_')[0].lower())):
                                     # Si la liste de données de la colonne du dataframe contient au minimum 10 données
                                     if len(self.dataframe[column].iloc[:].tolist()) >= 10:
                                         # Si la liste existe
@@ -124,18 +124,18 @@ class modeleNetcdf:
                                                     if all(self.dataframe[column].between(-90.0, 90.0)):
                                                         # Initialisation de l'indice de la colonne du dataframe
                                                         index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
-                                                        # Si la deuxième dimension de la variable n'est pas 'index' existe et que la longueur est inférieure au nombre de lignes du dataframe
-                                                        if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index):
+                                                        # Si la deuxième dimension de la variable n'est pas 'index', si la longueur est inférieure au nombre de lignes du dataframe et si le nom de la deuxième dimension de la variable est égal au nom de la colonne filtré
+                                                        if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index) and str(self.xarray_dataset[key].dims[1]).replace('_', '').lower() == re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower():
                                                             # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
                                                             for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
                                                                 # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
-                                                                index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
-                                                        # Si la deuxième dimension de la variable est 'index' et que la longueur est égale au nombre de lignes du dataframe
+                                                                index_list.append(self.dataframe.index[self.dataframe[column] == value].tolist()[0])
+                                                        # Si la deuxième dimension de la variable est 'index' et si la longueur est égale au nombre de lignes du dataframe
                                                         elif self.xarray_dataset[key].dims[1] == "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] == len(self.dataframe.index):
                                                             # Initialisation d'une liste d'indices de ligne
                                                             index_list = [i for i in range(0, len(self.dataframe.index))]
-                                                        # Si les tableaux numpy sont de même taille
-                                                        if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape:
+                                                        # Si les tableaux numpy sont de même taille et si la longueur de la liste des indices est de la même taille que la longueur du tableau de la deuxième dimension de la variable
+                                                        if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape and len(index_list) == len(self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist()):
                                                             # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
                                                             self.xarray_dataset[key].values = np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]]))
                                                         # Si la liste des noms de colonne possibles n'est pas dans la liste
@@ -152,18 +152,18 @@ class modeleNetcdf:
                                                     if all(self.dataframe[column].between(-180.0, 180.0)):    
                                                         # Initialisation de l'indice de la colonne du dataframe
                                                         index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
-                                                        # Si la deuxième dimension de la variable n'est pas 'index' existe et que la longueur est inférieure au nombre de lignes du dataframe
-                                                        if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index):
+                                                        # Si la deuxième dimension de la variable n'est pas 'index', si la longueur est inférieure au nombre de lignes du dataframe et si le nom de la deuxième dimension de la variable est égal au nom de la colonne filtré
+                                                        if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index) and str(self.xarray_dataset[key].dims[1]).replace('_', '').lower() == re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower():
                                                             # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
                                                             for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
                                                                 # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
-                                                                index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
-                                                        # Si la deuxième dimension de la variable est 'index' et que la longueur est égale au nombre de lignes du dataframe
+                                                                index_list.append(self.dataframe.index[self.dataframe[column] == value].tolist()[0])
+                                                        # Si la deuxième dimension de la variable est 'index' et si la longueur est égale au nombre de lignes du dataframe
                                                         elif self.xarray_dataset[key].dims[1] == "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] == len(self.dataframe.index):
                                                             # Initialisation d'une liste d'indices de ligne
                                                             index_list = [i for i in range(0, len(self.dataframe.index))]
-                                                        # Si les tableaux numpy sont de même taille
-                                                        if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape:
+                                                        # Si les tableaux numpy sont de même taille et si la longueur de la liste des indices est de la même taille que la longueur du tableau de la deuxième dimension de la variable
+                                                        if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape and len(index_list) == len(self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist()):
                                                             # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
                                                             self.xarray_dataset[key].values = np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]]))
                                                         # Si la liste des noms de colonne possibles n'est pas dans la liste
@@ -178,18 +178,18 @@ class modeleNetcdf:
                                                 else:
                                                     # Initialisation de l'indice de la colonne du dataframe
                                                     index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
-                                                    # Si la deuxième dimension de la variable n'est pas 'index' existe et que la longueur est inférieure au nombre de lignes du dataframe
-                                                    if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index):
+                                                    # Si la deuxième dimension de la variable n'est pas 'index', si la longueur est inférieure au nombre de lignes du dataframe et si le nom de la deuxième dimension de la variable est égal au nom de la colonne filtré
+                                                    if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index) and str(self.xarray_dataset[key].dims[1]).replace('_', '').lower() == re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower():
                                                         # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
                                                         for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
                                                             # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
-                                                            index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
-                                                    # Si la deuxième dimension de la variable est 'index' et que la longueur est égale au nombre de lignes du dataframe
+                                                            index_list.append(self.dataframe.index[self.dataframe[column] == value].tolist()[0])
+                                                    # Si la deuxième dimension de la variable est 'index' et si la longueur est égale au nombre de lignes du dataframe
                                                     elif self.xarray_dataset[key].dims[1] == "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] == len(self.dataframe.index):
                                                         # Initialisation d'une liste d'indices de ligne
                                                         index_list = [i for i in range(0, len(self.dataframe.index))]
-                                                    # Si les tableaux numpy sont de même taille
-                                                    if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape:
+                                                    # Si les tableaux numpy sont de même taille et si la longueur de la liste des indices est de la même taille que la longueur du tableau de la deuxième dimension de la variable
+                                                    if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape and len(index_list) == len(self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist()):
                                                         # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
                                                         self.xarray_dataset[key].values = np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]]))
                                                     # Si la liste des noms de colonne possibles n'est pas dans la liste
@@ -204,18 +204,18 @@ class modeleNetcdf:
                                         else:
                                             # Initialisation de l'indice de la colonne du dataframe
                                             index: int = modeleNetcdf.get_index_as_int(self.dataframe, column)
-                                            # Si la deuxième dimension de la variable n'est pas 'index' existe et que la longueur est inférieure au nombre de lignes du dataframe
-                                            if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index):
+                                            # Si la deuxième dimension de la variable n'est pas 'index', si la longueur est inférieure au nombre de lignes du dataframe et si le nom de la deuxième dimension de la variable est égal au nom de la colonne filtré
+                                            if self.xarray_dataset[key].dims[1] != "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] < len(self.dataframe.index) and str(self.xarray_dataset[key].dims[1]).replace('_', '').lower() == re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower():
                                                 # Parcours de chaque valeur dans la liste des valeurs de la deuxième dimension de la variable
                                                 for value in self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist():
                                                     # Ajout du premier indice de la ligne de la colonne de la deuxième dimension de la variable qui vaut l'élément de la liste à la liste
-                                                    index_list.append(self.dataframe.index[self.dataframe[self.xarray_dataset[key].dims[1]] == value].tolist()[0])
+                                                    index_list.append(self.dataframe.index[self.dataframe[column] == value].tolist()[0])
                                             # Si la deuxième dimension de la variable est 'index' et que la longueur est égale au nombre de lignes du dataframe
                                             elif self.xarray_dataset[key].dims[1] == "index" and self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.shape[0] == len(self.dataframe.index):
                                                 # Initialisation d'une liste d'indices de ligne
                                                 index_list = [i for i in range(0, len(self.dataframe.index))]
-                                            # Si les tableaux numpy sont de même taille
-                                            if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape:
+                                            # Si les tableaux numpy sont de même taille et si la longueur de la liste des indices est de la même taille que la longueur du tableau de la deuxième dimension de la variable
+                                            if self.xarray_dataset[key].values.shape == np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]])).shape and len(index_list) == len(self.xarray_dataset[self.xarray_dataset[key].dims[1]].values.tolist()):
                                                 # Ajout des données des colonnes du dataframe dans le tableau de données associé à la clé
                                                 self.xarray_dataset[key].values = np.transpose(np.array(self.dataframe.iloc[index_list, index: index + self.xarray_dataset[key].values.shape[0]]))
                                             # Ajout de la liste

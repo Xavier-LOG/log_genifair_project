@@ -26,8 +26,15 @@ class controleurArrangementsettings:
         super().__init__()
         self.vuearrangementsettings = vuearrangementsettings
         self.dataframe = pd.DataFrame()
-        self.signal = self.vuearrangementsettings.vuearrangement.vuemainwindow.vuetoolbar.controleurtoolbar.signal
-        self.signal.connect(self.set_dataframe)
+        self.dimension_name_list = ["Time", "Depth", "Latitude", "Longitude", "Station", "Sample"]
+        self.dimension_value_list = ["400, 500, 600, 700", "400, 450, 500, 550, 600, 650, 700"]
+        self.variable_name_list = ["sea_surface_temperature", "quality_flag", "sea_bottom_temperature", "sea_surface_salinity", "sea_bottom_salinity", "sea_surface_pressure", "sea_bottom_pressure", "sea_surface_height", "sea_bottom_depth", "sea_surface_oxygen_concentration", "sea_bottom_oxygen_concentration", "sea_surface_chlorophyll_concentration", "sea_bottom_chlorophyll_concentration"]
+        self.variable_attribute_list = ["axis"]
+        self.global_attribute_list = ["comments"]
+        self.catalog_signal = self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.signal
+        self.catalog_signal.connect(self.fill_combobox)
+        self.dataframe_signal = self.vuearrangementsettings.vuearrangement.vuemainwindow.vuetoolbar.controleurtoolbar.signal
+        self.dataframe_signal.connect(self.set_dataframe)
 
     
     # Définition des méthodes
@@ -36,6 +43,81 @@ class controleurArrangementsettings:
     def set_dataframe(self, obj):
         
         self.dataframe = obj[1][0]
+    
+    
+    def fill_combobox(self, obj):
+        
+        catalog = obj
+        # Si l'agencement existe
+        if catalog:
+            
+            self.vuearrangementsettings.dimension_tabwidget.add_name_combobox.clear()
+            self.vuearrangementsettings.dimension_tabwidget.add_name_combobox.addItems(self.dimension_name_list)
+            self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_combobox.clear()
+            self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_combobox.addItems(list(catalog['dimension'].keys()))
+            self.vuearrangementsettings.dimension_tabwidget.add_value_combobox.clear()
+            self.vuearrangementsettings.dimension_tabwidget.add_value_combobox.addItems(self.dimension_value_list)
+            
+            self.vuearrangementsettings.dimension_tabwidget.modify_name_combobox.clear()
+            self.vuearrangementsettings.dimension_tabwidget.modify_name_combobox.addItems(list(catalog['dimension'].keys()))
+            self.vuearrangementsettings.dimension_tabwidget.modify_new_name_combobox.clear()
+            self.vuearrangementsettings.dimension_tabwidget.modify_new_name_combobox.addItems(self.dimension_name_list)
+            self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_combobox.clear()
+            self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_combobox.addItems(list(catalog['dimension'].keys()))
+            self.vuearrangementsettings.dimension_tabwidget.modify_new_value_combobox.clear()
+            self.vuearrangementsettings.dimension_tabwidget.modify_new_value_combobox.addItems(self.dimension_value_list)
+            
+            self.vuearrangementsettings.dimension_tabwidget.delete_name_combobox.clear()
+            self.vuearrangementsettings.dimension_tabwidget.delete_name_combobox.addItems(list(catalog['dimension'].keys()))
+            self.vuearrangementsettings.dimension_tabwidget.delete_value_dimension_combobox.clear()
+            self.vuearrangementsettings.dimension_tabwidget.delete_value_dimension_combobox.addItems(list(catalog['dimension'].keys()))
+            
+            self.vuearrangementsettings.variable_tabwidget.add_name_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.add_name_combobox.addItems(self.variable_name_list)
+            self.vuearrangementsettings.variable_tabwidget.add_dimension_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.add_dimension_combobox.addItems(list(catalog['dimension'].keys()))
+            self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_combobox.addItems(list(catalog['variable'].keys()))
+            self.vuearrangementsettings.variable_tabwidget.add_attribute_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.add_attribute_combobox.addItems(self.variable_attribute_list)
+            self.vuearrangementsettings.variable_tabwidget.add_attribute_value_combobox.clear()
+            
+            self.vuearrangementsettings.variable_tabwidget.modify_name_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.modify_name_combobox.addItems(list(catalog['variable'].keys()))
+            self.vuearrangementsettings.variable_tabwidget.modify_new_name_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.modify_new_name_combobox.addItems(self.variable_name_list)
+            self.vuearrangementsettings.variable_tabwidget.modify_dimension_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.modify_dimension_combobox.addItems(list(catalog['dimension'].keys()))
+            
+            self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.addItems(list(catalog['variable'].keys()))
+            self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.addItems(self.variable_attribute_list)
+            self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_combobox.clear()
+            
+            self.vuearrangementsettings.variable_tabwidget.delete_name_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.delete_name_combobox.addItems(list(catalog['variable'].keys()))
+            self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_combobox.clear()
+            self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_combobox.addItems(list(catalog['variable'].keys()))
+            
+            self.vuearrangementsettings.attribute_tabwidget.add_name_combobox.clear()
+            self.vuearrangementsettings.attribute_tabwidget.add_name_combobox.addItems(self.global_attribute_list)
+            self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_combobox.clear()
+            self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_combobox.addItems(list(catalog['global_attribute'].keys()))
+            self.vuearrangementsettings.attribute_tabwidget.add_value_combobox.clear()
+            
+            self.vuearrangementsettings.attribute_tabwidget.modify_name_combobox.clear()
+            self.vuearrangementsettings.attribute_tabwidget.modify_name_combobox.addItems(list(catalog['global_attribute'].keys()))
+            self.vuearrangementsettings.attribute_tabwidget.modify_new_name_combobox.clear()
+            self.vuearrangementsettings.attribute_tabwidget.modify_new_name_combobox.addItems(self.global_attribute_list)
+            self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_combobox.clear()
+            self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_combobox.addItems(list(catalog['global_attribute'].keys()))
+            self.vuearrangementsettings.attribute_tabwidget.modify_new_value_combobox.clear()
+            
+            self.vuearrangementsettings.attribute_tabwidget.delete_name_combobox.clear()
+            self.vuearrangementsettings.attribute_tabwidget.delete_name_combobox.addItems(list(catalog['global_attribute'].keys()))
+            self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_combobox.clear()
+            self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_combobox.addItems(list(catalog['global_attribute'].keys()))
     
     
     def fill_arrangement(self):
@@ -57,6 +139,7 @@ class controleurArrangementsettings:
                     "global_attribute": {
                         ":_FillValue": "NaN",
                         ":project": "NaN",
+                        ":coordinates": "Station",
                         ":Conventions": "CF-1.6, SeaDataNet_1.0",
                         ":institution": "NaN",
                         ":source": "NaN",
@@ -94,7 +177,7 @@ class controleurArrangementsettings:
                             "column_name": "datetime"
                         }
                     }
-                    arrangement['global_attribute'][':coordinates'] = dimension_name
+                    arrangement['global_attribute'][':coordinates'] += ", " + dimension_name
                     arrangement['global_attribute'][':time_coverage_start'] = "NaN"
                     arrangement['global_attribute'][':time_coverage_end'] = "NaN"
                     arrangement['global_attribute'][':update_interval'] = "NaN"
@@ -125,7 +208,7 @@ class controleurArrangementsettings:
                             "column_name": "profondeur"
                         }
                     }
-                    arrangement['global_attribute'][':coordinates'] = dimension_name
+                    arrangement['global_attribute'][':coordinates'] += ", " + dimension_name
                     arrangement['global_attribute'][':title'] = "Profile"
                     arrangement['global_attribute'][':featureType'] = "Profile"
                     arrangement['global_attribute'][':cdm_data_type'] = "Profile"
@@ -145,7 +228,7 @@ class controleurArrangementsettings:
                             "column_name": "sample"
                         }
                     }
-                    arrangement['global_attribute'][':coordinates'] = dimension_name
+                    arrangement['global_attribute'][':coordinates'] += ", " + dimension_name
                     arrangement['global_attribute'][':title'] = "Sample"
                 
                 arrangement['dimension'][dimension_name] = {
@@ -225,7 +308,8 @@ class controleurArrangementsettings:
                                         "column_name": "datetime"
                                     }
                                 }
-                                arrangement['global_attribute'][':coordinates'] += ", " + dimension_name
+                                if dimension_name not in arrangement['global_attribute'][':coordinates']:
+                                    arrangement['global_attribute'][':coordinates'] += ", " + dimension_name
                                 arrangement['global_attribute'][':time_coverage_start'] = "NaN"
                                 arrangement['global_attribute'][':time_coverage_end'] = "NaN"
                                 arrangement['global_attribute'][':update_interval'] = "NaN"
@@ -259,12 +343,12 @@ class controleurArrangementsettings:
     
     def dimension_name_add(self):
         
-        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.add_name_lineedit.text()
+        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.add_name_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de la nouvelle dimension n'est pas vide, s'il ne contient aucun espace blanc, si le premier caractère est en majuscule et s'il n'est pas dans l'agencement
-            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name not in arrangement['dimension'] and dimension_name not in arrangement['global_attribute'][':coordinates'] and dimension_name.lower() not in arrangement['variable']:
+            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name not in arrangement['dimension'] and dimension_name not in arrangement['global_attribute'][':coordinates'].replace(' ', '').split(','):
                 arrangement['dimension'][dimension_name] = {
                     "values": []
                 }
@@ -282,7 +366,8 @@ class controleurArrangementsettings:
                         "column_name": dimension_name.lower()
                     }
                 }
-                arrangement['global_attribute'][':coordinates'] += ", " + dimension_name
+                if dimension_name not in arrangement['global_attribute'][':coordinates'].replace(' ', '').split(','):
+                    arrangement['global_attribute'][':coordinates'] += ", " + dimension_name
                 self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
                 self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Dimension added.\n")
@@ -299,17 +384,15 @@ class controleurArrangementsettings:
     
     def dimension_value_add_confirm(self):
         
-        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_lineedit.text()
+        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de la nouvelle dimension n'est pas vide, s'il ne contient aucun espace blanc et s'il est inclu dans l'agencement
             if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension']:
-                self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_lineedit.setEnabled(False)
-                self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_confirm_button.setEnabled(False)
+                self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_combobox.setEnabled(False)
                 self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.dimension_tabwidget.add_value_lineedit.setEnabled(True)
-                self.vuearrangementsettings.dimension_tabwidget.add_value_button.setEnabled(True)
+                self.vuearrangementsettings.dimension_tabwidget.add_value_combobox.setEnabled(True)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Dimension name selected.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Dimension name selected.\n", "green")
             # Sinon
@@ -324,23 +407,21 @@ class controleurArrangementsettings:
     
     def dimension_value_add_cancel(self):
         
-        self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_lineedit.setEnabled(True)
-        self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_confirm_button.setEnabled(True)
+        self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_combobox.setEnabled(True)
         self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.dimension_tabwidget.add_value_lineedit.setEnabled(False)
-        self.vuearrangementsettings.dimension_tabwidget.add_value_button.setEnabled(False)
+        self.vuearrangementsettings.dimension_tabwidget.add_value_combobox.setEnabled(False)
     
     
     def dimension_value_add(self):
         
-        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_lineedit.text()
-        dimension_value: str = self.vuearrangementsettings.dimension_tabwidget.add_value_lineedit.text()
+        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_combobox.currentText()
+        dimension_value: str = self.vuearrangementsettings.dimension_tabwidget.add_value_combobox.currentText()
         value_checked: int = 0
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de la dimension n'est pas vide, s'il ne contient aucun espace blanc, si le premier caractère est en majuscule et s'il est inclu dans l'agencement
-            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'] and dimension_name.lower() in arrangement['variable']:
+            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'].replace(' ', '').split(',') and dimension_name.lower() in arrangement['variable']:
                 # Parcours des valeurs de la dimension
                 for value in dimension_value.split(','):
                     # Si la valeur est un nombre entier ou flottant
@@ -351,11 +432,9 @@ class controleurArrangementsettings:
                     arrangement['dimension'][dimension_name]['values'] = [word.replace(' ', '') for word in dimension_value.split(',')]
                     self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
                     self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
-                    self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_lineedit.setEnabled(True)
-                    self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_confirm_button.setEnabled(True)
+                    self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_combobox.setEnabled(True)
                     self.vuearrangementsettings.dimension_tabwidget.add_value_dimension_cancel_button.setEnabled(False)
-                    self.vuearrangementsettings.dimension_tabwidget.add_value_lineedit.setEnabled(False)
-                    self.vuearrangementsettings.dimension_tabwidget.add_value_button.setEnabled(False)
+                    self.vuearrangementsettings.dimension_tabwidget.add_value_combobox.setEnabled(False)
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Dimension value added.\n")
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Dimension value added.\n", "green")
                 # Sinon
@@ -364,23 +443,25 @@ class controleurArrangementsettings:
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect dimension values.\n", "red")
             # Sinon
             else:
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect dimension name.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect dimension name.\n", "red")
+        # Sinon
+        else:
+            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
+            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
             
     
     def dimension_name_modify_confirm(self):
         
-        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.modify_name_lineedit.text()
+        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.modify_name_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de la dimension n'est pas vide, s'il ne contient aucun espace blanc, si le premier caractère est en majuscule et s'il est inclu dans l'agencement
-            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'] and dimension_name.lower() in arrangement['variable']:
-                self.vuearrangementsettings.dimension_tabwidget.modify_name_lineedit.setEnabled(False)
-                self.vuearrangementsettings.dimension_tabwidget.modify_name_confirm_button.setEnabled(False)
+            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'].replace(' ', '').split(',') and dimension_name.lower() in arrangement['variable']:
+                self.vuearrangementsettings.dimension_tabwidget.modify_name_combobox.setEnabled(False)
                 self.vuearrangementsettings.dimension_tabwidget.modify_name_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.dimension_tabwidget.modify_new_name_lineedit.setEnabled(True)
-                self.vuearrangementsettings.dimension_tabwidget.modify_new_name_modify_button.setEnabled(True)
+                self.vuearrangementsettings.dimension_tabwidget.modify_new_name_combobox.setEnabled(True)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Dimension name selected.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Dimension name selected.\n", "green")
             # Sinon
@@ -395,25 +476,34 @@ class controleurArrangementsettings:
     
     def dimension_name_modify_cancel(self):
         
-        self.vuearrangementsettings.dimension_tabwidget.modify_name_lineedit.setEnabled(True)
-        self.vuearrangementsettings.dimension_tabwidget.modify_name_confirm_button.setEnabled(True)
+        self.vuearrangementsettings.dimension_tabwidget.modify_name_combobox.setEnabled(True)
         self.vuearrangementsettings.dimension_tabwidget.modify_name_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.dimension_tabwidget.modify_new_name_lineedit.setEnabled(False)
-        self.vuearrangementsettings.dimension_tabwidget.modify_new_name_modify_button.setEnabled(False)
+        self.vuearrangementsettings.dimension_tabwidget.modify_new_name_combobox.setEnabled(False)
     
     
     def dimension_name_modify(self):
         
-        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.modify_name_lineedit.text()
-        dimension_new_name: str = self.vuearrangementsettings.dimension_tabwidget.modify_new_name_lineedit.text()
+        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.modify_name_combobox.currentText()
+        dimension_new_name: str = self.vuearrangementsettings.dimension_tabwidget.modify_new_name_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
-            # Si le nom de la nouvelle dimension n'est pas vide, s'il ne contient aucun espace blanc et si le premier caractère est en majuscule
-            if dimension_new_name != "" and any(char.isspace() for char in dimension_new_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_new_name)) == True:
+            # Si le nom de la nouvelle dimension n'est pas vide, s'il ne contient aucun espace blanc, si le premier caractère est en majuscule et s'il n'est pas dans l'agencement
+            if dimension_new_name != "" and any(char.isspace() for char in dimension_new_name) == False and dimension_new_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_new_name)) == True and dimension_new_name not in arrangement['dimension']:
                 arrangement['dimension'][dimension_new_name] = {
                     'values': arrangement['dimension'][dimension_name]['values']
                 }
+            
+                # Recherche de la variable de la dimension
+                for variable_name in arrangement['variable']:
+                    if 'dimension' in arrangement['variable'][variable_name] and dimension_name in arrangement['variable'][variable_name]['dimension']:
+                        if variable_name == dimension_name.lower():
+                            arrangement['variable'][dimension_new_name.lower()] = {
+                                'dimension' : [word.replace(dimension_name, dimension_new_name) for word in arrangement['variable'][variable_name]['dimension']],
+                                'attribute' : arrangement['variable'][variable_name]['attribute']
+                            }
+                            del arrangement['variable'][variable_name]
+                            break
             
                 # Recherche des variables ayant pour dimension dimension_name
                 for variable_name in arrangement['variable']:
@@ -425,11 +515,9 @@ class controleurArrangementsettings:
                 del arrangement['dimension'][dimension_name]
             
                 self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                self.vuearrangementsettings.dimension_tabwidget.modify_name_lineedit.setEnabled(True)
-                self.vuearrangementsettings.dimension_tabwidget.modify_name_confirm_button.setEnabled(True)
+                self.vuearrangementsettings.dimension_tabwidget.modify_name_combobox.setEnabled(True)
                 self.vuearrangementsettings.dimension_tabwidget.modify_name_cancel_button.setEnabled(False)
-                self.vuearrangementsettings.dimension_tabwidget.modify_new_name_lineedit.setEnabled(False)
-                self.vuearrangementsettings.dimension_tabwidget.modify_new_name_modify_button.setEnabled(False)
+                self.vuearrangementsettings.dimension_tabwidget.modify_new_name_combobox.setEnabled(False)
                 self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Dimension name modified.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Dimension name modified.\n", "green")
@@ -445,17 +533,15 @@ class controleurArrangementsettings:
 
     def dimension_value_modify_confirm(self):
         
-        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_lineedit.text()
+        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de la dimension n'est pas vide, s'il ne contient aucun espace blanc, si le premier caractère est en majuscule et s'il est inclu dans l'agencement
-            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'] and dimension_name.lower() in arrangement['variable']:
-                self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_lineedit.setEnabled(False)
-                self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_confirm_button.setEnabled(False)
+            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'].replace(' ', '').split(',') and dimension_name.lower() in arrangement['variable']:
+                self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_combobox.setEnabled(False)
                 self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.dimension_tabwidget.modify_new_value_lineedit.setEnabled(True)
-                self.vuearrangementsettings.dimension_tabwidget.modify_new_value_modify_button.setEnabled(True)
+                self.vuearrangementsettings.dimension_tabwidget.modify_new_value_combobox.setEnabled(True)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Dimension name selected.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Dimension name selected.\n", "green")
             # Sinon
@@ -470,17 +556,15 @@ class controleurArrangementsettings:
     
     def dimension_value_modify_cancel(self):
         
-        self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_lineedit.setEnabled(True)
-        self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_confirm_button.setEnabled(True)
+        self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_combobox.setEnabled(True)
         self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.dimension_tabwidget.modify_new_value_lineedit.setEnabled(False)
-        self.vuearrangementsettings.dimension_tabwidget.modify_new_value_modify_button.setEnabled(False)
+        self.vuearrangementsettings.dimension_tabwidget.modify_new_value_combobox.setEnabled(False)
     
     
     def dimension_value_modify(self):
         
-        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_lineedit.text()
-        dimension_value: str = self.vuearrangementsettings.dimension_tabwidget.modify_new_value_lineedit.text()
+        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_combobox.currentText()
+        dimension_value: str = self.vuearrangementsettings.dimension_tabwidget.modify_new_value_combobox.currentText()
         value_checked: int = 0
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
@@ -491,15 +575,16 @@ class controleurArrangementsettings:
                 if bool(re.match(r'^[\d\s.]+$', value)) == True:
                     value_checked += 1
             # Si toutes les valeurs de la dimension sont correctes
-            if value_checked == len(dimension_value.split(',')):
-                arrangement['dimension'][dimension_name]['values'] = [word.replace(' ', '') for word in dimension_value.split(',')]
+            if value_checked == len(dimension_value.split(',')) or dimension_value == "":
+                if value_checked == len(dimension_value.split(',')):
+                    arrangement['dimension'][dimension_name]['values'] = [word.replace(' ', '') for word in dimension_value.split(',')]
+                elif dimension_value == "":
+                    arrangement['dimension'][dimension_name]['values'] = []
                 self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
                 self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
-                self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_lineedit.setEnabled(True)
-                self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_confirm_button.setEnabled(True)
+                self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_combobox.setEnabled(True)
                 self.vuearrangementsettings.dimension_tabwidget.modify_value_dimension_cancel_button.setEnabled(False)
-                self.vuearrangementsettings.dimension_tabwidget.modify_new_value_lineedit.setEnabled(False)
-                self.vuearrangementsettings.dimension_tabwidget.modify_new_value_modify_button.setEnabled(False)
+                self.vuearrangementsettings.dimension_tabwidget.modify_new_value_combobox.setEnabled(False)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Dimension value modified.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Dimension value modified.\n", "green")
             # Sinon
@@ -514,12 +599,12 @@ class controleurArrangementsettings:
     
     def dimension_name_delete(self):
         
-        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.delete_name_lineedit.text()
+        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.delete_name_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de la dimension n'est pas vide, s'il ne contient aucun espace blanc, si le premier caractère est en majuscule, s'il n'y a que des lettres ou des chiffres mais pas seulement que des chiffres, s'il est inclu dans l'agencement et s'il y a au minimum plusieurs dimensions
-            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'] and dimension_name.lower() in arrangement['variable'] and len(arrangement['dimension']) > 1:
+            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'].replace(' ', '').split(',') and dimension_name.lower() in arrangement['variable'] and len(arrangement['dimension']) > 1:
                 variables_to_remove = []
                 # Recherche des variables ayant pour dimension dimension_name
                 for variable_name in arrangement['variable']:
@@ -535,7 +620,7 @@ class controleurArrangementsettings:
                         elif len(arrangement['variable'][variable]['dimension']) == 2:
                             arrangement['variable'][variable]['dimension'].remove(dimension_name)
             
-                    arrangement['global_attribute'][':coordinates'] = arrangement['global_attribute'][':coordinates'].replace(dimension_name, '')
+                    arrangement['global_attribute'][':coordinates'] = ', '.join([word.replace(' ','') for word in arrangement['global_attribute'][':coordinates'].split(',') if dimension_name != word.replace(' ','')])
                     
                     del arrangement['dimension'][dimension_name]
             
@@ -559,12 +644,12 @@ class controleurArrangementsettings:
     
     def dimension_value_delete(self):
         
-        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.delete_value_dimension_lineedit.text()
+        dimension_name: str = self.vuearrangementsettings.dimension_tabwidget.delete_value_dimension_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de la dimension n'est pas vide, s'il ne contient aucun espace blanc, si le premier caractère est en majuscule et s'il est inclu dans l'agencement
-            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'] and dimension_name.lower() in arrangement['variable']:
+            if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in arrangement['dimension'] and dimension_name in arrangement['global_attribute'][':coordinates'].replace(' ', '').split(',') and dimension_name.lower() in arrangement['variable']:
                 arrangement['dimension'][dimension_name]['values'] = []
                 self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
                 self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
@@ -579,12 +664,42 @@ class controleurArrangementsettings:
             self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
             self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
     
+
+    def variable_name_add_confirm(self):
+        
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.add_name_combobox.currentText()
+        arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
+        # Si l'agencement existe
+        if arrangement:
+            # Si le nom de la nouvelle variable n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule et s'il n'est pas dans l'agencement
+            if variable_name != "" and any(char.isspace() for char in variable_name) == False and variable_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', variable_name)) == True and variable_name not in arrangement['variable']:
+                self.vuearrangementsettings.variable_tabwidget.add_name_combobox.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.add_name_cancel_button.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.add_dimension_combobox.setEnabled(True)
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name selected.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name selected.\n", "green")
+            # Sinon
+            else:
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect variable name.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect variable name.\n", "red")
+        # Sinon
+        else:
+            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
+            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
+
+    
+    def variable_name_add_cancel(self):
+        
+        self.vuearrangementsettings.variable_tabwidget.add_name_combobox.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.add_name_cancel_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.add_dimension_combobox.setEnabled(False)
+
     
     def variable_name_add(self):
         
         datetime_catalog: list[str] = ['datetime', 'date', 'time', 'temps', 'heure', 'hour', 'minute', 'seconde', 'yyyy-mm-ddthh:mm:ss', 'yyyy/mm/ddthh:mm:ss', 'yyyy-mm-dd hh:mm:ss', 'yyyy/mm/dd hh:mm:ss', 'yyyy-mm-dd', 'yyyy/mm/dd', 'dd-mm-yyyy', 'dd/mm/yyyy', 'hh:mm:ss', 'hh:mm:ss.sss']
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.add_name_lineedit.text()
-        variable_dimension: str = self.vuearrangementsettings.variable_tabwidget.add_dimension_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.add_name_combobox.currentText()
+        variable_dimension: str = self.vuearrangementsettings.variable_tabwidget.add_dimension_combobox.currentText()
         variable_dimension_list: list = []
         variable_dimension_checked: int = 0
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
@@ -688,6 +803,9 @@ class controleurArrangementsettings:
                             }
                         }
                     self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
+                    self.vuearrangementsettings.variable_tabwidget.add_name_combobox.setEnabled(True)
+                    self.vuearrangementsettings.variable_tabwidget.add_name_cancel_button.setEnabled(False)
+                    self.vuearrangementsettings.variable_tabwidget.add_dimension_combobox.setEnabled(False)
                     self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name added.\n")
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name added.\n", "green")
@@ -705,20 +823,19 @@ class controleurArrangementsettings:
             self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
     
     
-    def variable_attribute_add_confirm(self):
+    def variable_attribute_variable_add_confirm(self):
         
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de la nouvelle variable n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule et s'il est inclu dans l'agencement
             if variable_name != "" and any(char.isspace() for char in variable_name) == False and variable_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', variable_name)) == True and variable_name in arrangement['variable']:
-                self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_lineedit.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_confirm_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_combobox.setEnabled(False)
                 self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.add_attribute_lineedit.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.add_attribute_value_lineedit.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.add_attribute_button.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_combobox.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_cancel_button.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_value_combobox.setEnabled(False)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name selected.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name selected.\n", "green")
             # Sinon
@@ -731,34 +848,67 @@ class controleurArrangementsettings:
             self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
     
     
+    def variable_attribute_variable_add_cancel(self):
+        
+        self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_combobox.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_cancel_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.add_attribute_combobox.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.add_attribute_cancel_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.add_attribute_value_combobox.setEnabled(False)
+    
+    
+    def variable_attribute_add_confirm(self):
+        
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_combobox.currentText()
+        attribute_name: str = self.vuearrangementsettings.variable_tabwidget.add_attribute_combobox.currentText()
+        arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
+        # Si l'agencement existe
+        if arrangement:
+            # Si le nom du nouvel attribut n'est pas vide et si le nom du nouvel attribut ne contient aucun espace blanc
+            if attribute_name != "" and any(char.isspace() for char in attribute_name) == False and attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_name)) == True and (":" + attribute_name) not in arrangement['variable'][variable_name]['attribute']:
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_combobox.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_cancel_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_combobox.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_cancel_button.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_value_combobox.setEnabled(True)
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Attribute name selected.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Attribute name selected.\n", "green")
+            # Sinon
+            else:
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect attribute name.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect attribute name.\n", "red")
+        # Sinon
+        else:
+            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
+            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
+    
+    
     def variable_attribute_add_cancel(self):
         
-        self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_lineedit.setEnabled(True)
-        self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_confirm_button.setEnabled(True)
-        self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.add_attribute_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.add_attribute_value_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.add_attribute_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_combobox.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_cancel_button.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.add_attribute_combobox.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.add_attribute_cancel_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.add_attribute_value_combobox.setEnabled(False)
     
     
     def variable_attribute_add(self):
         
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_lineedit.text()
-        attribute_name: str = self.vuearrangementsettings.variable_tabwidget.add_attribute_lineedit.text()
-        attribute_value: str = self.vuearrangementsettings.variable_tabwidget.add_attribute_value_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_combobox.currentText()
+        attribute_name: str = self.vuearrangementsettings.variable_tabwidget.add_attribute_combobox.currentText()
+        attribute_value: str = self.vuearrangementsettings.variable_tabwidget.add_attribute_value_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom du nouvel attribut et de la nouvelle valeur ne sont pas vides et si le nom du nouvel attribut ne contient aucun espace blanc
-            if attribute_name != "" and any(char.isspace() for char in attribute_name) == False and attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_name)) == True and attribute_name not in arrangement['variable'][variable_name]['attribute'] and attribute_value != "":
+            if attribute_name != "" and any(char.isspace() for char in attribute_name) == False and attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_name)) == True and (":" + attribute_name) not in arrangement['variable'][variable_name]['attribute'] and attribute_value != "":
                 arrangement['variable'][variable_name]["attribute"][":" + attribute_name] = attribute_value
                 self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_lineedit.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_confirm_button.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_combobox.setEnabled(True)
                 self.vuearrangementsettings.variable_tabwidget.add_attribute_variable_cancel_button.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.add_attribute_lineedit.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.add_attribute_value_lineedit.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.add_attribute_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_combobox.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_cancel_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.add_attribute_value_combobox.setEnabled(False)
                 self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable information name added.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable information name added.\n", "green")
@@ -774,7 +924,7 @@ class controleurArrangementsettings:
     
     def variable_name_modify_confirm(self):
         
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.modify_name_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
@@ -786,12 +936,11 @@ class controleurArrangementsettings:
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("The dimension variable cannot be modified.\n", "red")
                 # Sinon
                 else:
-                    self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.setEnabled(False)
-                    self.vuearrangementsettings.variable_tabwidget.modify_name_confirm_button.setEnabled(False)
+                    self.vuearrangementsettings.variable_tabwidget.modify_name_combobox.setEnabled(False)
                     self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(True)
-                    self.vuearrangementsettings.variable_tabwidget.modify_new_name_lineedit.setEnabled(True)
-                    self.vuearrangementsettings.variable_tabwidget.modify_dimension_lineedit.setEnabled(True)
-                    self.vuearrangementsettings.variable_tabwidget.modify_new_name_modify_button.setEnabled(True)
+                    self.vuearrangementsettings.variable_tabwidget.modify_new_name_combobox.setEnabled(True)
+                    self.vuearrangementsettings.variable_tabwidget.modify_new_name_cancel_button.setEnabled(False)
+                    self.vuearrangementsettings.variable_tabwidget.modify_dimension_combobox.setEnabled(False)
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name selected.\n")
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name selected.\n", "green")
             # Sinon
@@ -806,19 +955,52 @@ class controleurArrangementsettings:
     
     def variable_name_modify_cancel(self):
         
-        self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.setEnabled(True)
-        self.vuearrangementsettings.variable_tabwidget.modify_name_confirm_button.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.modify_name_combobox.setEnabled(True)
         self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_new_name_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_dimension_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_new_name_modify_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_name_combobox.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_name_cancel_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_dimension_combobox.setEnabled(False)
+    
+    
+    def variable_new_name_modify_confirm(self):
+        
+        variable_new_name: str = self.vuearrangementsettings.variable_tabwidget.modify_new_name_combobox.currentText()
+        arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
+        # Si l'agencement existe
+        if arrangement:
+            # Si le nom de la nouvelle variable n'est pas vide, s'il ne contient aucun espace blanc et si la première lettre est en minuscule
+            if variable_new_name != "" and any(char.isspace() for char in variable_new_name) == False and variable_new_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', variable_new_name)) == True:
+                self.vuearrangementsettings.variable_tabwidget.modify_name_combobox.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_name_combobox.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_name_cancel_button.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.modify_dimension_combobox.setEnabled(True)
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable new name selected.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable new name selected.\n", "green")
+            # Sinon
+            else:
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect variable name.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect variable name.\n", "red")
+        # Sinon
+        else:
+            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
+            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
+    
+    
+    def variable_new_name_modify_cancel(self):
+        
+        self.vuearrangementsettings.variable_tabwidget.modify_name_combobox.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_name_combobox.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_name_cancel_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_dimension_combobox.setEnabled(False)
     
     
     def variable_name_modify(self):
         
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.text()
-        variable_new_name: str = self.vuearrangementsettings.variable_tabwidget.modify_new_name_lineedit.text()
-        dimension_name: str = self.vuearrangementsettings.variable_tabwidget.modify_dimension_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.modify_name_combobox.currentText()
+        variable_new_name: str = self.vuearrangementsettings.variable_tabwidget.modify_new_name_combobox.currentText()
+        dimension_name: str = self.vuearrangementsettings.variable_tabwidget.modify_dimension_combobox.currentText()
         dimension_name_list: list = []
         dimension_name_checked: int = 0
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
@@ -841,12 +1023,11 @@ class controleurArrangementsettings:
                             if variable_new_name != variable_name:
                                 del arrangement['variable'][variable_name]
                             self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                            self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.setEnabled(True)
-                            self.vuearrangementsettings.variable_tabwidget.modify_name_confirm_button.setEnabled(True)
+                            self.vuearrangementsettings.variable_tabwidget.modify_name_combobox.setEnabled(True)
                             self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(False)
-                            self.vuearrangementsettings.variable_tabwidget.modify_new_name_lineedit.setEnabled(False)
-                            self.vuearrangementsettings.variable_tabwidget.modify_dimension_lineedit.setEnabled(False)
-                            self.vuearrangementsettings.variable_tabwidget.modify_new_name_modify_button.setEnabled(False)
+                            self.vuearrangementsettings.variable_tabwidget.modify_new_name_combobox.setEnabled(False)
+                            self.vuearrangementsettings.variable_tabwidget.modify_new_name_cancel_button.setEnabled(False)
+                            self.vuearrangementsettings.variable_tabwidget.modify_dimension_combobox.setEnabled(False)
                             self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
                             self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name and dimension name modified.\n")
                             self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name and dimension name modified.\n", "green")
@@ -862,12 +1043,11 @@ class controleurArrangementsettings:
                         if variable_new_name != variable_name:
                             del arrangement['variable'][variable_name]
                         self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                        self.vuearrangementsettings.variable_tabwidget.modify_name_lineedit.setEnabled(True)
-                        self.vuearrangementsettings.variable_tabwidget.modify_name_confirm_button.setEnabled(True)
+                        self.vuearrangementsettings.variable_tabwidget.modify_name_combobox.setEnabled(True)
                         self.vuearrangementsettings.variable_tabwidget.modify_name_cancel_button.setEnabled(False)
-                        self.vuearrangementsettings.variable_tabwidget.modify_new_name_lineedit.setEnabled(False)
-                        self.vuearrangementsettings.variable_tabwidget.modify_dimension_lineedit.setEnabled(False)
-                        self.vuearrangementsettings.variable_tabwidget.modify_new_name_modify_button.setEnabled(False)
+                        self.vuearrangementsettings.variable_tabwidget.modify_new_name_combobox.setEnabled(False)
+                        self.vuearrangementsettings.variable_tabwidget.modify_new_name_cancel_button.setEnabled(False)
+                        self.vuearrangementsettings.variable_tabwidget.modify_dimension_combobox.setEnabled(False)
                         self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
                         self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name and dimension name modified.\n")
                         self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name and dimension name modified.\n", "green")
@@ -887,21 +1067,20 @@ class controleurArrangementsettings:
     
     def variable_attribute_variable_modify_confirm(self):
         
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de la variable n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule et s'il est inclu dans l'agencement
             if variable_name != "" and any(char.isspace() for char in variable_name) == False and variable_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', variable_name)) == True and variable_name in arrangement['variable']:
-                self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_lineedit.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_confirm_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(False)
                 self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.modify_attribute_lineedit.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.modify_attribute_confirm_button.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.modify_attribute_combobox.addItems([key[1:] for key in list(arrangement['variable'][variable_name]['attribute'].keys()) if key != 'column_name'])
                 self.vuearrangementsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_lineedit.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_lineedit.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_modify_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(False)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name selected.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name selected.\n", "green")
             # Sinon
@@ -916,35 +1095,31 @@ class controleurArrangementsettings:
     
     def variable_attribute_variable_modify_cancel(self):
         
-        self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_lineedit.setEnabled(True)
-        self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_confirm_button.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(True)
         self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_attribute_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_attribute_confirm_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
         self.vuearrangementsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_modify_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(False)
     
     
     def variable_attribute_modify_confirm(self):
         
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_lineedit.text()
-        attribute_name: str = self.vuearrangementsettings.variable_tabwidget.modify_attribute_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.currentText()
+        attribute_name: str = self.vuearrangementsettings.variable_tabwidget.modify_attribute_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
-            # Si le nom de l'attribut n'est pas vide, si la première lettre est en minuscule et s'il est inclu dans l'agencement
-            if attribute_name != "" and any(char.isspace() for char in attribute_name) == False and attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_name)) == True and attribute_name in arrangement['variable'][variable_name]['attribute']:
-                self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_lineedit.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_confirm_button.setEnabled(False)
+            # Si le nom de l'attribut n'est pas vide, si la première lettre est en minuscule, s'il est inclu dans l'agencement et s'il n'est pas un attribut obligatoire
+            if attribute_name != "" and any(char.isspace() for char in attribute_name) == False and attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_name)) == True and (":" + attribute_name) in arrangement['variable'][variable_name]['attribute'] and attribute_name not in ['dtype', 'units', 'sdn_uom_name', 'sdn_uom_urn', 'standard_name', 'long_name', 'sdn_parameter_name', 'sdn_paramter_urn']:
+                self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(False)
                 self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.modify_attribute_lineedit.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.modify_attribute_confirm_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
                 self.vuearrangementsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_lineedit.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_lineedit.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_modify_button.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(False)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable information name selected.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable information name selected.\n", "green")
             # Sinon
@@ -959,23 +1134,59 @@ class controleurArrangementsettings:
     
     def variable_attribute_modify_cancel(self):
         
-        self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_confirm_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(False)
         self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(True)
-        self.vuearrangementsettings.variable_tabwidget.modify_attribute_lineedit.setEnabled(True)
-        self.vuearrangementsettings.variable_tabwidget.modify_attribute_confirm_button.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(True)
         self.vuearrangementsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_modify_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(False)
+
+
+    def variable_new_attribute_modify_confirm(self):
+        
+        attribute_new_name: str = self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.currentText()
+        arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
+        # Si l'agencement existe
+        if arrangement:
+            # Si le nom du nouvel attribut n'est pas vide, si la première lettre est en minuscule et s'il n'est pas un attribut obligatoire
+            if attribute_new_name != "" and any(char.isspace() for char in attribute_new_name) == False and attribute_new_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_new_name)) == True and attribute_new_name not in ['dtype', 'units', 'sdn_uom_name', 'sdn_uom_urn', 'standard_name', 'long_name', 'sdn_parameter_name', 'sdn_paramter_urn']:
+                self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(True)
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable information new name selected.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable information new name selected.\n", "green")
+            # Sinon
+            else:
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect variable information name.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect variable information name.\n", "red")
+        # Sinon
+        else:
+            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
+            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
+    
+    
+    def variable_new_attribute_modify_cancel(self):
+        
+        self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(False)
 
 
     def variable_attribute_modify(self):
         
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_lineedit.text()
-        attribute_name: str = self.vuearrangementsettings.variable_tabwidget.modify_attribute_lineedit.text()
-        attribute_new_name: str = self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_lineedit.text()
-        attribute_new_value: str = self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.currentText()
+        attribute_name: str = self.vuearrangementsettings.variable_tabwidget.modify_attribute_combobox.currentText()
+        attribute_new_name: str = self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.currentText()
+        attribute_new_value: str = self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
@@ -986,18 +1197,16 @@ class controleurArrangementsettings:
                     arrangement['variable'][variable_name]['attribute'][":" + attribute_new_name] = arrangement['variable'][variable_name]['attribute'].pop(":" + attribute_name)
                     arrangement['variable'][variable_name]['attribute'][":" + attribute_new_name] = attribute_new_value
                     self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                    self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_lineedit.setEnabled(True)
-                    self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_confirm_button.setEnabled(True)
+                    self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(True)
                     self.vuearrangementsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
-                    self.vuearrangementsettings.variable_tabwidget.modify_attribute_lineedit.setEnabled(False)
-                    self.vuearrangementsettings.variable_tabwidget.modify_attribute_confirm_button.setEnabled(False)
+                    self.vuearrangementsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
                     self.vuearrangementsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(False)
-                    self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_lineedit.setEnabled(False)
-                    self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_lineedit.setEnabled(False)
-                    self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_modify_button.setEnabled(False)
+                    self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(False)
+                    self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(False)
+                    self.vuearrangementsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(False)
                     self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
-                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable information name modified.\n")
-                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable information name modified.\n", "green")
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable information value modified.\n")
+                    self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable information value modified.\n", "green")
                 # Sinon
                 else:
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("The name of a mandatory variable attribute cannot be modified.\n")
@@ -1014,7 +1223,7 @@ class controleurArrangementsettings:
     
     def variable_name_delete(self):
         
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.delete_name_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.delete_name_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
@@ -1050,17 +1259,15 @@ class controleurArrangementsettings:
     
     def variable_attribute_delete_confirm(self):
         
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de la variable n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule et s'il est inclu dans l'agencement
             if variable_name != "" and any(char.isspace() for char in variable_name) == False and variable_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', variable_name)) == True and variable_name in arrangement['variable']:
-                self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_lineedit.setEnabled(False)
-                self.vuearrangementsettings.variable_tabwidget.delete_attribute_confirm_button.setEnabled(False)
+                self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_combobox.setEnabled(False)
                 self.vuearrangementsettings.variable_tabwidget.delete_attribute_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.delete_attribute_lineedit.setEnabled(True)
-                self.vuearrangementsettings.variable_tabwidget.delete_attribute_button.setEnabled(True)
+                self.vuearrangementsettings.variable_tabwidget.delete_attribute_combobox.setEnabled(True)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable name selected.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable name selected.\n", "green")
             # Sinon
@@ -1075,26 +1282,27 @@ class controleurArrangementsettings:
     
     def variable_attribute_delete_cancel(self):
         
-        self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_lineedit.setEnabled(True)
-        self.vuearrangementsettings.variable_tabwidget.delete_attribute_confirm_button.setEnabled(True)
+        self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_combobox.setEnabled(True)
         self.vuearrangementsettings.variable_tabwidget.delete_attribute_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.delete_attribute_lineedit.setEnabled(False)
-        self.vuearrangementsettings.variable_tabwidget.delete_attribute_button.setEnabled(False)
+        self.vuearrangementsettings.variable_tabwidget.delete_attribute_combobox.setEnabled(False)
     
     
     def variable_attribute_delete(self):        
         
-        variable_name: str = self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_lineedit.text()
-        attribute_name: str = self.vuearrangementsettings.variable_tabwidget.delete_attribute_lineedit.text()
+        variable_name: str = self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_combobox.currentText()
+        attribute_name: str = self.vuearrangementsettings.variable_tabwidget.delete_attribute_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de l'attribut n'est pas vide, si la première lettre est en minuscule, s'il est inclu dans l'agencement et s'il y a au minimum plusieurs attributs
-            if attribute_name != "" and any(char.isspace() for char in attribute_name) == False and attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_name)) == True and attribute_name in arrangement['variable'][variable_name]['attribute'] and len(arrangement['variable'][variable_name]['attribute']) > 1:
+            if attribute_name != "" and any(char.isspace() for char in attribute_name) == False and attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_name)) == True and (":" + attribute_name) in arrangement['variable'][variable_name]['attribute'] and len(arrangement['variable'][variable_name]['attribute']) > 1:
                 # Si le nom de l'attribut n'est pas un attribut obligatoire
                 if attribute_name not in ['dtype', 'units', 'sdn_uom_name', 'sdn_uom_urn', 'standard_name', 'long_name', 'sdn_parameter_name', 'sdn_paramter_urn']:
                     del arrangement['variable'][variable_name]['attribute'][":" + attribute_name]
                     self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
+                    self.vuearrangementsettings.variable_tabwidget.delete_attribute_variable_combobox.setEnabled(True)
+                    self.vuearrangementsettings.variable_tabwidget.delete_attribute_cancel_button.setEnabled(False)
+                    self.vuearrangementsettings.variable_tabwidget.delete_attribute_combobox.setEnabled(False)
                     self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Variable information deleted.\n")
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable information deleted.\n", "green")
@@ -1114,12 +1322,12 @@ class controleurArrangementsettings:
 
     def global_attribute_name_add(self):
         
-        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.add_name_lineedit.text()
+        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.add_name_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom du nouvel attribut global n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule et s'il n'est pas dans l'agencement
-            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and global_attribute_name not in arrangement['global_attribute']:
+            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and (":" + global_attribute_name) not in arrangement['global_attribute']:
                 arrangement['global_attribute'][":" + global_attribute_name] = "NaN"
                 self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
                 self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
@@ -1137,17 +1345,15 @@ class controleurArrangementsettings:
     
     def global_attribute_value_add_confirm(self):
         
-        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_lineedit.text()
+        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de l'attribut global n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule et s'il est inclu dans l'agencement
-            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and global_attribute_name in arrangement['global_attribute']:
-                self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_lineedit.setEnabled(False)
-                self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_confirm_button.setEnabled(False)
+            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and (":" + global_attribute_name) in arrangement['global_attribute']:
+                self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_combobox.setEnabled(False)
                 self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.attribute_tabwidget.add_value_lineedit.setEnabled(True)
-                self.vuearrangementsettings.attribute_tabwidget.add_value_button.setEnabled(True)
+                self.vuearrangementsettings.attribute_tabwidget.add_value_combobox.setEnabled(True)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Global information name selected.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Global information name selected.\n", "green")
             # Sinon
@@ -1162,17 +1368,15 @@ class controleurArrangementsettings:
     
     def global_attribute_value_add_cancel(self):
         
-        self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_lineedit.setEnabled(True)
-        self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_confirm_button.setEnabled(True)
+        self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_combobox.setEnabled(True)
         self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.attribute_tabwidget.add_value_lineedit.setEnabled(False)
-        self.vuearrangementsettings.attribute_tabwidget.add_value_button.setEnabled(False)
+        self.vuearrangementsettings.attribute_tabwidget.add_value_combobox.setEnabled(False)
     
     
     def global_attribute_value_add(self):
         
-        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_lineedit.text()
-        global_attribute_value: str = self.vuearrangementsettings.attribute_tabwidget.add_value_lineedit.text()
+        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_combobox.currentText()
+        global_attribute_value: str = self.vuearrangementsettings.attribute_tabwidget.add_value_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
@@ -1180,11 +1384,9 @@ class controleurArrangementsettings:
             if global_attribute_value != "":
                 arrangement['global_attribute'][":" + global_attribute_name] = global_attribute_value
                 self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_lineedit.setEnabled(True)
-                self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_confirm_button.setEnabled(True)
+                self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_combobox.setEnabled(True)
                 self.vuearrangementsettings.attribute_tabwidget.add_value_attribute_cancel_button.setEnabled(False)
-                self.vuearrangementsettings.attribute_tabwidget.add_value_lineedit.setEnabled(False)
-                self.vuearrangementsettings.attribute_tabwidget.add_value_button.setEnabled(False)
+                self.vuearrangementsettings.attribute_tabwidget.add_value_combobox.setEnabled(False)
                 self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Information added.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Information added.\n", "green")
@@ -1200,17 +1402,15 @@ class controleurArrangementsettings:
     
     def global_attribute_name_modify_confirm(self):
         
-        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.modify_name_lineedit.text()
+        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.modify_name_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de l'attribut global n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule et s'il est inclu dans l'agencement
-            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and global_attribute_name in arrangement['global_attribute']:
-                self.vuearrangementsettings.attribute_tabwidget.modify_name_lineedit.setEnabled(False)
-                self.vuearrangementsettings.attribute_tabwidget.modify_name_confirm_button.setEnabled(False)
+            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and (":" + global_attribute_name) in arrangement['global_attribute']:
+                self.vuearrangementsettings.attribute_tabwidget.modify_name_combobox.setEnabled(False)
                 self.vuearrangementsettings.attribute_tabwidget.modify_name_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.attribute_tabwidget.modify_new_name_lineedit.setEnabled(True)
-                self.vuearrangementsettings.attribute_tabwidget.modify_new_name_modify_button.setEnabled(True)
+                self.vuearrangementsettings.attribute_tabwidget.modify_new_name_combobox.setEnabled(True)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Global information name selected.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Global information name selected.\n", "green")
             # Sinon
@@ -1225,17 +1425,15 @@ class controleurArrangementsettings:
     
     def global_attribute_name_modify_cancel(self):
         
-        self.vuearrangementsettings.attribute_tabwidget.modify_name_lineedit.setEnabled(True)
-        self.vuearrangementsettings.attribute_tabwidget.modify_name_confirm_button.setEnabled(True)
+        self.vuearrangementsettings.attribute_tabwidget.modify_name_combobox.setEnabled(True)
         self.vuearrangementsettings.attribute_tabwidget.modify_name_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.attribute_tabwidget.modify_new_name_lineedit.setEnabled(False)
-        self.vuearrangementsettings.attribute_tabwidget.modify_new_name_modify_button.setEnabled(False)
+        self.vuearrangementsettings.attribute_tabwidget.modify_new_name_combobox.setEnabled(False)
     
     
     def global_attribute_name_modify(self):
         
-        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.modify_name_lineedit.text()
-        global_attribute_new_name: str = self.vuearrangementsettings.attribute_tabwidget.modify_new_name_lineedit.text()
+        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.modify_name_combobox.currentText()
+        global_attribute_new_name: str = self.vuearrangementsettings.attribute_tabwidget.modify_new_name_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
@@ -1246,11 +1444,9 @@ class controleurArrangementsettings:
                     arrangement['global_attribute'][":" + global_attribute_new_name] = arrangement['global_attribute'][":" + global_attribute_name]
                     del arrangement['global_attribute'][":" + global_attribute_name]
                     self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                    self.vuearrangementsettings.attribute_tabwidget.modify_name_lineedit.setEnabled(True)
-                    self.vuearrangementsettings.attribute_tabwidget.modify_name_confirm_button.setEnabled(True)
+                    self.vuearrangementsettings.attribute_tabwidget.modify_name_combobox.setEnabled(True)
                     self.vuearrangementsettings.attribute_tabwidget.modify_name_cancel_button.setEnabled(False)
-                    self.vuearrangementsettings.attribute_tabwidget.modify_new_name_lineedit.setEnabled(False)
-                    self.vuearrangementsettings.attribute_tabwidget.modify_new_name_modify_button.setEnabled(False)
+                    self.vuearrangementsettings.attribute_tabwidget.modify_new_name_combobox.setEnabled(False)
                     self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Global information name modified.\n")
                     self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Global information name modified.\n", "green")
@@ -1270,17 +1466,15 @@ class controleurArrangementsettings:
     
     def global_attribute_value_modify_confirm(self):
         
-        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_lineedit.text()
+        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de l'attribut global n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule et s'il est inclu dans l'agencement
-            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and global_attribute_name in arrangement['global_attribute']:
-                self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_lineedit.setEnabled(False)
-                self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_confirm_button.setEnabled(False)
+            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and (":" + global_attribute_name) in arrangement['global_attribute']:
+                self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_combobox.setEnabled(False)
                 self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.attribute_tabwidget.modify_new_value_lineedit.setEnabled(True)
-                self.vuearrangementsettings.attribute_tabwidget.modify_new_value_modify_button.setEnabled(True)
+                self.vuearrangementsettings.attribute_tabwidget.modify_new_value_combobox.setEnabled(True)
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Global information name selected.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Global information name selected.\n", "green")
             # Sinon
@@ -1295,17 +1489,15 @@ class controleurArrangementsettings:
     
     def global_attribute_value_modify_cancel(self):
         
-        self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_lineedit.setEnabled(True)
-        self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_confirm_button.setEnabled(True)
+        self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_combobox.setEnabled(True)
         self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.attribute_tabwidget.modify_new_value_lineedit.setEnabled(False)
-        self.vuearrangementsettings.attribute_tabwidget.modify_new_value_modify_button.setEnabled(False)
+        self.vuearrangementsettings.attribute_tabwidget.modify_new_value_combobox.setEnabled(False)
     
     
     def global_attribute_value_modify(self):
         
-        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_lineedit.text()
-        global_attribute_new_value: str = self.vuearrangementsettings.attribute_tabwidget.modify_new_value_lineedit.text()
+        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_combobox.currentText()
+        global_attribute_new_value: str = self.vuearrangementsettings.attribute_tabwidget.modify_new_value_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
@@ -1313,11 +1505,9 @@ class controleurArrangementsettings:
             if global_attribute_new_value != "":
                 arrangement['global_attribute'][":" + global_attribute_name] = global_attribute_new_value
                 self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-                self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_lineedit.setEnabled(True)
-                self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_confirm_button.setEnabled(True)
+                self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_combobox.setEnabled(True)
                 self.vuearrangementsettings.attribute_tabwidget.modify_value_attribute_cancel_button.setEnabled(False)
-                self.vuearrangementsettings.attribute_tabwidget.modify_new_value_lineedit.setEnabled(False)
-                self.vuearrangementsettings.attribute_tabwidget.modify_new_value_modify_button.setEnabled(False)
+                self.vuearrangementsettings.attribute_tabwidget.modify_new_value_combobox.setEnabled(False)
                 self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Information modified.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Information modified.\n", "green")
@@ -1333,12 +1523,12 @@ class controleurArrangementsettings:
     
     def global_attribute_name_delete(self):
         
-        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.delete_name_lineedit.text()
+        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.delete_name_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de l'attribut global n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule, s'il est inclu dans l'agencement et s'il y a au minimum 1 attribut global
-            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and global_attribute_name in arrangement['global_attribute'] and len(list(arrangement['global_attribute'].keys())) > 1:
+            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and (":" + global_attribute_name) in arrangement['global_attribute'] and len(list(arrangement['global_attribute'].keys())) > 1:
                 del arrangement['global_attribute'][":" + global_attribute_name]
                 self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
                 self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
@@ -1353,54 +1543,24 @@ class controleurArrangementsettings:
             self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
             self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
     
-    
-    def global_attribute_value_delete_confirm(self):
         
-        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_lineedit.text()
+    def global_attribute_value_delete(self):
+        
+        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_combobox.currentText()
         arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
         # Si l'agencement existe
         if arrangement:
             # Si le nom de l'attribut global n'est pas vide, s'il ne contient aucun espace blanc, si la première lettre est en minuscule et s'il est inclu dans l'agencement
-            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and global_attribute_name in arrangement['global_attribute']:
-                self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_lineedit.setEnabled(False)
-                self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_confirm_button.setEnabled(False)
-                self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_cancel_button.setEnabled(True)
-                self.vuearrangementsettings.attribute_tabwidget.delete_value_button.setEnabled(True)
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Global information name selected.\n")
-                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Global information name selected.\n", "green")
+            if global_attribute_name != "" and any(char.isspace() for char in global_attribute_name) == False and global_attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', global_attribute_name)) == True and (":" + global_attribute_name) in arrangement['global_attribute']:
+                arrangement['global_attribute'][":" + global_attribute_name] = "NaN"
+                self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
+                self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Information deleted.\n")
+                self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Information deleted.\n", "green")
             # Sinon
             else:
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect global information name.\n")
                 self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect global information name.\n", "red")
-        # Sinon
-        else:
-            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
-            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Unknown arrangement type.\n", "red")
-    
-    
-    def global_attribute_value_delete_cancel(self):
-        
-        self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_lineedit.setEnabled(True)
-        self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_confirm_button.setEnabled(True)
-        self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_cancel_button.setEnabled(False)
-        self.vuearrangementsettings.attribute_tabwidget.delete_value_button.setEnabled(False)
-    
-    
-    def global_attribute_value_delete(self):
-        
-        global_attribute_name: str = self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_lineedit.text()
-        arrangement = self.vuearrangementsettings.vuearrangement.modelearrangement.read_json()
-        # Si l'agencement existe
-        if arrangement:
-            arrangement['global_attribute'][":" + global_attribute_name] = "NaN"
-            self.vuearrangementsettings.vuearrangement.modelearrangement.write_json(arrangement)
-            self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_lineedit.setEnabled(True)
-            self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_confirm_button.setEnabled(True)
-            self.vuearrangementsettings.attribute_tabwidget.delete_value_attribute_cancel_button.setEnabled(False)
-            self.vuearrangementsettings.attribute_tabwidget.delete_value_button.setEnabled(False)
-            self.vuearrangementsettings.vuearrangement.vuearrangementviewer.controleurarrangementviewer.load_arrangement()
-            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Information deleted.\n")
-            self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Information deleted.\n", "green")
         # Sinon
         else:
             self.vuearrangementsettings.vuearrangement.vuemainwindow.vuelogs.controleurlogs.add_log("Unknown arrangement type.\n")
