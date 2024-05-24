@@ -3,7 +3,7 @@
 
 
 
-from controleurArrangementviewer import controleurArrangementviewer
+from controleurCatalogviewer import controleurCatalogviewer
 
 
 
@@ -14,16 +14,17 @@ from controleurArrangementviewer import controleurArrangementviewer
 
 
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QPlainTextEdit, QGroupBox
+from PyQt6.QtCore import Qt
 
 
 
 
-# Définition de la classe vueArrangementviewer
+# Définition de la classe vueCatalogviewer
 
 
 
 
-class vueArrangementviewer(QWidget):
+class vueCatalogviewer(QWidget):
     
     
     # Constructeur par défaut
@@ -32,9 +33,9 @@ class vueArrangementviewer(QWidget):
     def __init__(self, parent):
         
         super().__init__(parent)
-        self.vuearrangement = parent
+        self.vuecatalog = parent
         self.groupbox_textarea = QPlainTextEdit()
-        self.controleurarrangementviewer = controleurArrangementviewer(self)
+        self.controleurcatalogviewer = controleurCatalogviewer(self)
         self.init_ui()
 
 
@@ -43,18 +44,20 @@ class vueArrangementviewer(QWidget):
     
     def init_ui(self):
 
-        # Layout associé à l'instance de la classe vueArrangementviewer
-        self.vuearrangementviewer_layout = QVBoxLayout(self)
+        # Layout associé à l'instance de la classe vueCatalogviewer
+        self.vuecatalogviewer_layout = QVBoxLayout(self)
         
         self.groupbox = QGroupBox("Catalog Viewer")
         self.groupbox_layout = QVBoxLayout()
         
         self.groupbox_textarea.setReadOnly(True)
+        self.groupbox_textarea.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
+        self.groupbox_textarea.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         
         self.groupbox_layout.addWidget(self.groupbox_textarea)
         self.groupbox.setLayout(self.groupbox_layout)
         
-        self.vuearrangementviewer_layout.addWidget(self.groupbox)
+        self.vuecatalogviewer_layout.addWidget(self.groupbox)
 
 
 
@@ -67,14 +70,14 @@ class vueArrangementviewer(QWidget):
 if __name__ == "__main__":
     
     from vueMainwindow import vueMainwindow
-    from vueArrangement import vueArrangement
+    from vueCatalog import vueCatalog
     import sys
     from PyQt6.QtWidgets import QApplication, QMainWindow
     
     app = QApplication(sys.argv)
     mainwindow = QMainWindow()
     vuemainwindow = vueMainwindow()
-    vuearrangement = vueArrangement(vuemainwindow)
-    mainwindow.setCentralWidget(vueArrangementviewer(vuearrangement))
+    vuecatalog = vueCatalog(vuemainwindow)
+    mainwindow.setCentralWidget(vueCatalogviewer(vuecatalog))
     mainwindow.show()
     sys.exit(app.exec())

@@ -3,11 +3,11 @@
 
 
 
-from modeleArrangement import modeleArrangement
-from vueArrangementtype import vueArrangementtype
-from vueArrangementviewer import vueArrangementviewer
-from vueArrangementsettings import vueArrangementsettings
-from controleurArrangement import controleurArrangement
+from modeleCatalog import modeleCatalog
+from vueCatalogtype import vueCatalogtype
+from vueCatalogviewer import vueCatalogviewer
+from vueCatalogsettings import vueCatalogsettings
+from controleurCatalog import controleurCatalog
 
 
 
@@ -22,12 +22,12 @@ from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QWidget, QPushButton, QGro
 
 
 
-# Définition de la classe vueArrangement
+# Définition de la classe vueCatalog
 
 
 
 
-class vueArrangement(QWidget):
+class vueCatalog(QWidget):
     
     
     # Constructeur par défaut
@@ -37,13 +37,14 @@ class vueArrangement(QWidget):
         
         super().__init__(parent)
         self.vuemainwindow = parent
-        self.modelearrangement = modeleArrangement()
-        self.vuearrangementtype = vueArrangementtype(self)
-        self.vuearrangementviewer = vueArrangementviewer(self)
-        self.vuearrangementsettings = vueArrangementsettings(self)
-        self.controleurarrangement = controleurArrangement(self)
-        self.vuearrangementviewer.setEnabled(False)
-        self.vuearrangementsettings.setEnabled(False)
+        self.modelecatalog = modeleCatalog()
+        self.vuecatalogtype = vueCatalogtype(self)
+        self.vuecatalogviewer = vueCatalogviewer(self)
+        self.vuecatalogsettings = vueCatalogsettings(self)
+        self.controleurcatalog = controleurCatalog(self)
+        self.vuecatalogtype.setEnabled(False)
+        self.vuecatalogviewer.setEnabled(False)
+        self.vuecatalogsettings.setEnabled(False)
         self.init_ui()
         self.connect_signals()
 
@@ -53,16 +54,16 @@ class vueArrangement(QWidget):
     
     def init_ui(self):
 
-        # Layout associé à l'instance de la classe vueArrangement
-        self.vuearrangement_layout = QVBoxLayout(self)
+        # Layout associé à l'instance de la classe vueCatalog
+        self.vuecatalog_layout = QVBoxLayout(self)
         
         self.groupbox = QGroupBox("Catalog")
         self.groupbox_layout = QVBoxLayout()
         
         self.groupbox_viewersettings_layout = QHBoxLayout()
 
-        self.groupbox_viewersettings_layout.addWidget(self.vuearrangementviewer)
-        self.groupbox_viewersettings_layout.addWidget(self.vuearrangementsettings)
+        self.groupbox_viewersettings_layout.addWidget(self.vuecatalogviewer)
+        self.groupbox_viewersettings_layout.addWidget(self.vuecatalogsettings)
 
         self.groupbox_save_button = QPushButton("Save Catalog")
         self.groupbox_confirm_button = QPushButton("Confirm Catalog")
@@ -70,19 +71,19 @@ class vueArrangement(QWidget):
         self.groupbox_save_button.setEnabled(False)
         self.groupbox_confirm_button.setEnabled(False)
 
-        self.groupbox_layout.addWidget(self.vuearrangementtype)
+        self.groupbox_layout.addWidget(self.vuecatalogtype)
         self.groupbox_layout.addLayout(self.groupbox_viewersettings_layout)
         self.groupbox_layout.addWidget(self.groupbox_save_button)
         self.groupbox_layout.addWidget(self.groupbox_confirm_button)
         self.groupbox.setLayout(self.groupbox_layout)
         
-        self.vuearrangement_layout.addWidget(self.groupbox)
+        self.vuecatalog_layout.addWidget(self.groupbox)
     
     
     def connect_signals(self):
         
-        self.groupbox_save_button.clicked.connect(self.controleurarrangement.save)
-        self.groupbox_confirm_button.clicked.connect(self.controleurarrangement.confirm)
+        self.groupbox_save_button.clicked.connect(self.controleurcatalog.save)
+        self.groupbox_confirm_button.clicked.connect(self.controleurcatalog.confirm)
 
 
 
@@ -101,6 +102,6 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     mainwindow = QMainWindow()
     vuemainwindow = vueMainwindow()
-    mainwindow.setCentralWidget(vueArrangement(vuemainwindow))
+    mainwindow.setCentralWidget(vueCatalog(vuemainwindow))
     mainwindow.show()
     sys.exit(app.exec())

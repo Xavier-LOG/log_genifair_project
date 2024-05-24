@@ -3,7 +3,7 @@
 
 
 
-from controleurArrangementsettings import controleurArrangementsettings
+from controleurCatalogsettings import controleurCatalogsettings
 
 
 
@@ -13,7 +13,7 @@ from controleurArrangementsettings import controleurArrangementsettings
 
 
 
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QGroupBox, QTabWidget, QLineEdit, QScrollArea, QComboBox, QHBoxLayout
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLabel, QPushButton, QGroupBox, QTabWidget, QScrollArea, QComboBox
 
 
 
@@ -243,11 +243,12 @@ class VariableTabWidget(QWidget):
         self.add_dimension_combobox.setEditable(True)
         
         self.add_name_combobox.setEnabled(True)
-        self.add_name_cancel_button.setEnabled(False)
         self.add_dimension_combobox.setEnabled(False)
+        self.add_name_cancel_button.setEnabled(False)
         
         self.add_name_layout.addWidget(self.add_name_label)
         self.add_name_layout.addWidget(self.add_name_combobox)
+        self.add_name_layout.addWidget(self.add_name_cancel_button)
         self.add_name_layout.addWidget(self.add_dimension_label)
         self.add_name_layout.addWidget(self.add_dimension_combobox)
         self.add_name_groupbox.setLayout(self.add_name_layout)
@@ -257,10 +258,10 @@ class VariableTabWidget(QWidget):
         self.add_attribute_variable_label = QLabel("Variable Name")
         self.add_attribute_variable_combobox = QComboBox()
         self.add_attribute_variable_cancel_button = QPushButton("Cancel")
-        self.add_attribute_label = QLabel("Variable Information Name")
+        self.add_attribute_label = QLabel("Variable Attribute Name")
         self.add_attribute_combobox = QComboBox()
         self.add_attribute_cancel_button = QPushButton("Cancel")
-        self.add_attribute_value_label = QLabel("Variable Information Value")
+        self.add_attribute_value_label = QLabel("Variable Attribute Value")
         self.add_attribute_value_combobox = QComboBox()
         
         self.add_attribute_variable_combobox.setEditable(True)
@@ -284,7 +285,7 @@ class VariableTabWidget(QWidget):
         self.add_attribute_groupbox.setLayout(self.add_attribute_layout)
         
         self.add_tabwidget.addTab(self.add_name_groupbox, "Name")
-        self.add_tabwidget.addTab(self.add_attribute_groupbox, "Variable Information")
+        self.add_tabwidget.addTab(self.add_attribute_groupbox, "Attribute")
         
         return self.add_tabwidget
     
@@ -329,13 +330,13 @@ class VariableTabWidget(QWidget):
         self.modify_attribute_variable_label = QLabel("Variable Name")
         self.modify_attribute_variable_combobox = QComboBox()
         self.modify_attribute_variable_cancel_button = QPushButton("Cancel")
-        self.modify_attribute_label = QLabel("Variable Information Name")
+        self.modify_attribute_label = QLabel("Variable Attribute Name")
         self.modify_attribute_combobox = QComboBox()
         self.modify_attribute_cancel_button = QPushButton("Cancel")
-        self.modify_new_attribute_label = QLabel("New Variable Information Name")
+        self.modify_new_attribute_label = QLabel("New Variable Attribute Name")
         self.modify_new_attribute_combobox = QComboBox()
         self.modify_new_attribute_cancel_button = QPushButton("Cancel")
-        self.modify_new_attribute_value_label = QLabel("New Variable Information Value")
+        self.modify_new_attribute_value_label = QLabel("New Variable Attribute Value")
         self.modify_new_attribute_value_combobox = QComboBox()
         
         self.modify_attribute_variable_combobox.setEditable(True)
@@ -365,7 +366,7 @@ class VariableTabWidget(QWidget):
         self.modify_attribute_groupbox.setLayout(self.modify_attribute_layout)
         
         self.modify_tabwidget.addTab(self.modify_name_groupbox, "Name")
-        self.modify_tabwidget.addTab(self.modify_attribute_groupbox, "Variable Information")
+        self.modify_tabwidget.addTab(self.modify_attribute_groupbox, "Attribute")
         
         return self.modify_tabwidget
     
@@ -390,7 +391,7 @@ class VariableTabWidget(QWidget):
         self.delete_attribute_variable_label = QLabel("Variable Name")
         self.delete_attribute_variable_combobox = QComboBox()
         self.delete_attribute_cancel_button = QPushButton("Cancel")
-        self.delete_attribute_label = QLabel("Variable Information Name")
+        self.delete_attribute_label = QLabel("Variable Attribute Name")
         self.delete_attribute_combobox = QComboBox()
         
         self.delete_attribute_variable_combobox.setEditable(True)
@@ -408,7 +409,7 @@ class VariableTabWidget(QWidget):
         self.delete_attribute_groupbox.setLayout(self.delete_attribute_layout)
         
         self.delete_tabwidget.addTab(self.delete_name_groupbox, "Name")
-        self.delete_tabwidget.addTab(self.delete_attribute_groupbox, "Variable Information")
+        self.delete_tabwidget.addTab(self.delete_attribute_groupbox, "Attribute")
         
         return self.delete_tabwidget
 
@@ -459,7 +460,7 @@ class AttributeTabWidget(QWidget):
         
         self.add_name_groupbox = QGroupBox()
         self.add_name_layout = QVBoxLayout()
-        self.add_name_label = QLabel("New Global Information Name")
+        self.add_name_label = QLabel("New Global Attribute Name")
         self.add_name_combobox = QComboBox()
         
         self.add_name_combobox.setEditable(True)
@@ -470,10 +471,10 @@ class AttributeTabWidget(QWidget):
         
         self.add_value_groupbox = QGroupBox()
         self.add_value_layout = QVBoxLayout()
-        self.add_value_attribute_label = QLabel("Global Information Name")
+        self.add_value_attribute_label = QLabel("Global Attribute Name")
         self.add_value_attribute_combobox = QComboBox()
         self.add_value_attribute_cancel_button = QPushButton("Cancel")
-        self.add_value_label = QLabel("New Global Information Value")
+        self.add_value_label = QLabel("New Global Attribute Value")
         self.add_value_combobox = QComboBox()
         
         self.add_value_attribute_combobox.setEditable(True)
@@ -491,7 +492,7 @@ class AttributeTabWidget(QWidget):
         self.add_value_groupbox.setLayout(self.add_value_layout)
         
         self.add_tabwidget.addTab(self.add_name_groupbox, "Name")
-        self.add_tabwidget.addTab(self.add_value_groupbox, "Information")
+        self.add_tabwidget.addTab(self.add_value_groupbox, "Value")
         
         return self.add_tabwidget
     
@@ -502,10 +503,10 @@ class AttributeTabWidget(QWidget):
         
         self.modify_name_groupbox = QGroupBox()
         self.modify_name_layout = QVBoxLayout()
-        self.modify_name_label = QLabel("Global Information Name")
+        self.modify_name_label = QLabel("Global Attribute Name")
         self.modify_name_combobox = QComboBox()
         self.modify_name_cancel_button = QPushButton("Cancel")
-        self.modify_new_name_label = QLabel("New Global Information Name")
+        self.modify_new_name_label = QLabel("New Global Attribute Name")
         self.modify_new_name_combobox = QComboBox()
         
         self.modify_name_combobox.setEditable(True)
@@ -524,10 +525,10 @@ class AttributeTabWidget(QWidget):
         
         self.modify_value_groupbox = QGroupBox()
         self.modify_value_layout = QVBoxLayout()
-        self.modify_value_attribute_label = QLabel("Global Information Name")
+        self.modify_value_attribute_label = QLabel("Global Attribute Name")
         self.modify_value_attribute_combobox = QComboBox()
         self.modify_value_attribute_cancel_button = QPushButton("Cancel")
-        self.modify_new_value_label = QLabel("New Global Information Value")
+        self.modify_new_value_label = QLabel("New Global Attribute Value")
         self.modify_new_value_combobox = QComboBox()
         
         self.modify_value_attribute_combobox.setEditable(True)
@@ -545,7 +546,7 @@ class AttributeTabWidget(QWidget):
         self.modify_value_groupbox.setLayout(self.modify_value_layout)
         
         self.modify_tabwidget.addTab(self.modify_name_groupbox, "Name")
-        self.modify_tabwidget.addTab(self.modify_value_groupbox, "Information")
+        self.modify_tabwidget.addTab(self.modify_value_groupbox, "Value")
         
         return self.modify_tabwidget
     
@@ -556,7 +557,7 @@ class AttributeTabWidget(QWidget):
         
         self.delete_name_groupbox = QGroupBox()
         self.delete_name_layout = QVBoxLayout()
-        self.delete_name_label = QLabel("Global Information Name")
+        self.delete_name_label = QLabel("Global Attribute Name")
         self.delete_name_combobox = QComboBox()
         
         self.delete_name_combobox.setEditable(True)
@@ -567,7 +568,7 @@ class AttributeTabWidget(QWidget):
         
         self.delete_value_groupbox = QGroupBox()
         self.delete_value_layout = QVBoxLayout()
-        self.delete_value_attribute_label = QLabel("Global Information Name")
+        self.delete_value_attribute_label = QLabel("Global Attribute Name")
         self.delete_value_attribute_combobox = QComboBox()
         
         self.delete_value_attribute_combobox.setEditable(True)
@@ -577,19 +578,19 @@ class AttributeTabWidget(QWidget):
         self.delete_value_groupbox.setLayout(self.delete_value_layout)
         
         self.delete_tabwidget.addTab(self.delete_name_groupbox, "Name")
-        self.delete_tabwidget.addTab(self.delete_value_groupbox, "Information")
+        self.delete_tabwidget.addTab(self.delete_value_groupbox, "Value")
         
         return self.delete_tabwidget
 
 
 
 
-# Définition de la classe vueArrangementsettings
+# Définition de la classe vueCatalogsettings
 
 
 
 
-class vueArrangementsettings(QWidget):
+class vueCatalogsettings(QWidget):
     
     
     # Constructeur par défaut
@@ -598,8 +599,8 @@ class vueArrangementsettings(QWidget):
     def __init__(self, parent):
         
         super().__init__(parent)
-        self.vuearrangement = parent
-        self.controleurarrangementsettings = controleurArrangementsettings(self)
+        self.vuecatalog = parent
+        self.controleurcatalogsettings = controleurCatalogsettings(self)
         self.init_ui()
         self.connect_signals()
     
@@ -609,8 +610,8 @@ class vueArrangementsettings(QWidget):
     
     def init_ui(self):
         
-        # Layout associé à l'instance de la classe vueArrangementsettings
-        self.vuearrangementsettings_layout = QVBoxLayout(self)
+        # Layout associé à l'instance de la classe vueCatalogsettings
+        self.vuecatalogsettings_layout = QVBoxLayout(self)
 
         self.groupbox = QGroupBox("Catalog Settings")
         self.groupbox_layout = QVBoxLayout()
@@ -622,76 +623,76 @@ class vueArrangementsettings(QWidget):
 
         self.tabwidget.addTab(self.dimension_tabwidget, "Dimension")
         self.tabwidget.addTab(self.variable_tabwidget, "Variable")
-        self.tabwidget.addTab(self.attribute_tabwidget, "Global Information")
+        self.tabwidget.addTab(self.attribute_tabwidget, "Global Attribute")
 
         self.groupbox_layout.addWidget(self.button)
         self.groupbox_layout.addWidget(self.tabwidget)
         self.groupbox.setLayout(self.groupbox_layout)
         
-        self.vuearrangementsettings_layout.addWidget(self.groupbox)
+        self.vuecatalogsettings_layout.addWidget(self.groupbox)
     
     
     def connect_signals(self):
         
-        self.button.clicked.connect(self.controleurarrangementsettings.fill_arrangement)
+        self.button.clicked.connect(self.controleurcatalogsettings.fill_catalog)
         
-        self.dimension_tabwidget.add_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.dimension_name_add)
-        self.dimension_tabwidget.add_value_dimension_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.dimension_value_add_confirm)
-        self.dimension_tabwidget.add_value_dimension_cancel_button.clicked.connect(self.controleurarrangementsettings.dimension_value_add_cancel)
-        self.dimension_tabwidget.add_value_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.dimension_value_add)
+        self.dimension_tabwidget.add_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.dimension_name_add)
+        self.dimension_tabwidget.add_value_dimension_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.dimension_value_add_confirm)
+        self.dimension_tabwidget.add_value_dimension_cancel_button.clicked.connect(self.controleurcatalogsettings.dimension_value_add_cancel)
+        self.dimension_tabwidget.add_value_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.dimension_value_add)
         
-        self.dimension_tabwidget.modify_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.dimension_name_modify_confirm)
-        self.dimension_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurarrangementsettings.dimension_name_modify_cancel)
-        self.dimension_tabwidget.modify_new_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.dimension_name_modify)
-        self.dimension_tabwidget.modify_value_dimension_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.dimension_value_modify_confirm)
-        self.dimension_tabwidget.modify_value_dimension_cancel_button.clicked.connect(self.controleurarrangementsettings.dimension_value_modify_cancel)
-        self.dimension_tabwidget.modify_new_value_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.dimension_value_modify)
+        self.dimension_tabwidget.modify_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.dimension_name_modify_confirm)
+        self.dimension_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurcatalogsettings.dimension_name_modify_cancel)
+        self.dimension_tabwidget.modify_new_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.dimension_name_modify)
+        self.dimension_tabwidget.modify_value_dimension_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.dimension_value_modify_confirm)
+        self.dimension_tabwidget.modify_value_dimension_cancel_button.clicked.connect(self.controleurcatalogsettings.dimension_value_modify_cancel)
+        self.dimension_tabwidget.modify_new_value_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.dimension_value_modify)
         
-        self.dimension_tabwidget.delete_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.dimension_name_delete)
-        self.dimension_tabwidget.delete_value_dimension_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.dimension_value_delete)
+        self.dimension_tabwidget.delete_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.dimension_name_delete)
+        self.dimension_tabwidget.delete_value_dimension_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.dimension_value_delete)
         
-        self.variable_tabwidget.add_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_name_add_confirm)
-        self.variable_tabwidget.add_name_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_name_add_cancel)
-        self.variable_tabwidget.add_dimension_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_name_add)
-        self.variable_tabwidget.add_attribute_variable_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_attribute_variable_add_confirm)
-        self.variable_tabwidget.add_attribute_variable_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_variable_add_cancel)
-        self.variable_tabwidget.add_attribute_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_attribute_add_confirm)
-        self.variable_tabwidget.add_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_add_cancel)
-        self.variable_tabwidget.add_attribute_value_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_attribute_add)
+        self.variable_tabwidget.add_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_name_add_confirm)
+        self.variable_tabwidget.add_name_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_name_add_cancel)
+        self.variable_tabwidget.add_dimension_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_name_add)
+        self.variable_tabwidget.add_attribute_variable_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_attribute_variable_add_confirm)
+        self.variable_tabwidget.add_attribute_variable_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_variable_add_cancel)
+        self.variable_tabwidget.add_attribute_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_attribute_add_confirm)
+        self.variable_tabwidget.add_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_add_cancel)
+        self.variable_tabwidget.add_attribute_value_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_attribute_add)
         
-        self.variable_tabwidget.modify_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_name_modify_confirm)
-        self.variable_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_name_modify_cancel)
-        self.variable_tabwidget.modify_new_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_new_name_modify_confirm)
-        self.variable_tabwidget.modify_new_name_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_new_name_modify_cancel)
-        self.variable_tabwidget.modify_dimension_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_name_modify)
+        self.variable_tabwidget.modify_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_name_modify_confirm)
+        self.variable_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_name_modify_cancel)
+        self.variable_tabwidget.modify_new_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_new_name_modify_confirm)
+        self.variable_tabwidget.modify_new_name_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_new_name_modify_cancel)
+        self.variable_tabwidget.modify_dimension_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_name_modify)
         
-        self.variable_tabwidget.modify_attribute_variable_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_attribute_variable_modify_confirm)
-        self.variable_tabwidget.modify_attribute_variable_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_variable_modify_cancel)
-        self.variable_tabwidget.modify_attribute_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_attribute_modify_confirm)
-        self.variable_tabwidget.modify_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_modify_cancel)
-        self.variable_tabwidget.modify_new_attribute_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_new_attribute_modify_confirm)
-        self.variable_tabwidget.modify_new_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_new_attribute_modify_cancel)
-        self.variable_tabwidget.modify_new_attribute_value_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_attribute_modify)
+        self.variable_tabwidget.modify_attribute_variable_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_attribute_variable_modify_confirm)
+        self.variable_tabwidget.modify_attribute_variable_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_variable_modify_cancel)
+        self.variable_tabwidget.modify_attribute_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_attribute_modify_confirm)
+        self.variable_tabwidget.modify_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_modify_cancel)
+        self.variable_tabwidget.modify_new_attribute_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_new_attribute_modify_confirm)
+        self.variable_tabwidget.modify_new_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_new_attribute_modify_cancel)
+        self.variable_tabwidget.modify_new_attribute_value_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_attribute_modify)
         
-        self.variable_tabwidget.delete_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_name_delete)
-        self.variable_tabwidget.delete_attribute_variable_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_attribute_delete_confirm)
-        self.variable_tabwidget.delete_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.variable_attribute_delete_cancel)
-        self.variable_tabwidget.delete_attribute_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.variable_attribute_delete)
+        self.variable_tabwidget.delete_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_name_delete)
+        self.variable_tabwidget.delete_attribute_variable_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_attribute_delete_confirm)
+        self.variable_tabwidget.delete_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.variable_attribute_delete_cancel)
+        self.variable_tabwidget.delete_attribute_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.variable_attribute_delete)
         
-        self.attribute_tabwidget.add_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.global_attribute_name_add)
-        self.attribute_tabwidget.add_value_attribute_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.global_attribute_value_add_confirm)
-        self.attribute_tabwidget.add_value_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_add_cancel)
-        self.attribute_tabwidget.add_value_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.global_attribute_value_add)
+        self.attribute_tabwidget.add_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.global_attribute_name_add)
+        self.attribute_tabwidget.add_value_attribute_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.global_attribute_value_add_confirm)
+        self.attribute_tabwidget.add_value_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_add_cancel)
+        self.attribute_tabwidget.add_value_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.global_attribute_value_add)
         
-        self.attribute_tabwidget.modify_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.global_attribute_name_modify_confirm)
-        self.attribute_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurarrangementsettings.global_attribute_name_modify_cancel)
-        self.attribute_tabwidget.modify_new_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.global_attribute_name_modify)
-        self.attribute_tabwidget.modify_value_attribute_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.global_attribute_value_modify_confirm)
-        self.attribute_tabwidget.modify_value_attribute_cancel_button.clicked.connect(self.controleurarrangementsettings.global_attribute_value_modify_cancel)
-        self.attribute_tabwidget.modify_new_value_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.global_attribute_value_modify)
+        self.attribute_tabwidget.modify_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.global_attribute_name_modify_confirm)
+        self.attribute_tabwidget.modify_name_cancel_button.clicked.connect(self.controleurcatalogsettings.global_attribute_name_modify_cancel)
+        self.attribute_tabwidget.modify_new_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.global_attribute_name_modify)
+        self.attribute_tabwidget.modify_value_attribute_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.global_attribute_value_modify_confirm)
+        self.attribute_tabwidget.modify_value_attribute_cancel_button.clicked.connect(self.controleurcatalogsettings.global_attribute_value_modify_cancel)
+        self.attribute_tabwidget.modify_new_value_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.global_attribute_value_modify)
         
-        self.attribute_tabwidget.delete_name_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.global_attribute_name_delete)
-        self.attribute_tabwidget.delete_value_attribute_combobox.lineEdit().returnPressed.connect(self.controleurarrangementsettings.global_attribute_value_delete)
+        self.attribute_tabwidget.delete_name_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.global_attribute_name_delete)
+        self.attribute_tabwidget.delete_value_attribute_combobox.lineEdit().returnPressed.connect(self.controleurcatalogsettings.global_attribute_value_delete)
 
 
 
@@ -704,14 +705,14 @@ class vueArrangementsettings(QWidget):
 if __name__ == "__main__":
     
     from vueMainwindow import vueMainwindow
-    from vueArrangement import vueArrangement
+    from vueCatalog import vueCatalog
     import sys
     from PyQt6.QtWidgets import QApplication, QMainWindow
     
     app = QApplication(sys.argv)
     mainwindow = QMainWindow()
     vuemainwindow = vueMainwindow()
-    vuearrangement = vueArrangement(vuemainwindow)
-    mainwindow.setCentralWidget(vueArrangementsettings(vuearrangement))
+    vuecatalog = vueCatalog(vuemainwindow)
+    mainwindow.setCentralWidget(vueCatalogsettings(vuecatalog))
     mainwindow.show()
     sys.exit(app.exec())

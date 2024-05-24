@@ -9,12 +9,12 @@ import os
 
 
 
-# Définition de la classe modeleArrangement
+# Définition de la classe modeleCatalog
 
 
 
 
-class modeleArrangement:
+class modeleCatalog:
     
     
     # Constructeur par défaut
@@ -30,17 +30,17 @@ class modeleArrangement:
     
     def read_json(self):
         
-        arrangement = {}
+        catalog = {}
         if self.path_list_files[0] != "":
             if os.path.getsize(self.path_list_files[0]) != 0:
                 # Chargement le fichier JSON
                 with open(self.path_list_files[0], 'r') as f:
-                    arrangement = json.load(f)
-        return arrangement
+                    catalog = json.load(f)
+        return catalog
     
     
-    def write_json(self, arrangement):
+    def write_json(self, catalog):
         
         # Ecriture du fichier JSON 
         with open(self.path_list_files[0], "w") as f:
-            json.dump(arrangement, f, indent = 4)
+            json.dump(catalog, f, indent = 4)

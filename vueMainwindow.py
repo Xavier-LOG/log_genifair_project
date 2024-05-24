@@ -4,9 +4,10 @@
 
 
 from modeleMainwindow import modeleMainwindow
-from vueToolbar import vueToolbar
-from vueArrangement import vueArrangement
 from vueLogs import vueLogs
+from vueFilesettings import vueFilesettings
+from vueToolbar import vueToolbar
+from vueCatalog import vueCatalog
 from vueFileviewer import vueFileviewer
 from vueConversion import vueConversion
 
@@ -44,8 +45,9 @@ class vueMainwindow(QMainWindow):
         self.modelemainwindow.set_screen_resolution(int(QApplication.primaryScreen().availableGeometry().width()), int(QApplication.primaryScreen().availableGeometry().height() * 0.95))
         self.setMinimumSize(self.modelemainwindow.screen_width, self.modelemainwindow.screen_height)
         self.vuelogs = vueLogs(self)
+        self.vuefilesettings = vueFilesettings(self)
         self.vuetoolbar = vueToolbar(self)
-        self.vuearrangement = vueArrangement(self)
+        self.vuecatalog = vueCatalog(self)
         self.vuefileviewer = vueFileviewer(self)
         self.vueconversion = vueConversion(self)
         self.init_ui()
@@ -64,14 +66,15 @@ class vueMainwindow(QMainWindow):
         
         self.vuemainwindow_horizontal_layout = QHBoxLayout(self.central_widget)
         
-        self.vuemainwindow_vertical_tabwidget_layout = QVBoxLayout()
+        self.vuemainwindow_vertical_filesettingstabwidget_layout = QVBoxLayout()
         self.tabwidget = QTabWidget()
         
-        self.tabwidget.addTab(self.vuearrangement, "Arrange Data")
+        self.tabwidget.addTab(self.vuecatalog, "Arrange Data")
         self.tabwidget.addTab(self.vueconversion, "Process Data")
         self.tabwidget.setTabEnabled(1, False)
         
-        self.vuemainwindow_vertical_tabwidget_layout.addWidget(self.tabwidget)
+        self.vuemainwindow_vertical_filesettingstabwidget_layout.addWidget(self.vuefilesettings)
+        self.vuemainwindow_vertical_filesettingstabwidget_layout.addWidget(self.tabwidget)
         
         self.vuemainwindow_vertical_logsfileviewer_layout = QVBoxLayout()
         
@@ -81,7 +84,7 @@ class vueMainwindow(QMainWindow):
         self.vuemainwindow_vertical_logsfileviewer_layout.addWidget(self.vuelogs)
         self.vuemainwindow_vertical_logsfileviewer_layout.addWidget(self.vuefileviewer)
         
-        self.vuemainwindow_horizontal_layout.addLayout(self.vuemainwindow_vertical_tabwidget_layout)
+        self.vuemainwindow_horizontal_layout.addLayout(self.vuemainwindow_vertical_filesettingstabwidget_layout)
         self.vuemainwindow_horizontal_layout.addLayout(self.vuemainwindow_vertical_logsfileviewer_layout)
 
 

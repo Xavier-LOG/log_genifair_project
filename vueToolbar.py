@@ -52,6 +52,8 @@ class vueToolbar(QToolBar):
         self.action_file = self.menu_file.addAction("Import File")
         # Ajout d'une action dans le menu contextuel de File
         self.action_folder = self.menu_file.addAction("Import Folder")
+        # Ajout d'une action dans le menu contextuel de File
+        self.action_data = self.menu_file.addAction("Import Data From Database")
         
         self.menu_options_button = QPushButton("Options")
         self.menu_options = QMenu()
@@ -76,6 +78,7 @@ class vueToolbar(QToolBar):
         
         self.action_file.triggered.connect(self.controleurtoolbar.import_file_option)
         self.action_folder.triggered.connect(self.controleurtoolbar.import_folder_option)
+        self.action_data.triggered.connect(self.controleurtoolbar.import_data_option)
         self.action_options.triggered.connect(self.controleurtoolbar.resolution_option)
         self.action_help.triggered.connect(self.controleurtoolbar.about_option)
 

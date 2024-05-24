@@ -2,27 +2,9 @@
     "dimension": {
         "Sample": {
             "values": []
-        },
-        "Station": {
-            "values": []
         }
     },
     "variable": {
-        "station": {
-            "dimension": [
-                "Station"
-            ],
-            "attribute": {
-                ":axis": "Station",
-                ":dtype": "object",
-                ":standard_name": "station_id",
-                ":long_name": "Station id",
-                ":sdn_parameter_name": "station",
-                ":sdn_paramter_urn": "urn:sdn:parameter:station",
-                ":cf_role": "profile_id",
-                "column_name": "station_id"
-            }
-        },
         "sample": {
             "dimension": [
                 "Sample"
@@ -35,69 +17,14 @@
                 ":standard_name": "sample",
                 ":long_name": "Sample",
                 ":sdn_parameter_name": "sample",
-                ":sdn_paramter_urn": "urn:sdn:parameter:sample",
+                ":sdn_parameter_urn": "urn:sdn:parameter:sample",
                 "column_name": "sample"
-            }
-        },
-        "latitude": {
-            "dimension": [
-                "Sample"
-            ],
-            "attribute": {
-                ":axis": "Y",
-                ":coverage_content_type": "coordinate",
-                ":dtype": "float64",
-                ":units": "degree North",
-                ":sdn_uom_name": "degree_North",
-                ":sdn_uom_urn": "urn:sdn:parameter:degree_North",
-                ":standard_name": "latitude",
-                ":long_name": "Latitude",
-                ":sdn_parameter_name": "Latitude north",
-                ":sdn_paramter_urn": "SDN:P01::ALATZZ01",
-                "column_name": "lat"
-            }
-        },
-        "longitude": {
-            "dimension": [
-                "Sample"
-            ],
-            "attribute": {
-                ":axis": "X",
-                ":coverage_content_type": "coordinate",
-                ":dtype": "float64",
-                ":units": "degree East",
-                ":sdn_uom_name": "degree_East",
-                ":sdn_uom_urn": "urn:sdn:parameter:degree_East",
-                ":standard_name": "longitude",
-                ":long_name": "Longitude",
-                ":sdn_parameter_name": "Longitude east",
-                ":sdn_paramter_urn": "SDN:P01::ALONZZ01",
-                "column_name": "lon"
-            }
-        },
-        "depth": {
-            "dimension": [
-                "Sample"
-            ],
-            "attribute": {
-                ":axis": "Z",
-                ":coverage_content_type": "coordinate",
-                ":dtype": "float64",
-                ":units": "meters",
-                ":sdn_uom_name": "meters",
-                ":sdn_uom_urn": "urn:sdn:parameter:meters",
-                ":standard_name": "depth",
-                ":long_name": "Depth",
-                ":sdn_parameter_name": "depth",
-                ":sdn_paramter_urn": "urn:sdn:parameter:depth",
-                ":positive": "down",
-                "column_name": "profondeur"
             }
         }
     },
     "global_attribute": {
         ":_FillValue": "NaN",
-        ":coordinates": "Station, Sample",
+        ":coordinates": "Sample",
         ":date_created": "NaN",
         ":title": "Sample",
         ":project": "NaN",
@@ -107,6 +34,7 @@
         ":request_for_aknowledgement": "If you use the data in presentation or in publications, please acknowledge. Send us also a reprint or preprint of publications using the data for inclusion in our bibliography.",
         ":citation": "NaN",
         ":license": "The data is not intended for legal use. However, it may be used and redistributed for free.",
+        ":references": "NaN",
         ":summary": "NaN",
         ":principal_investigator": "NaN",
         ":principal_investigator_email": "NaN",
@@ -115,6 +43,9 @@
         ":contributor_role": "NaN",
         ":contact": "NaN",
         ":comments": "NaN",
-        ":history": "NaN"
+        ":history": "NaN",
+        ":creator_email": "NaN",
+        ":creator_name": "NaN",
+        ":creator_url": "NaN"
     }
 }

@@ -1,19 +1,34 @@
 {
     "dimension": {
-        "Station": {
+        "Time": {
             "values": []
         },
-        "Time": {
+        "Station": {
             "values": []
         }
     },
     "variable": {
+        "station": {
+            "dimension": [
+                "Station"
+            ],
+            "attribute": {
+                ":axis": "Station",
+                ":dtype": "object",
+                ":standard_name": "station_id",
+                ":long_name": "Station id",
+                ":sdn_parameter_name": "station",
+                ":sdn_parameter_urn": "urn:sdn:parameter:station",
+                ":cf_role": "profile_id",
+                "column_name": "station_id"
+            }
+        },
         "time": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
-                ":axis": "T",
+                ":axis": "Time",
                 ":coverage_content_type": "coordinate",
                 ":dtype": "object",
                 ":units": "seconds since 1970-01-01 00:00:00",
@@ -24,11 +39,11 @@
                 ":standard_name": "time",
                 ":long_name": "Time",
                 ":sdn_parameter_name": "Elapsed time relative to 1970-01-01T00:00:00Z",
-                ":sdn_paramter_urn": "SDN:P01::ELTMEP01",
+                ":sdn_parameter_urn": "SDN:P01::ELTMEP01",
                 "column_name": "datetime"
             }
         },
-        "latitude__pfb": {
+        "latitude": {
             "dimension": [
                 "Time"
             ],
@@ -42,11 +57,11 @@
                 ":standard_name": "latitude",
                 ":long_name": "Latitude",
                 ":sdn_parameter_name": "Latitude north",
-                ":sdn_paramter_urn": "SDN:P01::ALATZZ01",
+                ":sdn_parameter_urn": "SDN:P01::ALATZZ01",
                 "column_name": "lat"
             }
         },
-        "longitude__pfb": {
+        "longitude": {
             "dimension": [
                 "Time"
             ],
@@ -60,533 +75,190 @@
                 ":standard_name": "longitude",
                 ":long_name": "Longitude",
                 ":sdn_parameter_name": "Longitude east",
-                ":sdn_paramter_urn": "SDN:P01::ALONZZ01",
+                ":sdn_parameter_urn": "SDN:P01::ALONZZ01",
                 "column_name": "lon"
             }
         },
-        "speed_kn_pfb": {
+        "depth": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
-                ":dtype": "int64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "speed_kn_pfb",
-                ":long_name": "Speed kn pfb",
-                ":sdn_parameter_name": "speed_kn_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:speed_kn_pfb",
-                "column_name": "Speed (Kn)_PFB"
+                ":axis": "Z",
+                ":coverage_content_type": "coordinate",
+                ":dtype": "float64",
+                ":units": "meters",
+                ":sdn_uom_name": "meters",
+                ":sdn_uom_urn": "urn:sdn:parameter:meters",
+                ":standard_name": "depth",
+                ":long_name": "Depth",
+                ":sdn_parameter_name": "depth",
+                ":sdn_parameter_urn": "urn:sdn:parameter:depth",
+                ":positive": "down",
+                "column_name": "profondeur"
             }
         },
-        "course__pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "int64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "course__pfb",
-                ":long_name": "Course  pfb",
-                ":sdn_parameter_name": "course__pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:course__pfb",
-                "column_name": "Course (\u00b0)_PFB"
-            }
-        },
-        "height_m_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "int64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "height_m_pfb",
-                ":long_name": "Height m pfb",
-                ":sdn_parameter_name": "height_m_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:height_m_pfb",
-                "column_name": "Height (m)_PFB"
-            }
-        },
-        "satellites__pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "int64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "satellites__pfb",
-                ":long_name": "Satellites  pfb",
-                ":sdn_parameter_name": "satellites__pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:satellites__pfb",
-                "column_name": "Satellites (#)_PFB"
-            }
-        },
-        "ph_ph_pfb": {
+        "temperature": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "ph_ph_pfb",
-                ":long_name": "Ph ph pfb",
-                ":sdn_parameter_name": "ph_ph_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:ph_ph_pfb",
-                "column_name": "pH (pH)_PFB"
+                ":units": "degree Celsius",
+                ":sdn_uom_name": "degree_Celsius",
+                ":sdn_uom_urn": "urn:sdn:parameter:degree_Celsius",
+                ":standard_name": "sea_water_temperature",
+                ":long_name": "Sea water temperature",
+                ":sdn_parameter_name": "sea_water_temperature",
+                ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_temperature",
+                ":reference_scale": "ITS-90",
+                "column_name": "sea_water_temperature"
             }
         },
-        "ph_temp_degc_pfb": {
+        "salinity": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "ph_temp_degc_pfb",
-                ":long_name": "Ph temp degc pfb",
-                ":sdn_parameter_name": "ph_temp_degc_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:ph_temp_degc_pfb",
-                "column_name": "pH_Temp (DegC)_PFB"
+                ":units": "PSU",
+                ":sdn_uom_name": "psu",
+                ":sdn_uom_urn": "urn:sdn:parameter:psu",
+                ":standard_name": "sea_water_salinity",
+                ":long_name": "Sea water salinity",
+                ":sdn_parameter_name": "sea_water_practical_salinity",
+                ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_practical_salinity",
+                "column_name": "sea_water_salinity"
             }
         },
-        "sbe45_temp_c_pfb": {
+        "density": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "sbe45_temp_c_pfb",
-                ":long_name": "Sbe45 temp c pfb",
-                ":sdn_parameter_name": "sbe45_temp_c_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:sbe45_temp_c_pfb",
-                "column_name": "SBE45_Temp (\u00b0C)_PFB"
+                ":units": "kg/m^3",
+                ":sdn_uom_name": "kg/m^3",
+                ":sdn_uom_urn": "urn:sdn:parameter:kg/m^3",
+                ":standard_name": "sea_water_density",
+                ":long_name": "Sea water density",
+                ":sdn_parameter_name": "sea_water_density",
+                ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_density",
+                "column_name": "sea_water_density"
             }
         },
-        "sbe45_conductivity_sm_pfb": {
+        "fluorescence": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "sbe45_conductivity_sm_pfb",
-                ":long_name": "Sbe45 conductivity sm pfb",
-                ":sdn_parameter_name": "sbe45_conductivity_sm_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:sbe45_conductivity_sm_pfb",
-                "column_name": "SBE45_Conductivity (S/m)_PFB"
+                ":units": "mg/m^3",
+                ":sdn_uom_name": "mg/m^3",
+                ":sdn_uom_urn": "urn:sdn:parameter:mg/m^3",
+                ":standard_name": "sea_water_fluorescence",
+                ":long_name": "Sea water fluorescence",
+                ":sdn_parameter_name": "mass_concentration_of_chlorophyll_in_sea_water",
+                ":sdn_parameter_urn": "urn:sdn:parameter:mass_concentration_of_chlorophyll_in_sea_water",
+                "column_name": "sea_water_fluorescence"
             }
         },
-        "sbe45_salinity_psu_pfb": {
+        "pressure": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "sbe45_salinity_psu_pfb",
-                ":long_name": "Sbe45 salinity psu pfb",
-                ":sdn_parameter_name": "sbe45_salinity_psu_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:sbe45_salinity_psu_pfb",
-                "column_name": "SBE45_Salinity (psu)_PFB"
+                ":units": "dbar",
+                ":sdn_uom_name": "dbar",
+                ":sdn_uom_urn": "urn:sdn:parameter:dbar",
+                ":standard_name": "sea_water_pressure",
+                ":long_name": "Sea water pressure",
+                ":sdn_parameter_name": "sea_water_pressure",
+                ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_pressure",
+                "column_name": "sea_water_pressure"
             }
         },
-        "sbe45_soundvelocity_ms_pfb": {
+        "dissolved_oxygen": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "sbe45_soundvelocity_ms_pfb",
-                ":long_name": "Sbe45 soundvelocity ms pfb",
-                ":sdn_parameter_name": "sbe45_soundvelocity_ms_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:sbe45_soundvelocity_ms_pfb",
-                "column_name": "SBE45_SoundVelocity (m/s)_PFB"
+                ":units": "ml/l",
+                ":sdn_uom_name": "ml/l",
+                ":sdn_uom_urn": "urn:sdn:parameter:ml/l",
+                ":standard_name": "dissolved_oxygen",
+                ":long_name": "Dissolved oxygen",
+                ":sdn_parameter_name": "dissolved_oxygen",
+                ":sdn_parameter_urn": "urn:sdn:parameter:dissolved_oxygen",
+                "column_name": "dissolved_oxygen"
             }
         },
-        "opt_dissolved_oxygen_moll_pfb": {
+        "nitrate": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "opt_dissolved_oxygen_moll_pfb",
-                ":long_name": "Opt dissolved oxygen moll pfb",
-                ":sdn_parameter_name": "opt_dissolved_oxygen_moll_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:opt_dissolved_oxygen_moll_pfb",
-                "column_name": "Opt_Dissolved_Oxygen (\u00b5mol/l)_PFB"
+                ":units": "\u00c2\u00b5mol/l",
+                ":sdn_uom_name": "\u00c2\u00b5mol/l",
+                ":sdn_uom_urn": "urn:sdn:parameter:\u00c2\u00b5mol/l",
+                ":standard_name": "sea_water_nitrate",
+                ":long_name": "Sea water nitrate",
+                ":sdn_parameter_name": "concentration_of_nitrate_in_sea_water",
+                ":sdn_parameter_urn": "urn:sdn:parameter:concentration_of_nitrate_in_sea_water",
+                "column_name": "sea_water_nitrate"
             }
         },
-        "opt_o2_saturation__pfb": {
+        "phosphate": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "opt_o2_saturation__pfb",
-                ":long_name": "Opt o2 saturation  pfb",
-                ":sdn_parameter_name": "opt_o2_saturation__pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:opt_o2_saturation__pfb",
-                "column_name": "Opt_O2_Saturation (%)_PFB"
+                ":units": "\u00c2\u00b5mol/l",
+                ":sdn_uom_name": "\u00c2\u00b5mol/l",
+                ":sdn_uom_urn": "urn:sdn:parameter:\u00c2\u00b5mol/l",
+                ":standard_name": "sea_water_phosphate",
+                ":long_name": "Sea water phosphate",
+                ":sdn_parameter_name": "concentration_of_phosphate_in_sea_water",
+                ":sdn_parameter_urn": "urn:sdn:parameter:concentration_of_phosphate_in_sea_water",
+                "column_name": "sea_water_phosphate"
             }
         },
-        "opt_temperature_c_pfb": {
+        "silicate": {
             "dimension": [
                 "Time"
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "opt_temperature_c_pfb",
-                ":long_name": "Opt temperature c pfb",
-                ":sdn_parameter_name": "opt_temperature_c_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:opt_temperature_c_pfb",
-                "column_name": "Opt_Temperature (\u00b0C)_PFB"
-            }
-        },
-        "corr_co2_moll_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "corr_co2_moll_pfb",
-                ":long_name": "Corr co2 moll pfb",
-                ":sdn_parameter_name": "corr_co2_moll_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:corr_co2_moll_pfb",
-                "column_name": "Corr_CO2 (\u00b5mol/l)_PFB"
-            }
-        },
-        "seap_turbidity_ftu_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "seap_turbidity_ftu_pfb",
-                ":long_name": "Seap turbidity ftu pfb",
-                ":sdn_parameter_name": "seap_turbidity_ftu_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:seap_turbidity_ftu_pfb",
-                "column_name": "Seap_Turbidity (FTU)_PFB"
-            }
-        },
-        "cycl_cdom_gl_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "cycl_cdom_gl_pfb",
-                ":long_name": "Cycl cdom gl pfb",
-                ":sdn_parameter_name": "cycl_cdom_gl_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:cycl_cdom_gl_pfb",
-                "column_name": "Cycl_CDOM (\u00b5g/l)_PFB"
-            }
-        },
-        "ai_turbidity_v_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "ai_turbidity_v_pfb",
-                ":long_name": "Ai turbidity v pfb",
-                ":sdn_parameter_name": "ai_turbidity_v_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:ai_turbidity_v_pfb",
-                "column_name": "AI_Turbidity (V)_PFB"
-            }
-        },
-        "ai_cdom_v_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "ai_cdom_v_pfb",
-                ":long_name": "Ai cdom v pfb",
-                ":sdn_parameter_name": "ai_cdom_v_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:ai_cdom_v_pfb",
-                "column_name": "AI_CDOM (V)_PFB"
-            }
-        },
-        "flow_main_lmin_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "flow_main_lmin_pfb",
-                ":long_name": "Flow main lmin pfb",
-                ":sdn_parameter_name": "flow_main_lmin_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:flow_main_lmin_pfb",
-                "column_name": "flow_main (l/min)_PFB"
-            }
-        },
-        "aoa_greenalgae_gl_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_greenalgae_gl_pfb",
-                ":long_name": "Aoa greenalgae gl pfb",
-                ":sdn_parameter_name": "aoa_greenalgae_gl_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_greenalgae_gl_pfb",
-                "column_name": "AOA_GreenAlgae (\u00b5g/l)_PFB"
-            }
-        },
-        "aoa_bluealgae_gl_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_bluealgae_gl_pfb",
-                ":long_name": "Aoa bluealgae gl pfb",
-                ":sdn_parameter_name": "aoa_bluealgae_gl_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_bluealgae_gl_pfb",
-                "column_name": "AOA_BlueAlgae (\u00b5g/l)_PFB"
-            }
-        },
-        "aoa_diatoms_gl_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_diatoms_gl_pfb",
-                ":long_name": "Aoa diatoms gl pfb",
-                ":sdn_parameter_name": "aoa_diatoms_gl_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_diatoms_gl_pfb",
-                "column_name": "AOA_Diatoms (\u00b5g/l)_PFB"
-            }
-        },
-        "aoa_cryptophyta_gl_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_cryptophyta_gl_pfb",
-                ":long_name": "Aoa cryptophyta gl pfb",
-                ":sdn_parameter_name": "aoa_cryptophyta_gl_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_cryptophyta_gl_pfb",
-                "column_name": "AOA_Cryptophyta (\u00b5g/l)_PFB"
-            }
-        },
-        "aoa_yellow_substance_gl_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_yellow_substance_gl_pfb",
-                ":long_name": "Aoa yellow substance gl pfb",
-                ":sdn_parameter_name": "aoa_yellow_substance_gl_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_yellow_substance_gl_pfb",
-                "column_name": "AOA_Yellow substance (\u00b5g/l)_PFB"
-            }
-        },
-        "aoa_totalalgae_gl_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_totalalgae_gl_pfb",
-                ":long_name": "Aoa totalalgae gl pfb",
-                ":sdn_parameter_name": "aoa_totalalgae_gl_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_totalalgae_gl_pfb",
-                "column_name": "AOA_TotalAlgae (\u00b5g/l)_PFB"
-            }
-        },
-        "aoa_trans_green__pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_trans_green__pfb",
-                ":long_name": "Aoa trans green  pfb",
-                ":sdn_parameter_name": "aoa_trans_green__pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_trans_green__pfb",
-                "column_name": "AOA_Trans_Green (%)_PFB"
-            }
-        },
-        "aoa_trans_blue__pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_trans_blue__pfb",
-                ":long_name": "Aoa trans blue  pfb",
-                ":sdn_parameter_name": "aoa_trans_blue__pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_trans_blue__pfb",
-                "column_name": "AOA_Trans_Blue (%)_PFB"
-            }
-        },
-        "aoa_trans_diatoms__pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_trans_diatoms__pfb",
-                ":long_name": "Aoa trans diatoms  pfb",
-                ":sdn_parameter_name": "aoa_trans_diatoms__pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_trans_diatoms__pfb",
-                "column_name": "AOA_Trans_Diatoms (%)_PFB"
-            }
-        },
-        "aoa_trans_crypto__pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_trans_crypto__pfb",
-                ":long_name": "Aoa trans crypto  pfb",
-                ":sdn_parameter_name": "aoa_trans_crypto__pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_trans_crypto__pfb",
-                "column_name": "AOA_Trans_Crypto (%)_PFB"
-            }
-        },
-        "aoa_trans_yellow__pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_trans_yellow__pfb",
-                ":long_name": "Aoa trans yellow  pfb",
-                ":sdn_parameter_name": "aoa_trans_yellow__pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_trans_yellow__pfb",
-                "column_name": "AOA_Trans_Yellow (%)_PFB"
-            }
-        },
-        "aoa_trans_abs__pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_trans_abs__pfb",
-                ":long_name": "Aoa trans abs  pfb",
-                ":sdn_parameter_name": "aoa_trans_abs__pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_trans_abs__pfb",
-                "column_name": "AOA_Trans_Abs (%)_PFB"
-            }
-        },
-        "aoa_sampletemp_c_pfb": {
-            "dimension": [
-                "Time"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "aoa_sampletemp_c_pfb",
-                ":long_name": "Aoa sampletemp c pfb",
-                ":sdn_parameter_name": "aoa_sampletemp_c_pfb",
-                ":sdn_paramter_urn": "urn:sdn:parameter:aoa_sampletemp_c_pfb",
-                "column_name": "AOA_SampleTemp (\u00b0C)_PFB"
+                ":units": "\u00c2\u00b5mol/l",
+                ":sdn_uom_name": "\u00c2\u00b5mol/l",
+                ":sdn_uom_urn": "urn:sdn:parameter:\u00c2\u00b5mol/l",
+                ":standard_name": "sea_water_silicate",
+                ":long_name": "Sea water silicate",
+                ":sdn_parameter_name": "concentration_of_silicate_in_sea_water",
+                ":sdn_parameter_urn": "urn:sdn:parameter:concentration_of_silicate_in_sea_water",
+                "column_name": "sea_water_silicate"
             }
         }
     },
     "global_attribute": {
         ":_FillValue": "NaN",
-        ":project": "NaN",
         ":coordinates": "Station, Time",
+        ":date_created": "NaN",
+        ":time_coverage_start": "NaN",
+        ":time_coverage_end": "NaN",
+        ":title": "Trajectory",
+        ":project": "NaN",
         ":Conventions": "CF-1.6, SeaDataNet_1.0",
         ":institution": "NaN",
         ":source": "NaN",
         ":request_for_aknowledgement": "If you use the data in presentation or in publications, please acknowledge. Send us also a reprint or preprint of publications using the data for inclusion in our bibliography.",
         ":citation": "NaN",
         ":license": "The data is not intended for legal use. However, it may be used and redistributed for free.",
+        ":references": "NaN",
         ":summary": "NaN",
         ":principal_investigator": "NaN",
         ":principal_investigator_email": "NaN",
@@ -594,14 +266,13 @@
         ":contributor_name": "NaN",
         ":contributor_role": "NaN",
         ":contact": "NaN",
-        ":comments": "NaN",
-        ":history": "NaN",
-        ":time_coverage_start": "NaN",
-        ":time_coverage_end": "NaN",
-        ":update_interval": "NaN",
-        ":title": "Trajectory",
         ":featureType": "Trajectory",
         ":cdm_data_type": "Trajectory",
-        ":date_created": "2024/05/16 11:15:50"
+        ":comments": "NaN",
+        ":history": "NaN",
+        ":creator_email": "NaN",
+        ":creator_name": "NaN",
+        ":creator_url": "NaN",
+        ":test": "NaN"
     }
 }

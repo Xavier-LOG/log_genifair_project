@@ -18,7 +18,7 @@
                 ":standard_name": "station_id",
                 ":long_name": "Station id",
                 ":sdn_parameter_name": "station",
-                ":sdn_paramter_urn": "urn:sdn:parameter:station",
+                ":sdn_parameter_urn": "urn:sdn:parameter:station",
                 ":cf_role": "profile_id",
                 "column_name": "station_id"
             }
@@ -37,7 +37,7 @@
                 ":standard_name": "depth",
                 ":long_name": "Depth",
                 ":sdn_parameter_name": "depth",
-                ":sdn_paramter_urn": "urn:sdn:parameter:depth",
+                ":sdn_parameter_urn": "urn:sdn:parameter:depth",
                 ":positive": "down",
                 "column_name": "profondeur"
             }
@@ -54,7 +54,7 @@
                 ":standard_name": "sea_water_temperature",
                 ":long_name": "Sea water temperature",
                 ":sdn_parameter_name": "sea_water_temperature",
-                ":sdn_paramter_urn": "urn:sdn:parameter:sea_water_temperature",
+                ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_temperature",
                 ":reference_scale": "ITS-90",
                 "column_name": "sea_water_temperature"
             }
@@ -71,7 +71,7 @@
                 ":standard_name": "sea_water_salinity",
                 ":long_name": "Sea water salinity",
                 ":sdn_parameter_name": "sea_water_practical_salinity",
-                ":sdn_paramter_urn": "urn:sdn:parameter:sea_water_practical_salinity",
+                ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_practical_salinity",
                 "column_name": "sea_water_salinity"
             }
         },
@@ -87,7 +87,7 @@
                 ":standard_name": "sea_water_density",
                 ":long_name": "Sea water density",
                 ":sdn_parameter_name": "sea_water_density",
-                ":sdn_paramter_urn": "urn:sdn:parameter:sea_water_density",
+                ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_density",
                 "column_name": "sea_water_density"
             }
         },
@@ -103,7 +103,7 @@
                 ":standard_name": "sea_water_fluorescence",
                 ":long_name": "Sea water fluorescence",
                 ":sdn_parameter_name": "mass_concentration_of_chlorophyll_in_sea_water",
-                ":sdn_paramter_urn": "urn:sdn:parameter:mass_concentration_of_chlorophyll_in_sea_water",
+                ":sdn_parameter_urn": "urn:sdn:parameter:mass_concentration_of_chlorophyll_in_sea_water",
                 "column_name": "sea_water_fluorescence"
             }
         },
@@ -119,7 +119,7 @@
                 ":standard_name": "sea_water_pressure",
                 ":long_name": "Sea water pressure",
                 ":sdn_parameter_name": "sea_water_pressure",
-                ":sdn_paramter_urn": "urn:sdn:parameter:sea_water_pressure",
+                ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_pressure",
                 "column_name": "sea_water_pressure"
             }
         },
@@ -135,7 +135,7 @@
                 ":standard_name": "dissolved_oxygen",
                 ":long_name": "Dissolved oxygen",
                 ":sdn_parameter_name": "dissolved_oxygen",
-                ":sdn_paramter_urn": "urn:sdn:parameter:dissolved_oxygen",
+                ":sdn_parameter_urn": "urn:sdn:parameter:dissolved_oxygen",
                 "column_name": "dissolved_oxygen"
             }
         },
@@ -151,7 +151,7 @@
                 ":standard_name": "sea_water_nitrate",
                 ":long_name": "Sea water nitrate",
                 ":sdn_parameter_name": "concentration_of_nitrate_in_sea_water",
-                ":sdn_paramter_urn": "urn:sdn:parameter:concentration_of_nitrate_in_sea_water",
+                ":sdn_parameter_urn": "urn:sdn:parameter:concentration_of_nitrate_in_sea_water",
                 "column_name": "sea_water_nitrate"
             }
         },
@@ -167,7 +167,7 @@
                 ":standard_name": "sea_water_phosphate",
                 ":long_name": "Sea water phosphate",
                 ":sdn_parameter_name": "concentration_of_phosphate_in_sea_water",
-                ":sdn_paramter_urn": "urn:sdn:parameter:concentration_of_phosphate_in_sea_water",
+                ":sdn_parameter_urn": "urn:sdn:parameter:concentration_of_phosphate_in_sea_water",
                 "column_name": "sea_water_phosphate"
             }
         },
@@ -183,7 +183,7 @@
                 ":standard_name": "sea_water_silicate",
                 ":long_name": "Sea water silicate",
                 ":sdn_parameter_name": "concentration_of_silicate_in_sea_water",
-                ":sdn_paramter_urn": "urn:sdn:parameter:concentration_of_silicate_in_sea_water",
+                ":sdn_parameter_urn": "urn:sdn:parameter:concentration_of_silicate_in_sea_water",
                 "column_name": "sea_water_silicate"
             }
         }
@@ -200,6 +200,7 @@
         ":request_for_aknowledgement": "If you use the data in presentation or in publications, please acknowledge. Send us also a reprint or preprint of publications using the data for inclusion in our bibliography.",
         ":citation": "NaN",
         ":license": "The data is not intended for legal use. However, it may be used and redistributed for free.",
+        ":references": "NaN",
         ":summary": "NaN",
         ":principal_investigator": "NaN",
         ":principal_investigator_email": "NaN",
@@ -210,6 +211,9 @@
         ":featureType": "profile",
         ":cdm_data_type": "profile",
         ":comments": "NaN",
-        ":history": "NaN"
+        ":history": "NaN",
+        ":creator_email": "NaN",
+        ":creator_name": "NaN",
+        ":creator_url": "NaN"
     }
 }

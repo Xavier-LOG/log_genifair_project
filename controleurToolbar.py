@@ -1,3 +1,13 @@
+# Importation des fichiers
+
+
+
+
+from vueDatabase import vueDatabase
+
+
+
+
 # Importation des bibliothèques
 
 
@@ -32,6 +42,7 @@ class controleurToolbar(QObject):
         self.vuetoolbar = vuetoolbar
         self.file_list = []
         self.dataframe_list = []
+        self.row_number = None
         
         
     # Définition des méthodes
@@ -53,16 +64,16 @@ class controleurToolbar(QObject):
 
     def import_validation(self):
         
-        # vueToolbar est instanciée avant vueArrangement et vueConversion. Donc émission d'un signal.
-        # Emission d'un signal sous forme de liste vers controleurArrangement en premier (pour remplacer la deuxième valeur de path_list_files de modeleArrangement par self.file_list), 
+        # vueToolbar est instanciée avant vueCatalog et vueConversion. Donc émission d'un signal.
+        # Emission d'un signal sous forme de liste vers controleurCatalog en premier (pour remplacer la deuxième valeur de path_list_files de modeleCatalog par self.file_list), 
         # puis vers controleurFileviewer en deuxième (pour afficher la liste des fichiers importés avec la deuxième valeur de path_list_files désormais modifiée), 
-        # puis vers controleurArrangementsettings en troisième (pour remplacer dataframe de controleurArrangementsettings par la première valeur de self.dataframe_list)
+        # puis vers controleurCatalogsettings en troisième (pour remplacer dataframe de controleurCatalogsettings par la première valeur de self.dataframe_list)
         # puis vers controleurDataframeviewer en quatrième (pour afficher uniquement la première valeur de self.dataframe_list)
         # puis vers controleurConversionsettings en dernier (pour convertir tous les dataframes pandas en fichier netCDF)
         self.signal.emit([self.file_list, self.dataframe_list])
         self.vuetoolbar.menu_file_button.setEnabled(False)
-        self.vuetoolbar.vuemainwindow.vuearrangement.vuearrangementsettings.button.setEnabled(True)
-        self.vuetoolbar.vuemainwindow.vuearrangement.groupbox_confirm_button.setEnabled(True)
+        self.vuetoolbar.vuemainwindow.vuecatalog.vuecatalogsettings.button.setEnabled(True)
+        self.vuetoolbar.vuemainwindow.vuecatalog.groupbox_confirm_button.setEnabled(True)
         self.vuetoolbar.vuemainwindow.vuelogs.controleurlogs.add_log("Files have been imported.\n")
         self.vuetoolbar.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Files have been imported.\n", "green")
 
@@ -77,10 +88,10 @@ class controleurToolbar(QObject):
             # Si le fichier est au format .xlsx
             if file_path.endswith('.xlsx'):
                 # Initialisation du dataframe (pandas remplit automatiquement les valeurs manquantes par NaN (donc même nombre de lignes dans le dataframe))
-                dataframe = pd.read_excel(file_path, nrows = 100)
+                dataframe = pd.read_excel(file_path, nrows = self.row_number)
             # Si le fichier est au format .csv
             elif file_path.endswith('.csv'):
-                dataframe = pd.read_csv(file_path, nrows = 100)
+                dataframe = pd.read_csv(file_path, nrows = self.row_number)
             # Si le fichier est au format .odf
             elif file_path.endswith('.odf'):
                 # Utilisation de pyexcel_ods pour obtenir les données
@@ -92,7 +103,7 @@ class controleurToolbar(QObject):
             # Si le fichier est au format .txt
             elif file_path.endswith('.txt'):
                 # Initialisation du dataframe (on suppose que les colonnes du fichier sont délimitées par des espaces, donc on utilise delim_whitespace)
-                dataframe = pd.read_csv(file_path, nrows = 100, delimiter = '\t')
+                dataframe = pd.read_csv(file_path, nrows = self.row_number, delimiter = '\t')
                 file_path = file_path[:-4] + '.xlsx'
                 # Ecriture dans un fichier Excel
                 dataframe.to_excel(file_path)
@@ -139,13 +150,13 @@ class controleurToolbar(QObject):
             if xlsx == len(os.listdir(directory)):
                 for file_name in os.listdir(directory):
                     file_path = os.path.join(directory, file_name)
-                    dataframe = pd.read_excel(file_path, nrows = 100)
+                    dataframe = pd.read_excel(file_path, nrows = self.row_number)
                     self.import_check(file_path, dataframe)
                 self.import_validation()
             elif csv == len(os.listdir(directory)):
                 for file_name in os.listdir(directory):
                     file_path = os.path.join(directory, file_name)
-                    dataframe = pd.read_csv(file_path, nrows = 100)
+                    dataframe = pd.read_csv(file_path, nrows = self.row_number)
                     self.import_check(file_path, dataframe)
                 self.import_validation()
             elif odf == len(os.listdir(directory)):
@@ -161,7 +172,7 @@ class controleurToolbar(QObject):
             elif txt == len(os.listdir(directory)):
                 for file_name in os.listdir(directory):
                     file_path = os.path.join(directory, file_name)
-                    dataframe = pd.read_csv(file_path, nrows = 100, delimiter = '\t')
+                    dataframe = pd.read_csv(file_path, nrows = self.row_number, delimiter = '\t')
                     file = file[:-4] + '.xlsx'
                     # Ecriture dans un fichier Excel
                     dataframe.to_excel(file_path)
@@ -181,6 +192,12 @@ class controleurToolbar(QObject):
         else:
             self.vuetoolbar.vuemainwindow.vuelogs.controleurlogs.add_log("No folder has been opened. Dataframe will be cleared.\n")
             self.vuetoolbar.vuemainwindow.vuelogs.controleurlogs.add_colored_log("No folder has been opened. Dataframe will be cleared.\n", "red")
+    
+    
+    def import_data_option(self):
+        
+        vuedatabase = vueDatabase()
+        vuedatabase.show()
     
     
     def resolution_option(self):

@@ -42,14 +42,14 @@ class controleurConversionsettings:
     
     def convert(self):
 
-        file_path, _ = QFileDialog.getSaveFileName(self.vueconversionsettings, "Save NetCDF File", self.vueconversionsettings.vueconversion.vuemainwindow.vuearrangement.modelearrangement.path_list_files[1][0][:self.vueconversionsettings.vueconversion.vuemainwindow.vuearrangement.modelearrangement.path_list_files[1][0].find(".")] + ".nc", "NetCDF File (*.nc)")
+        file_path, _ = QFileDialog.getSaveFileName(self.vueconversionsettings, "Save NetCDF File", self.vueconversionsettings.vueconversion.vuemainwindow.vuecatalog.modelecatalog.path_list_files[1][0][:self.vueconversionsettings.vueconversion.vuemainwindow.vuecatalog.modelecatalog.path_list_files[1][0].find(".")] + ".nc", "NetCDF File (*.nc)")
         if file_path:
             if file_path.endswith(".nc"):
                 for i in range(0, len(self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list)):
                     conversionlogs = self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs
                     dataframe = self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[i]
-                    arrangement_path = self.vueconversionsettings.vueconversion.vuemainwindow.vuearrangement.modelearrangement.path_list_files[0]
-                    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, arrangement_path)
+                    catalog_path = self.vueconversionsettings.vueconversion.vuemainwindow.vuecatalog.modelecatalog.path_list_files[0]
+                    xarray_dataset = modeleNetcdf.create_xarray_dataset(dataframe, catalog_path)
                     xarray_dataset = modeleNetcdf.check_xarray_dataset(xarray_dataset)
                     modelenetcdf = modeleNetcdf(conversionlogs, dataframe, xarray_dataset)
                     modelenetcdf.check_dataframe_integrity()
@@ -68,11 +68,11 @@ class controleurConversionsettings:
                     else:
                         self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Empty dataframe.\n")
                         self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Empty dataframe.\n", "red")
-                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Click on Cancel in Arrange Data to convert a new file again.\n")
-                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Click on Cancel in Arrange Data to convert a new file again.\n", "green")
+                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Click on Cancel in File Settings or click on Cancel in Arrange Data to convert a new file again.\n")
+                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Click on Cancel in File Settings or click on Cancel in Arrange Data to convert a new file again.\n", "green")
             else:
-                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect file format. Click on Cancel in Arrange Data to convert a new file again.\n")
-                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect file format. Click on Cancel in Arrange Data to convert a new file again.\n", "red")
+                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect file format. Click on Cancel in File Settings or click on Cancel in Arrange Data to convert a new file again.\n")
+                self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Incorrect file format. Click on Cancel in File Settings or click on Cancel in Arrange Data to convert a new file again.\n", "red")
         else:
-            self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("NetCDF file has not been saved. Click on Cancel in Arrange Data to convert a new file again.\n")
-            self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("NetCDF file has not been saved. Click on Cancel in Arrange Data to convert a new file again.\n", "red")
+            self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_log("NetCDF file has not been saved. Click on Cancel in File Settings or click on Cancel in Arrange Data to convert a new file again.\n")
+            self.vueconversionsettings.vueconversion.vuemainwindow.vuelogs.controleurlogs.add_colored_log("NetCDF file has not been saved. Click on Cancel in File Settings or click on Cancel in Arrange Data to convert a new file again.\n", "red")
