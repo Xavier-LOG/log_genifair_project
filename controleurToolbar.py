@@ -47,6 +47,13 @@ class controleurToolbar(QObject):
         
     # Définition des méthodes
     
+    
+    def data_collect(self, obj):
+        
+        for i in range(0, len(obj[1])):
+            self.import_check(obj[0], obj[1][i])
+        self.import_validation()
+    
 
     def import_check(self, file_path, dataframe):
         
@@ -198,6 +205,7 @@ class controleurToolbar(QObject):
         
         vuedatabase = vueDatabase()
         vuedatabase.show()
+        vuedatabase.controleurdatabase.signal.connect(self.data_collect)
     
     
     def resolution_option(self):

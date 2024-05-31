@@ -4,6 +4,9 @@
 
 
 import psycopg2
+import pandas as pd
+from PyQt6.QtWidgets import QLineEdit, QCheckBox
+from PyQt6.QtCore import QObject, pyqtSignal
 
 
 
@@ -13,7 +16,10 @@ import psycopg2
 
 
 
-class controleurDatabase:
+class controleurDatabase(QObject):
+
+
+    signal = pyqtSignal(list)
 
 
     # Constructeur par défaut
@@ -23,14 +29,20 @@ class controleurDatabase:
         
         super().__init__()
         self.vuedatabase = vuedatabase
-        self.host = self.vuedatabase.host_lineedit.text()
-        self.database = self.vuedatabase.database_name_lineedit.text()
-        self.user = self.vuedatabase.username_lineedit.text()
-        self.password = self.vuedatabase.password_lineedit.text()
         self.connection = None
+        self.cursor = None
+        self.table_list = []
 
     
     # Définition des méthodes
+
+
+    def toggle_password_visibility(self):
+        
+        if self.vuedatabase.groupbox_connection_checkbox.isChecked() == True:
+            self.vuedatabase.groupbox_connection_password_lineedit.setEchoMode(QLineEdit.EchoMode.Normal)
+        else:
+            self.vuedatabase.groupbox_connection_password_lineedit.setEchoMode(QLineEdit.EchoMode.Password)
 
 
     def connect(self):
@@ -38,10 +50,10 @@ class controleurDatabase:
         try:
             # Connexion à la base de données
             self.connection = psycopg2.connect(
-                host = self.host,
-                database = self.database,
-                user = self.user,
-                password = self.password
+                host = self.vuedatabase.groupbox_connection_host_lineedit.text(),
+                database = self.vuedatabase.groupbox_connection_database_name_lineedit.text(),
+                user = self.vuedatabase.groupbox_connection_username_lineedit.text(),
+                password = self.vuedatabase.groupbox_connection_password_lineedit.text()
             )
             self.load_data()
         except (Exception, psycopg2.DatabaseError) as error:
@@ -59,26 +71,70 @@ class controleurDatabase:
     
         if self.connection is not None:
             # Création d'un curseur pour exécuter des requêtes SQL
-            cursor = self.connection.cursor()
+            self.cursor = self.connection.cursor()
             
-            # Exécuter une requête SQL pour récupérer tous les noms de tables
-            cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
+            if self.cursor:
+                # Exécuter une requête SQL pour récupérer tous les noms de tables
+                self.cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
 
-            # Récupérer les résultats de la requête
-            tables = cursor.fetchall()
+                # Récupérer les résultats de la requête
+                tables = self.cursor.fetchall()
             
-            for table in tables:
+                if tables:
+                    for table in tables:
+                        table = table[0]
+                        checkbox = QCheckBox(str(table))
+                        self.vuedatabase.groupbox_table_layout.addWidget(checkbox)
+                    self.vuedatabase.groupbox_connection_button.setEnabled(False)
+                    self.vuedatabase.groupbox_table.setEnabled(True)
+                    self.vuedatabase.groupbox_button.setEnabled(False)
+    
+    
+    def table_confirm(self):
+        
+        for i in range(0, self.vuedatabase.groupbox_table_layout.count()):
+            if isinstance(self.vuedatabase.groupbox_table_layout.itemAt(i).widget(), QCheckBox):
+                if self.vuedatabase.groupbox_table_layout.itemAt(i).widget().isChecked():
+                    self.table_list.append(self.vuedatabase.groupbox_table_layout.itemAt(i).widget().text())
+        
+        self.vuedatabase.groupbox_connection_button.setEnabled(False)
+        self.vuedatabase.groupbox_table.setEnabled(False)
+        self.vuedatabase.groupbox_button.setEnabled(True)
+    
+    
+    def import_data(self):
+    
+        dataframe_list = []
+    
+        if self.cursor:
+    
+            for table in self.table_list:
             
-                table = table[0]
-                # Exécuter une requête SQL pour récupérer les 2 premières lignes de la première table
-                cursor.execute(f"SELECT * FROM {table} FETCH FIRST 2 ROWS ONLY;")
+                # Exécuter une requête SQL pour récupérer les 1000 premières lignes de la première table
+                self.cursor.execute(f"SELECT * FROM {table} FETCH FIRST 1000 ROWS ONLY;")
             
                 # Récupérer les résultats de la requête
-                rows = cursor.fetchall()
+                rows = self.cursor.fetchall()
                 
-                print(rows)
+                filtered_rows = []
+                
+                for row in rows:
+                    filtered_row = []
+                    for value in row:
+                        if (isinstance(value, list) or isinstance(value, tuple)) and len(value) > 0:
+                            filtered_row.append(value[0])
+                        else:
+                            filtered_row.append(value)
+                    filtered_rows.append(filtered_row)
+                
+                if self.cursor.description:
+                    dataframe_list.append(pd.DataFrame(filtered_rows, columns=[desc[0] for desc in self.cursor.description]))
             
             # Fermeture du curseur
-            cursor.close()
+            self.cursor.close()
             self.disconnect()
+            
+        self.signal.emit(["", dataframe_list])
+        
+        self.vuedatabase.close()
     

@@ -6,7 +6,8 @@
 import pandas as pd
 from datetime import datetime, date, time
 import re
-from PyQt6.QtCore import QObject
+from PyQt6.QtWidgets import QToolTip
+from PyQt6.QtCore import QObject, QEvent
 
 
 
@@ -32,9 +33,9 @@ class controleurCatalogsettings(QObject):
         self.optional_dimension_value_list = ['400, 500, 600, 700', '400, 450, 500, 550, 600, 650, 700', '1, 2', '1, 2, 3', '1, 2, 3, 4', '1, 2, 3, 4, 5', '1, 2, 3, 4, 5, 6', '1, 2, 3, 4, 5, 6, 7', '1, 2, 3, 4, 5, 6, 7, 8', '1, 2, 3, 4, 5, 6, 7, 8, 9', '1, 2, 3, 4, 5, 6, 7, 8, 9, 10']
         self.optional_variable_name_list = ['sea_surface_temperature', 'sea_bottom_temperature', 'sea_surface_salinity', 'sea_bottom_salinity', 'sea_surface_pressure', 'sea_bottom_pressure', 'sea_surface_height', 'sea_bottom_depth', 'sea_surface_oxygen_concentration', 'sea_bottom_oxygen_concentration', 'sea_surface_chlorophyll_concentration', 'sea_bottom_chlorophyll_concentration']
         self.mandatory_variable_attribute_list = ['dtype', 'units', 'sdn_uom_name', 'sdn_uom_urn', 'standard_name', 'long_name', 'sdn_parameter_name', 'sdn_paramter_urn']
-        self.optional_variable_attribute_list = ['axis', 'bounds', 'calendar', 'comment', 'coverage_content_type', 'grid_mapping', 'grid_mapping_name', 'inverse_flattening', 'origin', 'scale_factor', 'semi_major_axis', 'valid_max', 'valid_min']
+        self.optional_variable_attribute_list = ['axis', 'calendar', 'comment', 'coverage_content_type', 'inverse_flattening', 'origin', 'scale_factor', 'valid_max', 'valid_min']
         self.mandatory_global_attribute_list = ['_FillValue', 'coordinates', 'title', 'project', 'Conventions', 'institution', 'source', 'request_for_aknowledgement', 'citation', 'license', 'references', 'summary', 'principal_investigator', 'principal_investigator_email', 'metadata_contact', 'contributor_name', 'contributor_role', 'contact', 'featureType', 'cdm_data_type', 'comments', 'history', 'creator_email', 'creator_name', 'creator_url']
-        self.optional_global_attribute_list = ['comment', 'date_issued', 'date_created', 'date_modified', 'geospatial_lat_max', 'geospatial_lat_min', 'geospatial_lat_resolution', 'geospatial_lat_units', 'geospatial_lon_max', 'geospatial_lon_min', 'geospatial_lon_resolution', 'geospatial_lon_units', 'geospatial_vertical_max', 'geospatial_vertical_min', 'geospatial_vertical_positive', 'geospatial_vertical_resolution', 'keywords', 'keywords_vocabulary', 'Metadata_Conventions', 'platform', 'processing_level', 'product_version', 'time_coverage_start', 'time_coverage_end']
+        self.optional_global_attribute_list = ['comment', 'date_created', 'date_modified', 'geospatial_lat_max', 'geospatial_lat_min', 'geospatial_lat_resolution', 'geospatial_lat_units', 'geospatial_lon_max', 'geospatial_lon_min', 'geospatial_lon_resolution', 'geospatial_lon_units', 'geospatial_vertical_max', 'geospatial_vertical_min', 'geospatial_vertical_positive', 'geospatial_vertical_resolution', 'keywords', 'keywords_vocabulary', 'platform', 'time_coverage_start', 'time_coverage_end']
         self.catalog_signal = self.vuecatalogsettings.vuecatalog.vuecatalogviewer.controleurcatalogviewer.signal
         self.catalog_signal.connect(self.fill_combobox)
         self.dataframe_signal = self.vuecatalogsettings.vuecatalog.vuemainwindow.vuetoolbar.controleurtoolbar.signal
@@ -68,6 +69,79 @@ class controleurCatalogsettings(QObject):
                             catalog['global_attribute'][":time_coverage_end"] = datetime.fromtimestamp(self.dataframe.iloc[-1][column]).strftime("%Y-%m-%d")
                         elif isinstance(self.dataframe.iloc[-1][column], str):
                             catalog['global_attribute'][":time_coverage_end"] = str(self.dataframe.iloc[-1][column])
+    
+    
+    def eventFilter(self, source, event):
+        
+        if event.type() == QEvent.Type.ToolTip:
+            if source == self.vuecatalogsettings.variable_tabwidget.add_attribute_combobox or source == self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_combobox:
+                index = source.currentIndex()
+                if index == 0:
+                    QToolTip.showText(event.globalPos(), "Indicates the direction of data in a specific dimension, such as time (axis: “T”), etc.")
+                elif index == 1:
+                    QToolTip.showText(event.globalPos(), "Specifies the type of calendar used to interpret dates (calendar: “gregorian”)")
+                elif index == 2:
+                    QToolTip.showText(event.globalPos(), "Additional textual description providing explanations and details about a variable")
+                elif index == 3:
+                    QToolTip.showText(event.globalPos(), "Describes the type of data contained, such as thematic data (coverage_content_type: “coordinate”)")
+                elif index == 4:
+                    QToolTip.showText(event.globalPos(), "Indicates the measure of the Earth's flatness")
+                elif index == 5:
+                    QToolTip.showText(event.globalPos(), "Indicates data source (origin: “01-JAN-1970 00:00:00”)")
+                elif index == 6:
+                    QToolTip.showText(event.globalPos(), "Adjusts stored values to a specific scale (scale_factor: “0.1”)")
+                elif index == 7:
+                    QToolTip.showText(event.globalPos(), "Specifies the maximum valid value for a given variable")
+                elif index == 8:
+                    QToolTip.showText(event.globalPos(), "Specifies the minimum valid value for a given variable")
+                else:
+                    QToolTip.hideText()
+            elif source == self.vuecatalogsettings.attribute_tabwidget.add_name_combobox or source == self.vuecatalogsettings.attribute_tabwidget.modify_new_name_combobox:
+                index = source.currentIndex()
+                if index == 0:
+                    QToolTip.showText(event.globalPos(), "Brief description or remarks on the data contained in the file")
+                elif index == 1:
+                    QToolTip.showText(event.globalPos(), "Indicates the date on which the file was first created or generated")
+                elif index == 2:
+                    QToolTip.showText(event.globalPos(), "Indicates the last time the file was modified")
+                elif index == 3:
+                    QToolTip.showText(event.globalPos(), "Indicates the maximum latitude of geospatial data")
+                elif index == 4:
+                    QToolTip.showText(event.globalPos(), "Indicates the minimum latitude of geospatial data")
+                elif index == 5:
+                    QToolTip.showText(event.globalPos(), "Indicates the spatial resolution of the data in latitude")
+                elif index == 6:
+                    QToolTip.showText(event.globalPos(), "Specifies the unit used to measure latitude, often in degrees north or south of the equator")
+                elif index == 7:
+                    QToolTip.showText(event.globalPos(), "Indicates the maximum longitude of geospatial data")
+                elif index == 8:
+                    QToolTip.showText(event.globalPos(), "Indicates the minimum longitude of geospatial data")
+                elif index == 9:
+                    QToolTip.showText(event.globalPos(), "Indicates the spatial resolution of the data in longitude")
+                elif index == 10:
+                    QToolTip.showText(event.globalPos(), "Specifies the unit used to measure longitude, often in degrees east or west in relation to the Greenwich meridian")
+                elif index == 11:
+                    QToolTip.showText(event.globalPos(), "Indicates the maximum value of the geospatial vertical dimension, often used to represent the maximum depth or altitude of geospatial data")
+                elif index == 12:
+                    QToolTip.showText(event.globalPos(), "Indicates the minimum value of the geospatial vertical dimension, often used to represent the minimum depth or altitude of geospatial data")
+                elif index == 13:
+                    QToolTip.showText(event.globalPos(), "Indicates the positive direction of the vertical axis, for example “up” to indicate that values increase with altitude")
+                elif index == 14:
+                    QToolTip.showText(event.globalPos(), "Indicates the precision with which data is represented along the vertical axis")
+                elif index == 15:
+                    QToolTip.showText(event.globalPos(), "Keywords describing the content and subject of the file")
+                elif index == 16:
+                    QToolTip.showText(event.globalPos(), "Indicates the vocabulary used to describe the keywords associated with the data")
+                elif index == 17:
+                    QToolTip.showText(event.globalPos(), "Provides information on the platform from which the data was collected or generated, such as the type of sensor or instrument used")
+                elif index == 18:
+                    QToolTip.showText(event.globalPos(), "Specifies the start of the period of temporal data coverage")
+                elif index == 19:
+                    QToolTip.showText(event.globalPos(), "Specifies the end of the period of temporal data coverage")
+                else:
+                    QToolTip.hideText()
+            return True
+        return super().eventFilter(source, event)
     
     
     def fill_combobox(self, obj):
@@ -106,6 +180,7 @@ class controleurCatalogsettings(QObject):
             self.vuecatalogsettings.variable_tabwidget.add_attribute_variable_combobox.addItems(list(catalog['variable'].keys()))
             self.vuecatalogsettings.variable_tabwidget.add_attribute_combobox.clear()
             self.vuecatalogsettings.variable_tabwidget.add_attribute_combobox.addItems(self.optional_variable_attribute_list)
+            self.vuecatalogsettings.variable_tabwidget.add_attribute_combobox.installEventFilter(self)
             self.vuecatalogsettings.variable_tabwidget.add_attribute_value_combobox.clear()
             
             self.vuecatalogsettings.variable_tabwidget.modify_name_combobox.clear()
@@ -119,6 +194,7 @@ class controleurCatalogsettings(QObject):
             self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_combobox.addItems(list(catalog['variable'].keys()))
             self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_combobox.clear()
             self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_combobox.addItems(self.optional_variable_attribute_list)
+            self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_combobox.installEventFilter(self)
             self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_value_combobox.clear()
             
             self.vuecatalogsettings.variable_tabwidget.delete_name_combobox.clear()
@@ -128,6 +204,7 @@ class controleurCatalogsettings(QObject):
             
             self.vuecatalogsettings.attribute_tabwidget.add_name_combobox.clear()
             self.vuecatalogsettings.attribute_tabwidget.add_name_combobox.addItems(self.optional_global_attribute_list)
+            self.vuecatalogsettings.attribute_tabwidget.add_name_combobox.installEventFilter(self)
             self.vuecatalogsettings.attribute_tabwidget.add_value_attribute_combobox.clear()
             self.vuecatalogsettings.attribute_tabwidget.add_value_attribute_combobox.addItems([key[1:] for key in list(catalog['global_attribute'].keys())])
             self.vuecatalogsettings.attribute_tabwidget.add_value_combobox.clear()
@@ -136,6 +213,7 @@ class controleurCatalogsettings(QObject):
             self.vuecatalogsettings.attribute_tabwidget.modify_name_combobox.addItems([key[1:] for key in list(catalog['global_attribute'].keys())])
             self.vuecatalogsettings.attribute_tabwidget.modify_new_name_combobox.clear()
             self.vuecatalogsettings.attribute_tabwidget.modify_new_name_combobox.addItems(self.optional_global_attribute_list)
+            self.vuecatalogsettings.attribute_tabwidget.modify_new_name_combobox.installEventFilter(self)
             self.vuecatalogsettings.attribute_tabwidget.modify_value_attribute_combobox.clear()
             self.vuecatalogsettings.attribute_tabwidget.modify_value_attribute_combobox.addItems([key[1:] for key in list(catalog['global_attribute'].keys())])
             self.vuecatalogsettings.attribute_tabwidget.modify_new_value_combobox.clear()
@@ -950,9 +1028,9 @@ class controleurCatalogsettings(QObject):
     
     def variable_attribute_add_cancel(self):
         
-        self.vuecatalogsettings.variable_tabwidget.add_attribute_variable_combobox.setEnabled(False)
+        self.vuecatalogsettings.variable_tabwidget.add_attribute_variable_combobox.setEnabled(True)
         self.vuecatalogsettings.variable_tabwidget.add_attribute_variable_cancel_button.setEnabled(True)
-        self.vuecatalogsettings.variable_tabwidget.add_attribute_combobox.setEnabled(True)
+        self.vuecatalogsettings.variable_tabwidget.add_attribute_combobox.setEnabled(False)
         self.vuecatalogsettings.variable_tabwidget.add_attribute_cancel_button.setEnabled(False)
         self.vuecatalogsettings.variable_tabwidget.add_attribute_value_combobox.setEnabled(False)
     
