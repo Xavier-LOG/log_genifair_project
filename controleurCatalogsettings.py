@@ -244,7 +244,7 @@ class controleurCatalogsettings(QObject):
                         ":project": "NaN",
                         ":coordinates": "Station",
                         ":Conventions": "CF-1.6, SeaDataNet_1.0",
-                        ":institution": "NaN",
+                        ":institution": "LOG Wimereux",
                         ":source": "NaN",
                         ":request_for_aknowledgement": "If you use the data in presentation or in publications, please acknowledge. Send us also a reprint or preprint of publications using the data for inclusion in our bibliography.",
                         ":citation": "NaN",
@@ -542,7 +542,7 @@ class controleurCatalogsettings(QObject):
             # Si le nom de la dimension n'est pas vide, s'il ne contient aucun espace blanc, si le premier caractère est en majuscule et s'il est inclu dans le catalogue
             if dimension_name != "" and any(char.isspace() for char in dimension_name) == False and dimension_name[0].isupper() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', dimension_name)) == True and dimension_name in catalog['dimension'] and dimension_name in catalog['global_attribute'][':coordinates'].replace(' ', '').split(',') and dimension_name.lower() in catalog['variable']:
                 # Parcours des valeurs de la dimension
-                for value in dimension_value.split(','):
+                for value in dimension_value.replace(' ','').split(','):
                     # Si la valeur contient des points, des chiffres ou des tirets
                     if bool(re.match(r'^[\d\s.-]+$', value)) == True:
                         if (value.count("-") == 0 or value.count("-") == 1) and (value.count(".") == 0 or value.count(".") == 1):
@@ -557,8 +557,8 @@ class controleurCatalogsettings(QObject):
                                 elif "." not in value:
                                     value_checked += 1
                 # Si toutes les valeurs de la dimension sont correctes
-                if value_checked == len(dimension_value.split(',')):
-                    catalog['dimension'][dimension_name]['values'] = [word.replace(' ', '') for word in dimension_value.split(',')]
+                if value_checked == len(dimension_value.replace(' ','').split(',')):
+                    catalog['dimension'][dimension_name]['values'] = [float(word.replace(' ', '')) for word in dimension_value.split(',')]
                     self.vuecatalogsettings.vuecatalog.modelecatalog.write_json(catalog)
                     self.vuecatalogsettings.vuecatalog.vuecatalogviewer.controleurcatalogviewer.load_catalog()
                     self.vuecatalogsettings.dimension_tabwidget.add_value_dimension_combobox.setEnabled(True)
@@ -705,7 +705,7 @@ class controleurCatalogsettings(QObject):
         # Si le catalogue existe
         if catalog:
             # Parcours des valeurs de la dimension
-            for value in dimension_value.split(','):
+            for value in dimension_value.replace(' ','').split(','):
                 # Si la valeur contient des points, des chiffres ou des tirets
                 if bool(re.match(r'^[\d\s.-]+$', value)) == True:
                     if (value.count("-") == 0 or value.count("-") == 1) and (value.count(".") == 0 or value.count(".") == 1):
@@ -720,9 +720,9 @@ class controleurCatalogsettings(QObject):
                             elif "." not in value:
                                 value_checked += 1
             # Si toutes les valeurs de la dimension sont correctes
-            if value_checked == len(dimension_value.split(',')) or dimension_value == "":
-                if value_checked == len(dimension_value.split(',')):
-                    catalog['dimension'][dimension_name]['values'] = [word.replace(' ', '') for word in dimension_value.split(',')]
+            if value_checked == len(dimension_value.replace(' ','').split(',')) or dimension_value == "":
+                if value_checked == len(dimension_value.replace(' ','').split(',')):
+                    catalog['dimension'][dimension_name]['values'] = [float(word.replace(' ', '')) for word in dimension_value.split(',')]
                 elif dimension_value == "":
                     catalog['dimension'][dimension_name]['values'] = []
                 self.vuecatalogsettings.vuecatalog.modelecatalog.write_json(catalog)
@@ -1158,7 +1158,7 @@ class controleurCatalogsettings(QObject):
                         
                 if dimension_name_checked == len(dimension_name_list):
                     if len(catalog['variable'][variable_name]['dimension']) == 1:
-                        if variable_new_name != "time" and variable_new_name.capitalize() != catalog['variable'][variable_new_name]['dimension'][0]:
+                        if variable_new_name != "time" and variable_new_name.capitalize() != catalog['variable'][variable_name]['dimension'][0]:
                             catalog['variable'][variable_new_name] = {
                                 "dimension" : dimension_name_list,
                                 "attribute" : catalog['variable'][variable_name]['attribute']
@@ -1256,7 +1256,7 @@ class controleurCatalogsettings(QObject):
         # Si le catalogue existe
         if catalog:
             # Si le nom de l'attribut n'est pas vide, si la première lettre est en minuscule, s'il est inclu dans le catalogue et s'il n'est pas un attribut obligatoire
-            if attribute_name != "" and any(char.isspace() for char in attribute_name) == False and attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_name)) == True and (":" + attribute_name) in catalog['variable'][variable_name]['attribute'] and attribute_name not in self.mandatory_variable_attribute_list:
+            if attribute_name != "" and any(char.isspace() for char in attribute_name) == False and attribute_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_name)) == True and (":" + attribute_name) in catalog['variable'][variable_name]['attribute']:
                 self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(False)
                 self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
                 self.vuecatalogsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
@@ -1289,21 +1289,35 @@ class controleurCatalogsettings(QObject):
 
     def variable_new_attribute_modify_confirm(self):
         
+        attribute_name: str = self.vuecatalogsettings.variable_tabwidget.modify_attribute_combobox.currentText()
         attribute_new_name: str = self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_combobox.currentText()
         catalog = self.vuecatalogsettings.vuecatalog.modelecatalog.read_json()
         # Si le catalogue existe
         if catalog:
             # Si le nom du nouvel attribut n'est pas vide, si la première lettre est en minuscule et s'il n'est pas un attribut obligatoire
-            if attribute_new_name != "" and any(char.isspace() for char in attribute_new_name) == False and attribute_new_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_new_name)) == True and attribute_new_name not in self.mandatory_variable_attribute_list:
-                self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(False)
-                self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
-                self.vuecatalogsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
-                self.vuecatalogsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(False)
-                self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(False)
-                self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(True)
-                self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(True)
-                self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Variable attribute new name selected.\n")
-                self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable attribute new name selected.\n", "green")
+            if attribute_new_name != "" and any(char.isspace() for char in attribute_new_name) == False and attribute_new_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_new_name)) == True:
+                # Si le nom de l'attribut est dans la liste des attributs de variable obligatoires et si le nom du nouvel attribut est l'attribut
+                if attribute_name in self.mandatory_variable_attribute_list and attribute_new_name == attribute_name:
+                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(False)
+                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
+                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
+                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(False)
+                    self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(False)
+                    self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(True)
+                    self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(True)
+                    self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Variable attribute new name selected.\n")
+                    self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable attribute new name selected.\n", "green")
+                # Si le nom de l'attribut n'est pas dans la liste des attributs de variable obligatoires
+                elif attribute_name not in self.mandatory_variable_attribute_list and attribute_new_name not in self.mandatory_variable_attribute_list:
+                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(False)
+                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
+                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
+                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(False)
+                    self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(False)
+                    self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(True)
+                    self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(True)
+                    self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Variable attribute new name selected.\n")
+                    self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable attribute new name selected.\n", "green")
             # Sinon
             else:
                 self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect variable information name.\n")
@@ -1336,25 +1350,19 @@ class controleurCatalogsettings(QObject):
         if catalog:
             # Si le nom du nouvel attribut n'est pas vide, si la première lettre est en minuscule et si la nouvelle valeur de l'attribut n'est pas vide
             if attribute_new_name != "" and any(char.isspace() for char in attribute_new_name) == False and attribute_new_name[0].islower() == True and bool(re.match(r'^[a-zA-Z0-9_]*$', attribute_new_name)) == True and attribute_new_value != "":
-                # Si le nom du nouvel attribut n'est pas un attribut obligatoire
-                if attribute_new_name not in self.mandatory_variable_attribute_list:
-                    catalog['variable'][variable_name]['attribute'][":" + attribute_new_name] = catalog['variable'][variable_name]['attribute'].pop(":" + attribute_name)
-                    catalog['variable'][variable_name]['attribute'][":" + attribute_new_name] = attribute_new_value
-                    self.vuecatalogsettings.vuecatalog.modelecatalog.write_json(catalog)
-                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(True)
-                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
-                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
-                    self.vuecatalogsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(False)
-                    self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(False)
-                    self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(False)
-                    self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(False)
-                    self.vuecatalogsettings.vuecatalog.vuecatalogviewer.controleurcatalogviewer.load_catalog()
-                    self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Variable attribute value modified.\n")
-                    self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable attribute value modified.\n", "green")
-                # Sinon
-                else:
-                    self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("The name of a mandatory variable attribute cannot be modified.\n")
-                    self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("The name of a mandatory variable attribute cannot be modified.\n", "red")
+                catalog['variable'][variable_name]['attribute'][":" + attribute_new_name] = catalog['variable'][variable_name]['attribute'].pop(":" + attribute_name)
+                catalog['variable'][variable_name]['attribute'][":" + attribute_new_name] = attribute_new_value
+                self.vuecatalogsettings.vuecatalog.modelecatalog.write_json(catalog)
+                self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_combobox.setEnabled(True)
+                self.vuecatalogsettings.variable_tabwidget.modify_attribute_variable_cancel_button.setEnabled(False)
+                self.vuecatalogsettings.variable_tabwidget.modify_attribute_combobox.setEnabled(False)
+                self.vuecatalogsettings.variable_tabwidget.modify_attribute_cancel_button.setEnabled(False)
+                self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_combobox.setEnabled(False)
+                self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_cancel_button.setEnabled(False)
+                self.vuecatalogsettings.variable_tabwidget.modify_new_attribute_value_combobox.setEnabled(False)
+                self.vuecatalogsettings.vuecatalog.vuecatalogviewer.controleurcatalogviewer.load_catalog()
+                self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Variable attribute value modified.\n")
+                self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Variable attribute value modified.\n", "green")
             # Sinon
             else:
                 self.vuecatalogsettings.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Incorrect variable information name.\n")

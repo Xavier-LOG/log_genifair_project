@@ -5,6 +5,16 @@
         },
         "Station": {
             "values": []
+        },
+        "Wavelength": {
+            "values": [
+                525.0,
+                570.0,
+                610.0,
+                370.0,
+                590.0,
+                470.0
+            ]
         }
     },
     "variable": {
@@ -187,18 +197,50 @@
                 ":sdn_parameter_urn": "urn:sdn:parameter:concentration_of_silicate_in_sea_water",
                 "column_name": "sea_water_silicate"
             }
+        },
+        "wavelength": {
+            "dimension": [
+                "Wavelength"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
+                ":standard_name": "wavelength",
+                ":long_name": "Wavelength",
+                ":sdn_parameter_name": "wavelength",
+                ":sdn_paramter_urn": "urn:sdn:parameter:wavelength",
+                "column_name": "wavelength"
+            }
+        },
+        "led": {
+            "dimension": [
+                "Wavelength"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
+                ":standard_name": "led",
+                ":long_name": "Led",
+                ":sdn_parameter_name": "led",
+                ":sdn_paramter_urn": "urn:sdn:parameter:led",
+                "column_name": "led"
+            }
         }
     },
     "global_attribute": {
         ":_FillValue": "NaN",
-        ":coordinates": "Station, Time",
+        ":coordinates": "Station, Time, Wavelength",
         ":date_created": "NaN",
         ":time_coverage_start": "NaN",
         ":time_coverage_end": "NaN",
         ":title": "Timeseries",
         ":project": "NaN",
         ":Conventions": "CF-1.6, SeaDataNet_1.0",
-        ":institution": "NaN",
+        ":institution": "LOG Wimereux",
         ":source": "NaN",
         ":request_for_aknowledgement": "If you use the data in presentation or in publications, please acknowledge. Send us also a reprint or preprint of publications using the data for inclusion in our bibliography.",
         ":citation": "NaN",

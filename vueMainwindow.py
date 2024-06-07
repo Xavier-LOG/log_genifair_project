@@ -58,7 +58,7 @@ class vueMainwindow(QMainWindow):
 
     def init_ui(self):
         
-        self.setWindowTitle("Project")
+        self.setWindowTitle("NetCDF LOG Wimereux Software")
         self.addToolBar(self.vuetoolbar)
         
         self.central_widget = QWidget()

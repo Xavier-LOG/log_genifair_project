@@ -4,7 +4,9 @@
 
 
 import os
+from PyQt6.QtGui import QTextCursor
 from PyQt6.QtCore import pyqtSignal, QObject
+
 
 
 
@@ -83,3 +85,59 @@ class controleurCatalogviewer(QObject):
             
             self.vuecatalogviewer.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Catalog has been loaded.\n")
             self.vuecatalogviewer.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Catalog has been loaded.\n", "green")
+    
+    
+    def toggle_searchbar(self):
+        
+        if self.vuecatalogviewer.groupbox_searchbar.isVisible():
+            self.vuecatalogviewer.groupbox_searchbar.setVisible(False)
+            self.vuecatalogviewer.groupbox_textarea.setFocus()
+        else:
+            self.vuecatalogviewer.groupbox_searchbar.setVisible(True)
+            # Permet de commencer à taper immédiatement
+            self.vuecatalogviewer.groupbox_textarea.setFocus()
+    
+    
+    def find_keyword(self):
+        
+        # Obtient le curseur actuel du QPlainTextEdit (sert à sélectionner un mot dans le texte du QPlainTextEdit)
+        cursor = self.vuecatalogviewer.groupbox_textarea.textCursor()
+        # Commence un bloc d'édition (bloc pour rechercher un mot dans le texte du QPlainTextEdit)
+        cursor.beginEditBlock()
+
+        # Déplace le curseur au début du texte du QPlainTextEdit
+        cursor.movePosition(QTextCursor.MoveOperation.Start)
+        # Met à jour le curseur dans le QPlainTextEdit
+        self.vuecatalogviewer.groupbox_textarea.setTextCursor(cursor)
+
+        # Récupère le mot à rechercher depuis la barre de recherche
+        search_word = self.vuecatalogviewer.groupbox_searchbar.text()
+        # Récupère le texte du QPlainTextEdit sous forme de document
+        document = self.vuecatalogviewer.groupbox_textarea.document()
+        
+        # Si le mot à rechercher existe
+        if search_word:
+            found = False
+            # Continue la recherche tant que le curseur n'est pas nul et qu'il n'est pas à la fin du document
+            while not cursor.isNull() and not cursor.atEnd():
+                # Cherche la première occurrence du mot à partir de la position actuelle du curseur jusqu'à la fin du document. Si aucune correspondance n'est trouvée avant la fin du document, le curseur est nul
+                cursor = document.find(search_word, cursor)
+                # Si une occurrence est trouvée
+                if not cursor.isNull():
+                    found = True
+                    # Met à jour le curseur pour le déplacer vers la position de la première occurrence du mot trouvée dans le document
+                    self.vuecatalogviewer.groupbox_textarea.setTextCursor(cursor)
+                    # Fin de boucle
+                    break
+
+            # Si le mot à rechercher a été trouvé
+            if found == True:
+                # Réinitialise le style de la barre de recherche
+                self.vuecatalogviewer.groupbox_searchbar.setStyleSheet("")
+            # Sinon
+            else:
+                # Change la couleur du fond d'écran en rouge
+                self.vuecatalogviewer.groupbox_searchbar.setStyleSheet("background-color: red;")
+
+        # Termine le bloc d'édition
+        cursor.endEditBlock()

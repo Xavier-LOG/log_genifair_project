@@ -198,7 +198,7 @@
         ":title": "Timeseries",
         ":project": "NaN",
         ":Conventions": "CF-1.6, SeaDataNet_1.0",
-        ":institution": "NaN",
+        ":institution": "LOG Wimereux",
         ":source": "NaN",
         ":request_for_aknowledgement": "If you use the data in presentation or in publications, please acknowledge. Send us also a reprint or preprint of publications using the data for inclusion in our bibliography.",
         ":citation": "NaN",

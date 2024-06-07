@@ -527,6 +527,8 @@ class modeleNetcdf:
         
         # Parcours de chaque clé du dataset xarray
         for key in list(self.xarray_dataset.data_vars.keys()):
+            if 'column_name' in self.xarray_dataset[key].attrs.keys():
+                del self.xarray_dataset[key].attrs['column_name']
             # Si le tableau de données de la clé est vide
             if np.all(self.xarray_dataset[key].values == 0) or np.all(self.xarray_dataset[key].values != self.xarray_dataset[key].values):
                 # Suppression des attributs de la variable

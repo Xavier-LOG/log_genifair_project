@@ -13,7 +13,8 @@ from controleurCatalogviewer import controleurCatalogviewer
 
 
 
-from PyQt6.QtWidgets import QVBoxLayout, QWidget, QPlainTextEdit, QGroupBox
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QLineEdit, QPlainTextEdit, QGroupBox
+from PyQt6.QtGui import QKeySequence, QShortcut
 from PyQt6.QtCore import Qt
 
 
@@ -35,8 +36,12 @@ class vueCatalogviewer(QWidget):
         super().__init__(parent)
         self.vuecatalog = parent
         self.groupbox_textarea = QPlainTextEdit()
+        self.groupbox_searchbar = QLineEdit()
+        # Définit un raccourci clavier qui se déclenchera par la séquence de touches Ctrl+F
+        self.shortcut = QShortcut(QKeySequence("Ctrl+F"), self)
         self.controleurcatalogviewer = controleurCatalogviewer(self)
         self.init_ui()
+        self.connect_signals()
 
 
     # Définition des méthodes
@@ -54,10 +59,20 @@ class vueCatalogviewer(QWidget):
         self.groupbox_textarea.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
         self.groupbox_textarea.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         
+        self.groupbox_searchbar.setPlaceholderText("Search Keyword")
+        self.groupbox_searchbar.setVisible(False)
+        
         self.groupbox_layout.addWidget(self.groupbox_textarea)
+        self.groupbox_layout.addWidget(self.groupbox_searchbar)
         self.groupbox.setLayout(self.groupbox_layout)
         
         self.vuecatalogviewer_layout.addWidget(self.groupbox)
+    
+    
+    def connect_signals(self):
+        
+        self.groupbox_searchbar.returnPressed.connect(self.controleurcatalogviewer.find_keyword)
+        self.shortcut.activated.connect(self.controleurcatalogviewer.toggle_searchbar)
 
 
 
