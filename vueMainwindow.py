@@ -20,7 +20,7 @@ from vueConversion import vueConversion
 
 
 import sys
-from PyQt6.QtWidgets import QMainWindow, QApplication, QWidget, QTabWidget, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QMainWindow, QApplication, QWidget, QMdiSubWindow, QTabWidget, QVBoxLayout, QHBoxLayout
 
 
 
@@ -58,6 +58,10 @@ class vueMainwindow(QMainWindow):
 
     def init_ui(self):
         
+        """_summary_
+        Initialisation de la vue de la fenêtre principale
+        """
+        
         self.setWindowTitle("NetCDF LOG Wimereux Software")
         self.addToolBar(self.vuetoolbar)
         
@@ -86,6 +90,24 @@ class vueMainwindow(QMainWindow):
         
         self.vuemainwindow_horizontal_layout.addLayout(self.vuemainwindow_vertical_filesettingstabwidget_layout)
         self.vuemainwindow_horizontal_layout.addLayout(self.vuemainwindow_vertical_logsfileviewer_layout)
+
+
+    def closeEvent(self, event):
+        
+        """_summary_
+        Gestion de la fermeture des sous-fenêtres lors de la fermeture de la fenêtre principale
+        """
+        
+        # Fermeture des sous-fenêtres
+        if isinstance(self.vuetoolbar.controleurtoolbar.vuedatabase, QWidget):
+            if self.vuetoolbar.controleurtoolbar.vuedatabase.isVisible():
+                self.vuetoolbar.controleurtoolbar.vuedatabase.close()
+        if isinstance(self.vuetoolbar.controleurtoolbar.about_window, QMdiSubWindow):
+            if self.vuetoolbar.controleurtoolbar.about_window.isVisible():
+                self.vuetoolbar.controleurtoolbar.about_window.close()
+                
+        # Acceptation de l'évènement de fermeture de la fenêtre principale
+        event.accept()
 
 
 

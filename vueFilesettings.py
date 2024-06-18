@@ -44,6 +44,10 @@ class vueFilesettings(QWidget):
     
     def init_ui(self):
 
+        """_summary_
+        Initialisation de la vue
+        """
+
         # Layout associé à l'instance de la classe vueFilesettings
         self.vuefilesettings_layout = QVBoxLayout(self)
         
@@ -90,6 +94,10 @@ class vueFilesettings(QWidget):
 
     
     def connect_signals(self):
+        
+        """_summary_
+        Connexion des signaux
+        """
         
         self.groupbox_confirm_button.clicked.connect(self.controleurfilesettings.confirm)
         self.groupbox_cancel_button.clicked.connect(self.controleurfilesettings.cancel)

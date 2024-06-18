@@ -10,7 +10,6 @@ from PyQt6.QtCore import pyqtSignal, QObject
 
 
 
-
 # Définition de la classe controleurCatalogviewer
 
 
@@ -36,29 +35,45 @@ class controleurCatalogviewer(QObject):
 
     def load_catalog(self):
         
+        """_summary_
+        Chargement du catalogue choisi dans la vue
+        """
+        
         # Mise à jour du catalogue dans la vue
         self.vuecatalogviewer.groupbox_textarea.setPlainText("")
         
+        # Récupération du chemin du catalogue
         file_path: str = self.vuecatalogviewer.vuecatalog.modelecatalog.path_list_files[0]
+        # Lecture du catalogue
         catalog = self.vuecatalogviewer.vuecatalog.modelecatalog.read_json()
+        # Emission du signal vers controleurCatalogSettings pour remplir les listes déroulantes
         self.signal.emit(catalog)
             
+        # Si le catalogue existe
         if catalog:
             
+            # Récupération du nom du catalogue à partir de son chemin
             catalog_name = file_path[:-5][2:]
             
+            # Ajout du nom du catalogue dans la zone de texte
             self.vuecatalogviewer.groupbox_textarea.appendPlainText("\n" + "netcdf " + os.path.basename(catalog_name) + " { " + "\n")
         
             # Affichage des dimensions du catalogue
             self.vuecatalogviewer.groupbox_textarea.appendPlainText("\ndimensions :\n")
+            # Parcours des dimensions du catalogue
             for dimension_name in catalog['dimension']:
+                # Si la dimension n'a pas de valeur
                 if len(catalog['dimension'][dimension_name]['values']) == 0:
+                    # Affichage de UNLIMITED
                     self.vuecatalogviewer.groupbox_textarea.appendPlainText("\t" + str(dimension_name) + " = UNLIMITED ; ")
+                # Sinon
                 else:
+                    # Affichage des valeurs
                     self.vuecatalogviewer.groupbox_textarea.appendPlainText("\t" + str(dimension_name) + " = " + str(len(catalog['dimension'][dimension_name]['values'])) + " ; ")
         
             # Affichage des variables du catalogue
             self.vuecatalogviewer.groupbox_textarea.appendPlainText("\nvariables :")
+            # Parcours des variables du catalogue
             for variable_name in catalog['variable']:
                 if str(catalog['variable'][variable_name]['attribute'][':dtype']) != "object":
                     self.vuecatalogviewer.groupbox_textarea.appendPlainText("\n\t" + str(catalog['variable'][variable_name]['attribute'][':dtype'][:-2]) + " " + str(variable_name) + "(" + str(catalog['variable'][variable_name]['dimension']) + "); ")
@@ -89,8 +104,14 @@ class controleurCatalogviewer(QObject):
     
     def toggle_searchbar(self):
         
+        """_summary_
+        Gérer la visibilité de la barre de recherche dans la vue
+        """
+        
+        # Si la barre de recherche est visible
         if self.vuecatalogviewer.groupbox_searchbar.isVisible():
             self.vuecatalogviewer.groupbox_searchbar.setVisible(False)
+            # Permet de commencer à taper immédiatement
             self.vuecatalogviewer.groupbox_textarea.setFocus()
         else:
             self.vuecatalogviewer.groupbox_searchbar.setVisible(True)
@@ -99,6 +120,10 @@ class controleurCatalogviewer(QObject):
     
     
     def find_keyword(self):
+        
+        """_summary_
+        Surlignage du mot de la barre de recherche dans la vue
+        """
         
         # Obtient le curseur actuel du QPlainTextEdit (sert à sélectionner un mot dans le texte du QPlainTextEdit)
         cursor = self.vuecatalogviewer.groupbox_textarea.textCursor()

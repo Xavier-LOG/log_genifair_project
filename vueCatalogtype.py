@@ -43,6 +43,10 @@ class vueCatalogtype(QWidget):
     
     def init_ui(self):
 
+        """_summary_
+        Initialisation de la vue
+        """
+
         # Layout associé à l'instance de la classe vueCatalogtype
         self.vuecatalogtype_layout = QVBoxLayout(self)
         
@@ -94,6 +98,10 @@ class vueCatalogtype(QWidget):
 
     
     def connect_signals(self):
+        
+        """_summary_
+        Connexion des signaux
+        """
         
         self.groupbox_trajectory_catalog_checkbox.toggled.connect(self.controleurcatalogtype.trajectory_catalog)
         self.groupbox_time_series_catalog_checkbox.toggled.connect(self.controleurcatalogtype.timeseries_catalog)

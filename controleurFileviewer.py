@@ -22,6 +22,10 @@ class controleurFileviewer:
     
     def load_file_name(self):
         
+        """_summary_
+        Affichage des chemins de fichier
+        """
+        
         self.vuefileviewer.groupbox_textarea.setPlainText("")
         
         for file_path in self.vuefileviewer.vuemainwindow.vuecatalog.modelecatalog.path_list_files[1]:

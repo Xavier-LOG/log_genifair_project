@@ -43,6 +43,10 @@ class vueDatabase(QWidget):
     
     def init_ui(self):
 
+        """_summary_
+        Initialisation de la vue
+        """
+
         # Layout associé à l'instance de la classe vueDatabase
         self.vuedatabase_layout = QVBoxLayout(self)
         
@@ -145,6 +149,10 @@ class vueDatabase(QWidget):
     
     def connect_signals(self):
         
+        """_summary_
+        Connexion des signaux
+        """
+        
         self.groupbox_connection_host_checkbox.stateChanged.connect(self.controleurdatabase.toggle_host_visibility)
         self.groupbox_connection_port_checkbox.stateChanged.connect(self.controleurdatabase.toggle_port_visibility)
         self.groupbox_connection_button.clicked.connect(self.controleurdatabase.connect)
@@ -166,6 +174,8 @@ if __name__ == "__main__":
     
     import sys
     from PyQt6.QtWidgets import QApplication, QMainWindow
+    from vueMainwindow import vueMainwindow
+    from vueToolbar import vueToolbar
     
     app = QApplication(sys.argv)
     mainwindow = QMainWindow()

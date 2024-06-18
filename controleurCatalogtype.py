@@ -31,8 +31,15 @@ class controleurCatalogtype:
     
     def trajectory_catalog(self):
         
+        """_summary_
+        Grisage et dégrisage de zones dans la vue lorsque le catalogue de type trajectoire est coché
+        """
+        
+        # Si le catalogue de type trajectoire est coché
         if self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.isChecked():
+            # Chemin du catalogue
             self.vuecatalogtype.vuecatalog.modelecatalog.path_list_files[0] = "./trajectory_catalog.json"
+            # Grisage et dégrisage des zones nécessaires
             self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.setEnabled(True)
             self.vuecatalogtype.groupbox_time_series_catalog_checkbox.setEnabled(False)
             self.vuecatalogtype.groupbox_profile_catalog_checkbox.setEnabled(False)
@@ -43,7 +50,9 @@ class controleurCatalogtype:
             self.vuecatalogtype.groupbox_open_button.setEnabled(False)
             self.vuecatalogtype.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Trajectory catalog has been selected.\n")
             self.vuecatalogtype.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Trajectory catalog has been selected.\n", "green")
+        # Sinon
         else:
+            # Grisage et dégrisage des zones nécessaires
             self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.setEnabled(True)
             self.vuecatalogtype.groupbox_time_series_catalog_checkbox.setEnabled(True)
             self.vuecatalogtype.groupbox_profile_catalog_checkbox.setEnabled(True)
@@ -56,8 +65,15 @@ class controleurCatalogtype:
     
     def timeseries_catalog(self):
         
+        """_summary_
+        Grisage et dégrisage de zones dans la vue lorsque le catalogue de type série temporelle est coché
+        """
+        
+        # Si le catalogue de type série temporelle est coché
         if self.vuecatalogtype.groupbox_time_series_catalog_checkbox.isChecked():
+            # Chemin du catalogue
             self.vuecatalogtype.vuecatalog.modelecatalog.path_list_files[0] = "./timeseries_catalog.json"
+            # Grisage et dégrisage des zones nécessaires
             self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.setEnabled(False)
             self.vuecatalogtype.groupbox_time_series_catalog_checkbox.setEnabled(True)
             self.vuecatalogtype.groupbox_profile_catalog_checkbox.setEnabled(False)
@@ -68,7 +84,9 @@ class controleurCatalogtype:
             self.vuecatalogtype.groupbox_open_button.setEnabled(False)
             self.vuecatalogtype.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Timeseries catalog has been selected.\n")
             self.vuecatalogtype.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Timeseries catalog has been selected.\n", "green")
+        # Sinon
         else:
+            # Grisage et dégrisage des zones nécessaires
             self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.setEnabled(True)
             self.vuecatalogtype.groupbox_time_series_catalog_checkbox.setEnabled(True)
             self.vuecatalogtype.groupbox_profile_catalog_checkbox.setEnabled(True)
@@ -81,8 +99,15 @@ class controleurCatalogtype:
     
     def profile_catalog(self):
         
+        """_summary_
+        Grisage et dégrisage de zones dans la vue lorsque le catalogue de type profil est coché
+        """
+        
+        # Si le catalogue de type profil est coché
         if self.vuecatalogtype.groupbox_profile_catalog_checkbox.isChecked():
+            # Chemin du catalogue
             self.vuecatalogtype.vuecatalog.modelecatalog.path_list_files[0] = "./profile_catalog.json"
+            # Grisage et dégrisage des zones nécessaires
             self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.setEnabled(False)
             self.vuecatalogtype.groupbox_time_series_catalog_checkbox.setEnabled(False)
             self.vuecatalogtype.groupbox_profile_catalog_checkbox.setEnabled(True)
@@ -93,7 +118,9 @@ class controleurCatalogtype:
             self.vuecatalogtype.groupbox_open_button.setEnabled(False)
             self.vuecatalogtype.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Profile catalog has been selected.\n")
             self.vuecatalogtype.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Profile catalog has been selected.\n", "green")
+        # Sinon
         else:
+            # Grisage et dégrisage des zones nécessaires
             self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.setEnabled(True)
             self.vuecatalogtype.groupbox_time_series_catalog_checkbox.setEnabled(True)
             self.vuecatalogtype.groupbox_profile_catalog_checkbox.setEnabled(True)
@@ -106,8 +133,15 @@ class controleurCatalogtype:
     
     def sample_catalog(self):
         
+        """_summary_
+        Grisage et dégrisage de zones dans la vue lorsque le catalogue de type échantillonnage est coché
+        """
+        
+        # Si le catalogue de type échantillonnage est coché
         if self.vuecatalogtype.groupbox_sample_catalog_checkbox.isChecked():
+            # Chemin du fichier
             self.vuecatalogtype.vuecatalog.modelecatalog.path_list_files[0] = "./sample_catalog.json"
+            # Grisage et dégrisage des zones nécessaires
             self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.setEnabled(False)
             self.vuecatalogtype.groupbox_time_series_catalog_checkbox.setEnabled(False)
             self.vuecatalogtype.groupbox_profile_catalog_checkbox.setEnabled(False)
@@ -118,7 +152,9 @@ class controleurCatalogtype:
             self.vuecatalogtype.groupbox_open_button.setEnabled(False)
             self.vuecatalogtype.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_log("Sample catalog has been selected.\n")
             self.vuecatalogtype.vuecatalog.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Sample catalog has been selected.\n", "green")
+        # Sinon
         else:
+            # Grisage et dégrisage des zones nécessaires
             self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.setEnabled(True)
             self.vuecatalogtype.groupbox_time_series_catalog_checkbox.setEnabled(True)
             self.vuecatalogtype.groupbox_profile_catalog_checkbox.setEnabled(True)
@@ -131,6 +167,11 @@ class controleurCatalogtype:
     
     def confirm(self):
         
+        """_summary_
+        Grisage et dégrisage de zones dans la vue lorsque le catalogue choisi est confirmé
+        """
+        
+        # Grisage et dégrisage des zones nécessaires
         self.vuecatalogtype.vuecatalog.vuecatalogviewer.setEnabled(True)
         self.vuecatalogtype.vuecatalog.vuecatalogsettings.setEnabled(True)
         self.vuecatalogtype.vuecatalog.vuecatalogsettings.button.setEnabled(False)
@@ -152,6 +193,11 @@ class controleurCatalogtype:
     
     def cancel(self):
         
+        """_summary_
+        Réinitialisation
+        """
+        
+        # Réinitialisation
         self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.setChecked(False)
         self.vuecatalogtype.groupbox_time_series_catalog_checkbox.setChecked(False)
         self.vuecatalogtype.groupbox_profile_catalog_checkbox.setChecked(False)
@@ -187,6 +233,11 @@ class controleurCatalogtype:
     
     def restore(self):
         
+        """_summary_
+        Restauration du catalogue choisi à partir de son type de catalogue
+        """
+        
+        # Le catalogue est vide
         catalog = {}
         if self.vuecatalogtype.groupbox_trajectory_catalog_checkbox.isChecked():
             catalog_path = './trajectory_catalog.json'
@@ -197,8 +248,10 @@ class controleurCatalogtype:
         elif self.vuecatalogtype.groupbox_sample_catalog_checkbox.isChecked():
             catalog_path = './sample_catalog.json'
             
+        # Chargement du catalogue back-up
         with open(catalog_path[:-5] + "_save.json", 'r') as f:
             catalog = json.load(f)
+        # Ecriture du catalogue à restorer
         with open(self.vuecatalogtype.vuecatalog.modelecatalog.path_list_files[0], 'w') as f:
             json.dump(catalog, f, indent = 4)
         self.vuecatalogtype.vuecatalog.vuecatalogviewer.controleurcatalogviewer.load_catalog()
@@ -208,8 +261,15 @@ class controleurCatalogtype:
     
     def open(self):
         
+        """_summary_
+        Ouverture d'un catalogue
+        """
+        
+        # Ouverture d'une fenêtre permettant à l'utilisateur de sélectionner un catalogue à ouvrir
         file_path, _ = QFileDialog.getOpenFileName(self.vuecatalogtype, "Open JSON file", "", "JSON file (*.json)")
+        # Si le chemin du catalogue existe
         if file_path:
+            # Si le chemin du catalogue se termine au format JSON
             if file_path.endswith(".json"):
                 self.vuecatalogtype.vuecatalog.modelecatalog.path_list_files[0] = str(file_path)
                 self.vuecatalogtype.vuecatalog.vuecatalogviewer.controleurcatalogviewer.load_catalog()

@@ -42,6 +42,10 @@ class vueNetcdfviewer(QWidget):
     
     def init_ui(self):
         
+        """_summary_
+        Initialisation de la vue
+        """
+        
         # Layout associé à l'instance de la classe vueNetcdfviewer
         self.vuenetcdfviewer_layout = QVBoxLayout(self)
         

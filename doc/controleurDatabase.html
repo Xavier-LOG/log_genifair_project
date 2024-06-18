@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module controleurDatabase</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>controleurDatabase</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cssaph%5Cdocuments%5Cgithub%5Cnetcdf_project%5Ccontroleurdatabase.py">c:\users\ssaph\documents\github\netcdf_project\controleurdatabase.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;Importation&nbsp;des&nbsp;bibliothèques</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top><a href="psycopg2.html">psycopg2</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>(<a href="PyQt6.sip.html#wrapper">PyQt6.sip.wrapper</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="controleurDatabase.html#controleurDatabase">controleurDatabase</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="controleurDatabase">class <strong>controleurDatabase</strong></a>(<a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#controleurDatabase">controleurDatabase</a>(vuedatabase)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="controleurDatabase.html#controleurDatabase">controleurDatabase</a></dd>
+<dd><a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a></dd>
+<dd><a href="PyQt6.sip.html#wrapper">PyQt6.sip.wrapper</a></dd>
+<dd><a href="PyQt6.sip.html#simplewrapper">PyQt6.sip.simplewrapper</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="controleurDatabase-__init__"><strong>__init__</strong></a>(self, vuedatabase)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-column_confirm"><strong>column_confirm</strong></a>(self)</dt><dd><tt>_summary_<br>
+Confirmation&nbsp;de&nbsp;la&nbsp;sélection&nbsp;des&nbsp;colonnes&nbsp;de&nbsp;la&nbsp;table&nbsp;pour&nbsp;passer&nbsp;à&nbsp;la&nbsp;prochaine&nbsp;sélection&nbsp;si&nbsp;une&nbsp;autre&nbsp;table&nbsp;est&nbsp;choisie</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-column_settings"><strong>column_settings</strong></a>(self, name)</dt><dd><tt>_summary_<br>
+Affichage&nbsp;des&nbsp;noms&nbsp;de&nbsp;colonne&nbsp;de&nbsp;la&nbsp;table</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-connect"><strong>connect</strong></a>(self)</dt><dd><tt>_summary_<br>
+Connexion&nbsp;à&nbsp;la&nbsp;base&nbsp;de&nbsp;données&nbsp;et&nbsp;affichage&nbsp;des&nbsp;noms&nbsp;des&nbsp;tables&nbsp;de&nbsp;la&nbsp;base&nbsp;de&nbsp;données</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-disconnect"><strong>disconnect</strong></a>(self)</dt><dd><tt>_summary_<br>
+Déconnexion</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-import_data"><strong>import_data</strong></a>(self)</dt><dd><tt>_summary_<br>
+Importation&nbsp;des&nbsp;données</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-load_data"><strong>load_data</strong></a>(self)</dt><dd><tt>_summary_<br>
+Affichage&nbsp;des&nbsp;noms&nbsp;des&nbsp;tables&nbsp;de&nbsp;la&nbsp;base&nbsp;de&nbsp;données&nbsp;et&nbsp;connexion</tt></dd></dl>
+
+<strong>signal</strong> = &lt;unbound PYQT_SIGNAL signal(QVariantList)&gt;
+<dl><dt><a name="controleurDatabase-table_confirm"><strong>table_confirm</strong></a>(self)</dt><dd><tt>_summary_<br>
+Dégrisage&nbsp;de&nbsp;la&nbsp;confirmation&nbsp;de&nbsp;la&nbsp;sélection&nbsp;actuelle&nbsp;de&nbsp;tables</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-toggle_host_visibility"><strong>toggle_host_visibility</strong></a>(self)</dt><dd><tt>_summary_<br>
+Gestion&nbsp;de&nbsp;la&nbsp;visibilité&nbsp;de&nbsp;la&nbsp;ligne&nbsp;de&nbsp;saisie&nbsp;pour&nbsp;saisir&nbsp;l'adresse&nbsp;IP</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-toggle_password_visibility"><strong>toggle_password_visibility</strong></a>(self)</dt><dd><tt>_summary_<br>
+Gestion&nbsp;de&nbsp;la&nbsp;visibilité&nbsp;du&nbsp;mot&nbsp;de&nbsp;passe&nbsp;de&nbsp;l'utilisateur</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-toggle_port_visibility"><strong>toggle_port_visibility</strong></a>(self)</dt><dd><tt>_summary_<br>
+Gestion&nbsp;de&nbsp;la&nbsp;visibilité&nbsp;de&nbsp;la&nbsp;ligne&nbsp;de&nbsp;saisie&nbsp;pour&nbsp;saisir&nbsp;le&nbsp;port&nbsp;de&nbsp;la&nbsp;base&nbsp;de&nbsp;données</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-unselect_all_columns"><strong>unselect_all_columns</strong></a>(self)</dt><dd><tt>_summary_<br>
+Décochage&nbsp;de&nbsp;toutes&nbsp;les&nbsp;cases&nbsp;cochées</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>:<br>
+<dl><dt><a name="controleurDatabase-__getattr__"><strong>__getattr__</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-__getattr__">__getattr__</a>(self,&nbsp;str)&nbsp;-&gt;&nbsp;object</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-blockSignals"><strong>blockSignals</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-blockSignals">blockSignals</a>(self,&nbsp;bool)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-childEvent"><strong>childEvent</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-childEvent">childEvent</a>(self,&nbsp;QChildEvent)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-children"><strong>children</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-children">children</a>(self)&nbsp;-&gt;&nbsp;List[<a href="PyQt6.QtCore.html#QObject">QObject</a>]</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-connectNotify"><strong>connectNotify</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-connectNotify">connectNotify</a>(self,&nbsp;QMetaMethod)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-customEvent"><strong>customEvent</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-customEvent">customEvent</a>(self,&nbsp;QEvent)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-deleteLater"><strong>deleteLater</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-deleteLater">deleteLater</a>(self)</tt></dd></dl>
+
+<strong>destroyed</strong> = &lt;unbound PYQT_SIGNAL destroyed(QObject*)&gt;
+<dl><dt><a name="controleurDatabase-disconnectNotify"><strong>disconnectNotify</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-disconnectNotify">disconnectNotify</a>(self,&nbsp;QMetaMethod)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-dumpObjectInfo"><strong>dumpObjectInfo</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-dumpObjectInfo">dumpObjectInfo</a>(self)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-dumpObjectTree"><strong>dumpObjectTree</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-dumpObjectTree">dumpObjectTree</a>(self)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-dynamicPropertyNames"><strong>dynamicPropertyNames</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-dynamicPropertyNames">dynamicPropertyNames</a>(self)&nbsp;-&gt;&nbsp;List[QByteArray]</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-event"><strong>event</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-event">event</a>(self,&nbsp;QEvent)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-eventFilter"><strong>eventFilter</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-eventFilter">eventFilter</a>(self,&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a>,&nbsp;QEvent)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-findChild"><strong>findChild</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-findChild">findChild</a>(self,&nbsp;type,&nbsp;name:&nbsp;str&nbsp;=&nbsp;'',&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a><br>
+<a href="#controleurDatabase-findChild">findChild</a>(self,&nbsp;Tuple,&nbsp;name:&nbsp;str&nbsp;=&nbsp;'',&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a></tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-findChildren"><strong>findChildren</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-findChildren">findChildren</a>(self,&nbsp;type,&nbsp;name:&nbsp;str&nbsp;=&nbsp;'',&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;List[<a href="PyQt6.QtCore.html#QObject">QObject</a>]<br>
+<a href="#controleurDatabase-findChildren">findChildren</a>(self,&nbsp;Tuple,&nbsp;name:&nbsp;str&nbsp;=&nbsp;'',&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;List[<a href="PyQt6.QtCore.html#QObject">QObject</a>]<br>
+<a href="#controleurDatabase-findChildren">findChildren</a>(self,&nbsp;type,&nbsp;QRegularExpression,&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;List[<a href="PyQt6.QtCore.html#QObject">QObject</a>]<br>
+<a href="#controleurDatabase-findChildren">findChildren</a>(self,&nbsp;Tuple,&nbsp;QRegularExpression,&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;List[<a href="PyQt6.QtCore.html#QObject">QObject</a>]</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-inherits"><strong>inherits</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-inherits">inherits</a>(self,&nbsp;str)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-installEventFilter"><strong>installEventFilter</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-installEventFilter">installEventFilter</a>(self,&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a>)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-isSignalConnected"><strong>isSignalConnected</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-isSignalConnected">isSignalConnected</a>(self,&nbsp;QMetaMethod)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-isWidgetType"><strong>isWidgetType</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-isWidgetType">isWidgetType</a>(self)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-isWindowType"><strong>isWindowType</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-isWindowType">isWindowType</a>(self)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-killTimer"><strong>killTimer</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-killTimer">killTimer</a>(self,&nbsp;int)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-metaObject"><strong>metaObject</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-metaObject">metaObject</a>(self)&nbsp;-&gt;&nbsp;QMetaObject</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-moveToThread"><strong>moveToThread</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-moveToThread">moveToThread</a>(self,&nbsp;QThread)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-objectName"><strong>objectName</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-objectName">objectName</a>(self)&nbsp;-&gt;&nbsp;str</tt></dd></dl>
+
+<strong>objectNameChanged</strong> = &lt;unbound PYQT_SIGNAL objectNameChanged(QString)&gt;
+<dl><dt><a name="controleurDatabase-parent"><strong>parent</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-parent">parent</a>(self)&nbsp;-&gt;&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a></tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-property"><strong>property</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-property">property</a>(self,&nbsp;str)&nbsp;-&gt;&nbsp;Any</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-pyqtConfigure"><strong>pyqtConfigure</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="PyQt6.QtCore.html#QObject">QObject</a>.<a href="#controleurDatabase-pyqtConfigure">pyqtConfigure</a>(...)<br>
+&nbsp;<br>
+Each&nbsp;keyword&nbsp;argument&nbsp;is&nbsp;either&nbsp;the&nbsp;name&nbsp;of&nbsp;a&nbsp;Qt&nbsp;property&nbsp;or&nbsp;a&nbsp;Qt&nbsp;signal.<br>
+For&nbsp;properties&nbsp;the&nbsp;property&nbsp;is&nbsp;set&nbsp;to&nbsp;the&nbsp;given&nbsp;value&nbsp;which&nbsp;should&nbsp;be&nbsp;of&nbsp;an<br>
+appropriate&nbsp;type.<br>
+For&nbsp;signals&nbsp;the&nbsp;signal&nbsp;is&nbsp;connected&nbsp;to&nbsp;the&nbsp;given&nbsp;value&nbsp;which&nbsp;should&nbsp;be&nbsp;a<br>
+callable.</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-receivers"><strong>receivers</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-receivers">receivers</a>(self,&nbsp;PYQT_SIGNAL)&nbsp;-&gt;&nbsp;int</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-removeEventFilter"><strong>removeEventFilter</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-removeEventFilter">removeEventFilter</a>(self,&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a>)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-sender"><strong>sender</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-sender">sender</a>(self)&nbsp;-&gt;&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a></tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-senderSignalIndex"><strong>senderSignalIndex</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-senderSignalIndex">senderSignalIndex</a>(self)&nbsp;-&gt;&nbsp;int</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-setObjectName"><strong>setObjectName</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-setObjectName">setObjectName</a>(self,&nbsp;str)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-setParent"><strong>setParent</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-setParent">setParent</a>(self,&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a>)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-setProperty"><strong>setProperty</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-setProperty">setProperty</a>(self,&nbsp;str,&nbsp;Any)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-signalsBlocked"><strong>signalsBlocked</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-signalsBlocked">signalsBlocked</a>(self)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-startTimer"><strong>startTimer</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-startTimer">startTimer</a>(self,&nbsp;int,&nbsp;timerType:&nbsp;Qt.TimerType&nbsp;=&nbsp;Qt.CoarseTimer)&nbsp;-&gt;&nbsp;int</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-thread"><strong>thread</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-thread">thread</a>(self)&nbsp;-&gt;&nbsp;QThread</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-timerEvent"><strong>timerEvent</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-timerEvent">timerEvent</a>(self,&nbsp;QTimerEvent)</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-tr"><strong>tr</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurDatabase-tr">tr</a>(str,&nbsp;disambiguation:&nbsp;str&nbsp;=&nbsp;None,&nbsp;n:&nbsp;int&nbsp;=&nbsp;-1)&nbsp;-&gt;&nbsp;str</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>:<br>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes inherited from <a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>:<br>
+<dl><dt><strong>staticMetaObject</strong> = &lt;PyQt6.QtCore.QMetaObject object&gt;</dl>
+
+<hr>
+Static methods inherited from <a href="PyQt6.sip.html#simplewrapper">PyQt6.sip.simplewrapper</a>:<br>
+<dl><dt><a name="controleurDatabase-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="PyQt6.sip.html#simplewrapper">PyQt6.sip.simplewrapper</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

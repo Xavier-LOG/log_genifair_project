@@ -43,6 +43,8 @@ class controleurToolbar(QObject):
         self.file_list = []
         self.dataframe_list = []
         self.row_number = None
+        self.vuedatabase = None
+        self.about_window = None
         
         
     # Définition des méthodes
@@ -50,16 +52,27 @@ class controleurToolbar(QObject):
     
     def data_collect(self, obj):
         
+        """_summary_
+        Collection des données importées
+        """
+        
+        # Parcours de chaque dataframe de la liste
         for i in range(0, len(obj[1])):
+            # Vérification de chaque dataframe
             self.import_check(obj[0], obj[1][i])
+        # Validation de l'importation
         self.import_validation()
     
 
     def import_check(self, file_path, dataframe):
         
+        """_summary_
+        Vérification de l'importation et suppression des colonnes du dataframe dont le nom de colonne est duppliqué
+        """
+        
         # Si tous les noms de colonne du dataframe sont des chaînes de caractères
         if all(isinstance(column, str) for column in dataframe.columns) == True: 
-            # Suppression des colonnes du dataframe dont le nom de colonne est dupliqué
+            # Suppression des colonnes du dataframe dont le nom de colonne est duppliqué
             dataframe = dataframe.drop(columns = dataframe.columns[dataframe.columns.duplicated()])
             self.file_list.append(str(file_path))
             self.dataframe_list.append(dataframe)
@@ -70,6 +83,10 @@ class controleurToolbar(QObject):
 
 
     def import_validation(self):
+
+        """_summary_
+        Validation de l'importation des données
+        """
         
         # vueToolbar est instanciée avant vueCatalog et vueConversion. Donc émission d'un signal.
         # Emission d'un signal sous forme de liste vers controleurCatalog en premier (pour remplacer la deuxième valeur de path_list_files de modeleCatalog par self.file_list), 
@@ -86,6 +103,10 @@ class controleurToolbar(QObject):
 
     
     def import_file_option(self):
+        
+        """_summary_
+        Importation des données de fichier au format xlsx, txt, csv, ods, odf
+        """
         
         file_dialog = QFileDialog(self.vuetoolbar)
         # Affichage de la boîte de dialogue pour sélectionner un fichier dans l'explorateur de fichiers
@@ -136,13 +157,17 @@ class controleurToolbar(QObject):
     def import_folder_option(self):
         
         directory_dialog = QFileDialog(self.vuetoolbar)
+        # Variable pour le chemin du dossier
         directory = directory_dialog.getExistingDirectory(self.vuetoolbar, "Select a folder")
+        # Variable pour vérifier si tous les fichiers du répertoire sont au même format (xlsx, csv, odf, txt, ods)
         xlsx = 0
         csv = 0
         odf = 0
         txt = 0
         ods = 0
+        # Si le dossier existe
         if directory:
+            # Pour chaque nom de fichier dans la liste des noms de fichier du dossier
             for file_name in os.listdir(directory):
                 if file_name.endswith(".xlsx"):
                     xlsx += 1
@@ -155,19 +180,25 @@ class controleurToolbar(QObject):
                 elif file_name.endswith(".odf"):
                     ods += 1
             if xlsx == len(os.listdir(directory)):
+                # Pour chaque nom de fichier dans la liste des noms de fichier du dossier
                 for file_name in os.listdir(directory):
+                    # Concaténation du chemin du dossier avec le nom du fichier
                     file_path = os.path.join(directory, file_name)
                     dataframe = pd.read_excel(file_path, nrows = self.row_number)
                     self.import_check(file_path, dataframe)
                 self.import_validation()
             elif csv == len(os.listdir(directory)):
+                # Pour chaque nom de fichier dans la liste des noms de fichier du dossier
                 for file_name in os.listdir(directory):
+                    # Concaténation du chemin du dossier avec le nom du fichier
                     file_path = os.path.join(directory, file_name)
                     dataframe = pd.read_csv(file_path, nrows = self.row_number)
                     self.import_check(file_path, dataframe)
                 self.import_validation()
             elif odf == len(os.listdir(directory)):
+                # Pour chaque nom de fichier dans la liste des noms de fichier du dossier
                 for file_name in os.listdir(directory):
+                    # Concaténation du chemin du dossier avec le nom du fichier
                     file_path = os.path.join(directory, file_name)
                     # Utilisation de pyexcel_ods pour obtenir les données
                     data = pyexcel_ods.get_data(file_path)
@@ -177,7 +208,9 @@ class controleurToolbar(QObject):
                     self.import_check(file_path, dataframe)
                 self.import_validation()
             elif txt == len(os.listdir(directory)):
+                # Pour chaque nom de fichier dans la liste des noms de fichier du dossier
                 for file_name in os.listdir(directory):
+                    # Concaténation du chemin du dossier avec le nom du fichier
                     file_path = os.path.join(directory, file_name)
                     dataframe = pd.read_csv(file_path, nrows = self.row_number, delimiter = '\t')
                     file = file[:-4] + '.xlsx'
@@ -188,7 +221,9 @@ class controleurToolbar(QObject):
                     self.import_check(file_path, dataframe)
                 self.import_validation()
             elif ods == len(os.listdir(directory)):
+                # Pour chaque nom de fichier dans la liste des noms de fichier du dossier
                 for file_name in os.listdir(directory):
+                    # Concaténation du chemin du dossier avec le nom du fichier
                     file_path = os.path.join(directory, file_name)
                     dataframe = pd.read_excel(file_path, engine='odf')
                     self.import_check(file_path, dataframe)
@@ -202,26 +237,38 @@ class controleurToolbar(QObject):
     
     
     def import_data_option(self):
+    
+        """_summary_
+        Affichage de la vue pour la base de données et connexion
+        """
         
-        vuedatabase = vueDatabase()
-        vuedatabase.show()
-        vuedatabase.controleurdatabase.signal.connect(self.data_collect)
+        self.vuedatabase = vueDatabase()
+        self.vuedatabase.show()
+        self.vuedatabase.controleurdatabase.signal.connect(self.data_collect)
     
     
     def resolution_option(self):
-            
+
+        """_summary_
+        Changement de la résolution de la fenêtre principale
+        """
+                    
         self.vuetoolbar.vuemainwindow.setGeometry(50, 50, 1280, 768)
 
 
     def about_option(self):
         
+        """_summary_
+        Affichage de la fenêtre A Propos
+        """
+        
         self.about_window = QMdiSubWindow()
         self.about_window.setWindowTitle("About")
         self.about_window.setFixedSize(400, 400)
         
-        self.about_text = QLabel("Some Content", self.about_window)
+        self.about_text = QLabel("This software was designed for the Laboratoire d'Océanologie et de Géosciences de Wimereux to arrange and process NetCDF data as part of the GENIFAIR (GENeration d'outils Informatiques destinés à la FAIRisation des données) project funded by the SFR Campus de la Mer. For more information on how to use it, please consult the user manual or visit the Github page.", self.about_window)
+        # Activation du retour à la ligne
         self.about_text.setWordWrap(True)
-        self.about_text.setGeometry(10, 10, 390, 190)
         
         self.about_window.setWidget(self.about_text)
         self.about_window.move(400, 0)

@@ -18,9 +18,13 @@ class controleurNetcdfviewer:
     # Définition des méthodes
     
     
-    def load_netcdf(self, modelenetcdf):
+    def load_netcdf(self, xarray_dataset):
+        
+        """_summary_
+        Affichage du fichier dans la vue
+        """
         
         # Mise à jour du fichier netcdf dans la vue
         self.vuenetcdfviewer.groupbox_textarea.setPlainText("")
         
-        self.vuenetcdfviewer.groupbox_textarea.appendPlainText(str(modelenetcdf.get_xarray_dataset()))
+        self.vuenetcdfviewer.groupbox_textarea.appendPlainText(str(xarray_dataset.get_xarray_dataset()))

@@ -29,12 +29,22 @@ class controleurLogs:
 
     def add_log(self, log):
         
+        """_summary_
+        Réinitialisation du contenu de la zone de texte toutes les 10 lignes et ajout dans la liste
+        """
+        
         if len(self.logs) % 10 == 0:
+            # Réinitialisation du contenu de la zone de texte toutes les 10 lignes
             self.vuelogs.groupbox_textarea.setPlainText("")
+        # Ajout dans la liste
         self.logs.append(log)
 
     
     def add_colored_log(self, log, color):
+        
+        """_summary_
+        Coloration
+        """
         
         format = QTextCharFormat()
         if color == "red":

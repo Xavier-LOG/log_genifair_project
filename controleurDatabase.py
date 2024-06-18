@@ -39,35 +39,67 @@ class controleurDatabase(QObject):
 
     def toggle_host_visibility(self):
         
+        """_summary_
+        Gestion de la visibilité de la ligne de saisie pour saisir l'adresse IP
+        """
+        
+        # Si l'hôte est décoché
         if self.vuedatabase.groupbox_connection_host_checkbox.isChecked() == False:
+            # Affichage de la ligne de saisie pour saisir l'adresse IP
             self.vuedatabase.groupbox_connection_host_lineedit.setVisible(True)
+        # Sinon
         else:
+            # La ligne de saisie pour saisir l'adresse IP reste cachée
             self.vuedatabase.groupbox_connection_host_lineedit.setVisible(False)
     
     
     def toggle_port_visibility(self):
         
+        """_summary_
+        Gestion de la visibilité de la ligne de saisie pour saisir le port de la base de données
+        """
+        
+        # Si le port est décoché
         if self.vuedatabase.groupbox_connection_port_checkbox.isChecked() == False:
+            # Affichage de la ligne de saisie pour saisir le port
             self.vuedatabase.groupbox_connection_port_lineedit.setVisible(True)
+        # Sinon
         else:
+            # La ligne de saisie pour saisir le port reste cachée
             self.vuedatabase.groupbox_connection_port_lineedit.setVisible(False)
 
 
     def toggle_password_visibility(self):
-        
+
+        """_summary_
+        Gestion de la visibilité du mot de passe de l'utilisateur
+        """
+
+        # Si la visibilité du mot de passe est coché        
         if self.vuedatabase.groupbox_connection_checkbox.isChecked() == True:
+            # Le mot de passe est visible
             self.vuedatabase.groupbox_connection_password_lineedit.setEchoMode(QLineEdit.EchoMode.Normal)
+        # Sinon
         else:
+            # Le mot de passe est caché
             self.vuedatabase.groupbox_connection_password_lineedit.setEchoMode(QLineEdit.EchoMode.Password)
 
 
     def connect(self):
+
+        """_summary_
+        Connexion à la base de données et affichage des noms des tables de la base de données
+        """
     
         try:
             
+            # Si l'hôte est coché
             if self.vuedatabase.groupbox_connection_host_checkbox.isChecked() == True:
+                # L'hôte est localhost
                 host_variable = "127.0.0.1"
+            # Si le port est coché
             if self.vuedatabase.groupbox_connection_port_checkbox.isChecked() == True:
+                # Le port par défaut est 5432
                 port_variable = "5432"
             
             # Connexion à la base de données
@@ -85,6 +117,10 @@ class controleurDatabase(QObject):
 
     def disconnect(self):
 
+        """_summary_
+        Déconnexion
+        """
+
         if self.connection is not None:
             # Fermeture de la connexion
             self.connection.close()
@@ -92,10 +128,15 @@ class controleurDatabase(QObject):
 
     def load_data(self):
     
+        """_summary_
+        Affichage des noms des tables de la base de données et connexion
+        """
+    
         if self.connection is not None:
             # Création d'un curseur pour exécuter des requêtes SQL
             self.cursor = self.connection.cursor()
-            
+
+            # Si le curseur existe            
             if self.cursor:
                 # Exécuter une requête SQL pour récupérer tous les noms de tables
                 self.cursor.execute("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'")
@@ -103,10 +144,15 @@ class controleurDatabase(QObject):
                 # Récupérer les résultats de la requête
                 tables = self.cursor.fetchall()
             
+                # Si les tables existent
                 if tables:
+                    # Parcours de chaque table
                     for table in tables:
+                        # Récupération du nom de la table
                         table = table[0]
+                        # Création d'une case à cocher pour chaque nom de table
                         checkbox = QCheckBox(str(table))
+                        # Connexion de la case à cocher aux paramètres de colonne de la table pour afficher les colonnes à sélectionner
                         checkbox.stateChanged.connect(lambda state, name = str(table): self.column_settings(name))
                         self.vuedatabase.groupbox_table_layout.addWidget(checkbox)
                     self.vuedatabase.groupbox_connection_button.setEnabled(False)
@@ -114,6 +160,10 @@ class controleurDatabase(QObject):
     
     
     def column_settings(self, name):
+        
+        """_summary_
+        Affichage des noms de colonne de la table
+        """
         
         if self.cursor:
             
@@ -123,11 +173,17 @@ class controleurDatabase(QObject):
             # Récupérer les résultats de la requête
             columns = self.cursor.fetchall()
             
+            # Si les colonnes de la table existent
             if columns:
+                # Parcours de chaque colonne
                 for column in columns:
+                    # Récupération du nom de la colonne
                     column = column[0]
+                    # Création d'une case à cocher pour chaque nom de colonne
                     checkbox = QCheckBox(str(column))
+                    # Création d'un identifiant unique pour la case
                     checkbox.setObjectName(str(name))
+                    # La case est déjà cochée (on considère que l'utilisateur récupère par défaut toutes les colonnes de la table)
                     checkbox.setChecked(True)
                     self.vuedatabase.groupbox_column_layout.addWidget(checkbox)
                 self.vuedatabase.groupbox_table.setEnabled(False)
@@ -136,31 +192,60 @@ class controleurDatabase(QObject):
     
     def unselect_all_columns(self):
         
+        """_summary_
+        Décochage de toutes les cases cochées
+        """
+        
+        # Parcours des indices du layout des colonnes de la table
         for i in range(0, self.vuedatabase.groupbox_column_layout.count()):
+            # Si le i-ème widget du layout des colonnes de la table est une case à cocher
             if isinstance(self.vuedatabase.groupbox_column_layout.itemAt(i).widget(), QCheckBox):
+                # Si le widget est coché
                 if self.vuedatabase.groupbox_column_layout.itemAt(i).widget().isChecked() == True:
+                    # Le widget est décoché
                     self.vuedatabase.groupbox_column_layout.itemAt(i).widget().setChecked(False)
     
     
     def column_confirm(self):
         
+        """_summary_
+        Confirmation de la sélection des colonnes de la table pour passer à la prochaine sélection si une autre table est choisie
+        """
+        
+        # Parcours des indices du layout des colonnes de la table
         for i in range(0, self.vuedatabase.groupbox_column_layout.count()):
+            # Si le i-ème widget du layout des colonnes de la table est une case à cocher
             if isinstance(self.vuedatabase.groupbox_column_layout.itemAt(i).widget(), QCheckBox):
+                # Si le widget est coché
                 if self.vuedatabase.groupbox_column_layout.itemAt(i).widget().isChecked() == True:
+                    # Si l'identifiant de la case à cocher est dans la liste des clés du dictionnaire des tables
                     if self.vuedatabase.groupbox_column_layout.itemAt(i).widget().objectName() in list(self.table_dict.keys()):
+                        # Ajout du nom de la colonne dans la liste des noms de colonne sélectionnés de la table choisie
                         self.table_dict[self.vuedatabase.groupbox_column_layout.itemAt(i).widget().objectName()].append(self.vuedatabase.groupbox_column_layout.itemAt(i).widget().text())
+                    # Sinon
                     else:
+                        # Ajout d'une valeur nulle
                         self.table_dict[self.vuedatabase.groupbox_column_layout.itemAt(i).widget().objectName()] = []
+        # Pour chaque case à cocher du layout des colonnes de la table (sans compter les boutons)
         for i in reversed(range(3, self.vuedatabase.groupbox_column_layout.count())):
+            # Le widget est la case à cocher
             widget = self.vuedatabase.groupbox_column_layout.itemAt(i).widget()
+            # Si le widget existe
             if widget is not None:
+                # Suppression du widget du layout
                 self.vuedatabase.groupbox_column_layout.removeWidget(widget)
                 widget.deleteLater()
+        # Pour chaque case à cocher du layout des tables (sans compter les boutons)
         for i in reversed(range(2, self.vuedatabase.groupbox_table_layout.count())):
+            # Le widget est la case à cocher
             widget = self.vuedatabase.groupbox_table_layout.itemAt(i).widget()
+            # Si le widget existe
             if widget is not None:
+                # Si le widget est une case à cocher
                 if isinstance(self.vuedatabase.groupbox_table_layout.itemAt(i).widget(), QCheckBox):
+                    # Si la case à cocher est cochée
                     if self.vuedatabase.groupbox_table_layout.itemAt(i).widget().isChecked() == True:
+                        # Suppression du widget du layout
                         self.vuedatabase.groupbox_table_layout.removeWidget(widget)
                         widget.deleteLater()
         self.vuedatabase.groupbox_column.setEnabled(False)
@@ -168,6 +253,10 @@ class controleurDatabase(QObject):
     
     
     def table_confirm(self):
+    
+        """_summary_
+        Dégrisage de la confirmation de la sélection actuelle de tables
+        """
         
         self.vuedatabase.groupbox_connection_button.setEnabled(False)
         self.vuedatabase.groupbox_table.setEnabled(False)
@@ -176,38 +265,52 @@ class controleurDatabase(QObject):
     
     def import_data(self):
     
+        """_summary_
+        Importation des données
+        """
+    
         dataframe_list = []
     
         if self.cursor and len(self.table_dict) > 0:
     
+            # Parcours de chaque table et de sa liste contenant les colonnes sélectionnées
             for table, columns in self.table_dict.items():
             
+                # Conversion de la liste des noms de colonne en chaîne de caractères
                 columns = ', '.join(columns)
-                # Exécuter une requête SQL pour récupérer les 1000 premières lignes de la première table
-                self.cursor.execute(f"SELECT {columns} FROM {table} FETCH FIRST 1000 ROWS ONLY;")
+                # Exécuter une requête SQL pour récupérer les 100 premières lignes des colonnes sélectionnées de la table choisie
+                self.cursor.execute(f"SELECT {columns} FROM {table} FETCH FIRST 100 ROWS ONLY;")
             
                 # Récupérer les résultats de la requête
                 rows = self.cursor.fetchall()
-                
+            
+                # Initialisation d'une variable représentant la liste des lignes filtrées    
                 filtered_rows = []
                 
+                # Parcours de chaque ligne
                 for row in rows:
+                    # Initialisation d'une variable représentant la ligne filtrée
                     filtered_row = []
+                    # Parcours de chaque valeur de la ligne
                     for value in row:
-                        if (isinstance(value, list) or isinstance(value, tuple)) and len(value) > 0:
-                            filtered_row.append(value[0])
-                        else:
+                        # Si la valeur n'est pas un tableau
+                        if not (isinstance(value, list) or isinstance(value, tuple)):
+                            # Ajout de la valeur dans la ligne filtrée
                             filtered_row.append(value)
-                    filtered_rows.append(filtered_row)
+                    # Conversion de la ligne filtrée en tuple
+                    filtered_rows.append(tuple(filtered_row))
                 
                 if self.cursor.description:
+                    # Ajout du dataframe contenant les noms de colonne et les lignes filtrées à la liste des dataframes
                     dataframe_list.append(pd.DataFrame(filtered_rows, columns=[desc[0] for desc in self.cursor.description]))
             
             # Fermeture du curseur
             self.cursor.close()
             self.disconnect()
             
+            # Emission du signal vers controleurToolbar pour récupérer les dataframes
             self.signal.emit(["", dataframe_list])
-        
+    
+        # Fermeture de la vue    
         self.vuedatabase.close()
     

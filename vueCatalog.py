@@ -54,6 +54,10 @@ class vueCatalog(QWidget):
     
     def init_ui(self):
 
+        """_summary_
+        Initialisation de la vue
+        """
+
         # Layout associé à l'instance de la classe vueCatalog
         self.vuecatalog_layout = QVBoxLayout(self)
         
@@ -81,6 +85,10 @@ class vueCatalog(QWidget):
     
     
     def connect_signals(self):
+        
+        """_summary_
+        Connexion des signaux
+        """
         
         self.groupbox_save_button.clicked.connect(self.controleurcatalog.save)
         self.groupbox_confirm_button.clicked.connect(self.controleurcatalog.confirm)

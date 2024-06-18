@@ -610,6 +610,10 @@ class vueCatalogsettings(QWidget):
     
     def init_ui(self):
         
+        """_summary_
+        Initialisation de la vue
+        """
+        
         # Layout associé à l'instance de la classe vueCatalogsettings
         self.vuecatalogsettings_layout = QVBoxLayout(self)
 
@@ -633,6 +637,10 @@ class vueCatalogsettings(QWidget):
     
     
     def connect_signals(self):
+        
+        """_summary_
+        Connexion des signaux
+        """
         
         self.button.clicked.connect(self.controleurcatalogsettings.fill_catalog)
         

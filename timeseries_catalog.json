@@ -5,16 +5,6 @@
         },
         "Station": {
             "values": []
-        },
-        "Wavelength": {
-            "values": [
-                525.0,
-                570.0,
-                610.0,
-                370.0,
-                590.0,
-                470.0
-            ]
         }
     },
     "variable": {
@@ -53,7 +43,7 @@
                 "column_name": "datetime"
             }
         },
-        "temperature": {
+        "sea_water_temperature": {
             "dimension": [
                 "Time"
             ],
@@ -67,10 +57,10 @@
                 ":sdn_parameter_name": "sea_water_temperature",
                 ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_temperature",
                 ":reference_scale": "ITS-90",
-                "column_name": "sea_water_temperature"
+                "column_name": "temperature"
             }
         },
-        "salinity": {
+        "sea_water_salinity": {
             "dimension": [
                 "Time"
             ],
@@ -83,10 +73,10 @@
                 ":long_name": "Sea water salinity",
                 ":sdn_parameter_name": "sea_water_practical_salinity",
                 ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_practical_salinity",
-                "column_name": "sea_water_salinity"
+                "column_name": "salinity"
             }
         },
-        "density": {
+        "sea_water_density": {
             "dimension": [
                 "Time"
             ],
@@ -99,10 +89,10 @@
                 ":long_name": "Sea water density",
                 ":sdn_parameter_name": "sea_water_density",
                 ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_density",
-                "column_name": "sea_water_density"
+                "column_name": "density"
             }
         },
-        "fluorescence": {
+        "sea_water_fluorescence": {
             "dimension": [
                 "Time"
             ],
@@ -115,10 +105,10 @@
                 ":long_name": "Sea water fluorescence",
                 ":sdn_parameter_name": "mass_concentration_of_chlorophyll_in_sea_water",
                 ":sdn_parameter_urn": "urn:sdn:parameter:mass_concentration_of_chlorophyll_in_sea_water",
-                "column_name": "sea_water_fluorescence"
+                "column_name": "fluorescence"
             }
         },
-        "pressure": {
+        "sea_water_pressure": {
             "dimension": [
                 "Time"
             ],
@@ -131,7 +121,7 @@
                 ":long_name": "Sea water pressure",
                 ":sdn_parameter_name": "sea_water_pressure",
                 ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_pressure",
-                "column_name": "sea_water_pressure"
+                "column_name": "pressure"
             }
         },
         "dissolved_oxygen": {
@@ -150,7 +140,7 @@
                 "column_name": "dissolved_oxygen"
             }
         },
-        "nitrate": {
+        "sea_water_nitrate": {
             "dimension": [
                 "Time"
             ],
@@ -163,10 +153,10 @@
                 ":long_name": "Sea water nitrate",
                 ":sdn_parameter_name": "concentration_of_nitrate_in_sea_water",
                 ":sdn_parameter_urn": "urn:sdn:parameter:concentration_of_nitrate_in_sea_water",
-                "column_name": "sea_water_nitrate"
+                "column_name": "nitrate"
             }
         },
-        "phosphate": {
+        "sea_water_phosphate": {
             "dimension": [
                 "Time"
             ],
@@ -179,10 +169,10 @@
                 ":long_name": "Sea water phosphate",
                 ":sdn_parameter_name": "concentration_of_phosphate_in_sea_water",
                 ":sdn_parameter_urn": "urn:sdn:parameter:concentration_of_phosphate_in_sea_water",
-                "column_name": "sea_water_phosphate"
+                "column_name": "phosphate"
             }
         },
-        "silicate": {
+        "sea_water_silicate": {
             "dimension": [
                 "Time"
             ],
@@ -195,45 +185,13 @@
                 ":long_name": "Sea water silicate",
                 ":sdn_parameter_name": "concentration_of_silicate_in_sea_water",
                 ":sdn_parameter_urn": "urn:sdn:parameter:concentration_of_silicate_in_sea_water",
-                "column_name": "sea_water_silicate"
-            }
-        },
-        "wavelength": {
-            "dimension": [
-                "Wavelength"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "wavelength",
-                ":long_name": "Wavelength",
-                ":sdn_parameter_name": "wavelength",
-                ":sdn_paramter_urn": "urn:sdn:parameter:wavelength",
-                "column_name": "wavelength"
-            }
-        },
-        "led": {
-            "dimension": [
-                "Wavelength"
-            ],
-            "attribute": {
-                ":dtype": "float64",
-                ":units": "NaN",
-                ":sdn_uom_name": "NaN",
-                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
-                ":standard_name": "led",
-                ":long_name": "Led",
-                ":sdn_parameter_name": "led",
-                ":sdn_paramter_urn": "urn:sdn:parameter:led",
-                "column_name": "led"
+                "column_name": "silicate"
             }
         }
     },
     "global_attribute": {
         ":_FillValue": "NaN",
-        ":coordinates": "Station, Time, Wavelength",
+        ":coordinates": "Station, Time",
         ":date_created": "NaN",
         ":time_coverage_start": "NaN",
         ":time_coverage_end": "NaN",

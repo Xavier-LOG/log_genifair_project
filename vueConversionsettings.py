@@ -43,6 +43,10 @@ class vueConversionsettings(QWidget):
     
     def init_ui(self):
         
+        """_summary_
+        Initialisation de la vue
+        """
+        
         # Layout associé à l'instance de la classe vueConversionsettings
         self.vueconversionsettings_layout = QVBoxLayout(self)
         
@@ -58,6 +62,10 @@ class vueConversionsettings(QWidget):
     
     
     def connect_signals(self):
+        
+        """_summary_
+        Connexion des signaux
+        """
         
         self.groupbox_convert_button.clicked.connect(self.controleurconversionsettings.convert)
 

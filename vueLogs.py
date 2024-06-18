@@ -42,6 +42,10 @@ class vueLogs(QWidget):
 
     def init_ui(self):
         
+        """_summary_
+        Initialisation de la vue
+        """
+        
         # Layout associé à l'instance de la classe vueLogs
         self.vuelogs_layout = QVBoxLayout(self)
         

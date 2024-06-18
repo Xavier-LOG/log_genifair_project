@@ -20,6 +20,10 @@ class modeleMainwindow:
 
     def set_screen_resolution(self, width, height):
         
+        """_summary_
+        Gestion de la résolution de l'écran
+        """
+        
         if width <= self.screen_width:
             self.screen_width = width
         if height <= self.screen_height:

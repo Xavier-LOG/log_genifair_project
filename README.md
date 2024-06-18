@@ -1,4 +1,4 @@
-# Execution du projet Python
+# Execution du projet
 
 ## 1. Ubuntu
 
@@ -26,7 +26,7 @@ conda init
 
 ### 6. Installer les packages Python
 
-pip install PyQt6 typing-extensions Self pandas datetime numpy xarray tk pyexcel_ods
+pip install PyQt6 typing-extensions Self pandas datetime numpy xarray tk pyexcel_ods psycopg2
 
 ### 7. Installer les paquets de développements
 
@@ -45,7 +45,7 @@ https://code.visualstudio.com
 
 ### 2. Installer les packages Python
 
-pip install PyQt6 typing-extensions Self pandas datetime numpy xarray tk pyexcel_ods
+pip install PyQt6 typing-extensions Self pandas datetime numpy xarray tk pyexcel_ods psycopg2
 
 ### 3. Executer le programme
 

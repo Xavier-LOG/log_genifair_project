@@ -42,6 +42,10 @@ class vueDataframeviewer(QWidget):
     
     def init_ui(self):
         
+        """_summary_
+        Initialisation de la vue
+        """
+        
         # Layout associé à l'instance de la classe vueDataframeviewer
         self.vuedataframeviewer_layout = QVBoxLayout(self)
         

@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module controleurToolbar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>controleurToolbar</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cssaph%5Cdocuments%5Cgithub%5Cnetcdf_project%5Ccontroleurtoolbar.py">c:\users\ssaph\documents\github\netcdf_project\controleurtoolbar.py</a></font></td></tr></table>
+    <p><tt>#&nbsp;Importation&nbsp;des&nbsp;fichiers</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+</td><td width="25%" valign=top><a href="pyexcel_ods.html">pyexcel_ods</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>(<a href="PyQt6.sip.html#wrapper">PyQt6.sip.wrapper</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="controleurToolbar.html#controleurToolbar">controleurToolbar</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="controleurToolbar">class <strong>controleurToolbar</strong></a>(<a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#controleurToolbar">controleurToolbar</a>(vuetoolbar)<br>
+&nbsp;<br>
+<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="controleurToolbar.html#controleurToolbar">controleurToolbar</a></dd>
+<dd><a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a></dd>
+<dd><a href="PyQt6.sip.html#wrapper">PyQt6.sip.wrapper</a></dd>
+<dd><a href="PyQt6.sip.html#simplewrapper">PyQt6.sip.simplewrapper</a></dd>
+<dd><a href="builtins.html#object">builtins.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="controleurToolbar-__init__"><strong>__init__</strong></a>(self, vuetoolbar)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-about_option"><strong>about_option</strong></a>(self)</dt><dd><tt>_summary_<br>
+Affichage&nbsp;de&nbsp;la&nbsp;fenêtre&nbsp;A&nbsp;Propos</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-data_collect"><strong>data_collect</strong></a>(self, obj)</dt><dd><tt>_summary_<br>
+Collection&nbsp;des&nbsp;données&nbsp;importées</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-import_check"><strong>import_check</strong></a>(self, file_path, dataframe)</dt><dd><tt>_summary_<br>
+Vérification&nbsp;de&nbsp;l'importation&nbsp;et&nbsp;suppression&nbsp;des&nbsp;colonnes&nbsp;du&nbsp;dataframe&nbsp;dont&nbsp;le&nbsp;nom&nbsp;de&nbsp;colonne&nbsp;est&nbsp;duppliqué</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-import_data_option"><strong>import_data_option</strong></a>(self)</dt><dd><tt>_summary_<br>
+Affichage&nbsp;de&nbsp;la&nbsp;vue&nbsp;pour&nbsp;la&nbsp;base&nbsp;de&nbsp;données&nbsp;et&nbsp;connexion</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-import_file_option"><strong>import_file_option</strong></a>(self)</dt><dd><tt>_summary_<br>
+Importation&nbsp;des&nbsp;données&nbsp;de&nbsp;fichier&nbsp;au&nbsp;format&nbsp;xlsx,&nbsp;txt,&nbsp;csv,&nbsp;ods,&nbsp;odf</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-import_folder_option"><strong>import_folder_option</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="controleurToolbar-import_validation"><strong>import_validation</strong></a>(self)</dt><dd><tt>_summary_<br>
+Validation&nbsp;de&nbsp;l'importation&nbsp;des&nbsp;données</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-resolution_option"><strong>resolution_option</strong></a>(self)</dt><dd><tt>_summary_<br>
+Changement&nbsp;de&nbsp;la&nbsp;résolution&nbsp;de&nbsp;la&nbsp;fenêtre&nbsp;principale</tt></dd></dl>
+
+<strong>signal</strong> = &lt;unbound PYQT_SIGNAL signal(QVariantList)&gt;
+<hr>
+Methods inherited from <a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>:<br>
+<dl><dt><a name="controleurToolbar-__getattr__"><strong>__getattr__</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-__getattr__">__getattr__</a>(self,&nbsp;str)&nbsp;-&gt;&nbsp;object</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-blockSignals"><strong>blockSignals</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-blockSignals">blockSignals</a>(self,&nbsp;bool)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-childEvent"><strong>childEvent</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-childEvent">childEvent</a>(self,&nbsp;QChildEvent)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-children"><strong>children</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-children">children</a>(self)&nbsp;-&gt;&nbsp;List[<a href="PyQt6.QtCore.html#QObject">QObject</a>]</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-connectNotify"><strong>connectNotify</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-connectNotify">connectNotify</a>(self,&nbsp;QMetaMethod)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-customEvent"><strong>customEvent</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-customEvent">customEvent</a>(self,&nbsp;QEvent)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-deleteLater"><strong>deleteLater</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-deleteLater">deleteLater</a>(self)</tt></dd></dl>
+
+<strong>destroyed</strong> = &lt;unbound PYQT_SIGNAL destroyed(QObject*)&gt;
+<dl><dt><a name="controleurToolbar-disconnect"><strong>disconnect</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-disconnect">disconnect</a>(QMetaObject.Connection)&nbsp;-&gt;&nbsp;bool<br>
+<a href="#controleurToolbar-disconnect">disconnect</a>(self)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-disconnectNotify"><strong>disconnectNotify</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-disconnectNotify">disconnectNotify</a>(self,&nbsp;QMetaMethod)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-dumpObjectInfo"><strong>dumpObjectInfo</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-dumpObjectInfo">dumpObjectInfo</a>(self)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-dumpObjectTree"><strong>dumpObjectTree</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-dumpObjectTree">dumpObjectTree</a>(self)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-dynamicPropertyNames"><strong>dynamicPropertyNames</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-dynamicPropertyNames">dynamicPropertyNames</a>(self)&nbsp;-&gt;&nbsp;List[QByteArray]</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-event"><strong>event</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-event">event</a>(self,&nbsp;QEvent)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-eventFilter"><strong>eventFilter</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-eventFilter">eventFilter</a>(self,&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a>,&nbsp;QEvent)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-findChild"><strong>findChild</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-findChild">findChild</a>(self,&nbsp;type,&nbsp;name:&nbsp;str&nbsp;=&nbsp;'',&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a><br>
+<a href="#controleurToolbar-findChild">findChild</a>(self,&nbsp;Tuple,&nbsp;name:&nbsp;str&nbsp;=&nbsp;'',&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a></tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-findChildren"><strong>findChildren</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-findChildren">findChildren</a>(self,&nbsp;type,&nbsp;name:&nbsp;str&nbsp;=&nbsp;'',&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;List[<a href="PyQt6.QtCore.html#QObject">QObject</a>]<br>
+<a href="#controleurToolbar-findChildren">findChildren</a>(self,&nbsp;Tuple,&nbsp;name:&nbsp;str&nbsp;=&nbsp;'',&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;List[<a href="PyQt6.QtCore.html#QObject">QObject</a>]<br>
+<a href="#controleurToolbar-findChildren">findChildren</a>(self,&nbsp;type,&nbsp;QRegularExpression,&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;List[<a href="PyQt6.QtCore.html#QObject">QObject</a>]<br>
+<a href="#controleurToolbar-findChildren">findChildren</a>(self,&nbsp;Tuple,&nbsp;QRegularExpression,&nbsp;options:&nbsp;Qt.FindChildOption&nbsp;=&nbsp;Qt.FindChildrenRecursively)&nbsp;-&gt;&nbsp;List[<a href="PyQt6.QtCore.html#QObject">QObject</a>]</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-inherits"><strong>inherits</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-inherits">inherits</a>(self,&nbsp;str)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-installEventFilter"><strong>installEventFilter</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-installEventFilter">installEventFilter</a>(self,&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a>)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-isSignalConnected"><strong>isSignalConnected</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-isSignalConnected">isSignalConnected</a>(self,&nbsp;QMetaMethod)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-isWidgetType"><strong>isWidgetType</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-isWidgetType">isWidgetType</a>(self)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-isWindowType"><strong>isWindowType</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-isWindowType">isWindowType</a>(self)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-killTimer"><strong>killTimer</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-killTimer">killTimer</a>(self,&nbsp;int)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-metaObject"><strong>metaObject</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-metaObject">metaObject</a>(self)&nbsp;-&gt;&nbsp;QMetaObject</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-moveToThread"><strong>moveToThread</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-moveToThread">moveToThread</a>(self,&nbsp;QThread)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-objectName"><strong>objectName</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-objectName">objectName</a>(self)&nbsp;-&gt;&nbsp;str</tt></dd></dl>
+
+<strong>objectNameChanged</strong> = &lt;unbound PYQT_SIGNAL objectNameChanged(QString)&gt;
+<dl><dt><a name="controleurToolbar-parent"><strong>parent</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-parent">parent</a>(self)&nbsp;-&gt;&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a></tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-property"><strong>property</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-property">property</a>(self,&nbsp;str)&nbsp;-&gt;&nbsp;Any</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-pyqtConfigure"><strong>pyqtConfigure</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="PyQt6.QtCore.html#QObject">QObject</a>.<a href="#controleurToolbar-pyqtConfigure">pyqtConfigure</a>(...)<br>
+&nbsp;<br>
+Each&nbsp;keyword&nbsp;argument&nbsp;is&nbsp;either&nbsp;the&nbsp;name&nbsp;of&nbsp;a&nbsp;Qt&nbsp;property&nbsp;or&nbsp;a&nbsp;Qt&nbsp;signal.<br>
+For&nbsp;properties&nbsp;the&nbsp;property&nbsp;is&nbsp;set&nbsp;to&nbsp;the&nbsp;given&nbsp;value&nbsp;which&nbsp;should&nbsp;be&nbsp;of&nbsp;an<br>
+appropriate&nbsp;type.<br>
+For&nbsp;signals&nbsp;the&nbsp;signal&nbsp;is&nbsp;connected&nbsp;to&nbsp;the&nbsp;given&nbsp;value&nbsp;which&nbsp;should&nbsp;be&nbsp;a<br>
+callable.</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-receivers"><strong>receivers</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-receivers">receivers</a>(self,&nbsp;PYQT_SIGNAL)&nbsp;-&gt;&nbsp;int</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-removeEventFilter"><strong>removeEventFilter</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-removeEventFilter">removeEventFilter</a>(self,&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a>)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-sender"><strong>sender</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-sender">sender</a>(self)&nbsp;-&gt;&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a></tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-senderSignalIndex"><strong>senderSignalIndex</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-senderSignalIndex">senderSignalIndex</a>(self)&nbsp;-&gt;&nbsp;int</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-setObjectName"><strong>setObjectName</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-setObjectName">setObjectName</a>(self,&nbsp;str)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-setParent"><strong>setParent</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-setParent">setParent</a>(self,&nbsp;<a href="PyQt6.QtCore.html#QObject">QObject</a>)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-setProperty"><strong>setProperty</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-setProperty">setProperty</a>(self,&nbsp;str,&nbsp;Any)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-signalsBlocked"><strong>signalsBlocked</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-signalsBlocked">signalsBlocked</a>(self)&nbsp;-&gt;&nbsp;bool</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-startTimer"><strong>startTimer</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-startTimer">startTimer</a>(self,&nbsp;int,&nbsp;timerType:&nbsp;Qt.TimerType&nbsp;=&nbsp;Qt.CoarseTimer)&nbsp;-&gt;&nbsp;int</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-thread"><strong>thread</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-thread">thread</a>(self)&nbsp;-&gt;&nbsp;QThread</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-timerEvent"><strong>timerEvent</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-timerEvent">timerEvent</a>(self,&nbsp;QTimerEvent)</tt></dd></dl>
+
+<dl><dt><a name="controleurToolbar-tr"><strong>tr</strong></a>(...)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt><a href="#controleurToolbar-tr">tr</a>(str,&nbsp;disambiguation:&nbsp;str&nbsp;=&nbsp;None,&nbsp;n:&nbsp;int&nbsp;=&nbsp;-1)&nbsp;-&gt;&nbsp;str</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>:<br>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<hr>
+Data and other attributes inherited from <a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>:<br>
+<dl><dt><strong>staticMetaObject</strong> = &lt;PyQt6.QtCore.QMetaObject object&gt;</dl>
+
+<hr>
+Static methods inherited from <a href="PyQt6.sip.html#simplewrapper">PyQt6.sip.simplewrapper</a>:<br>
+<dl><dt><a name="controleurToolbar-__new__"><strong>__new__</strong></a>(*args, **kwargs)<font color="#909090"><font face="helvetica, arial"> from <a href="PyQt6.sip.html#wrappertype">PyQt6.sip.wrappertype</a></font></font></dt><dd><tt>Create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;object.&nbsp;&nbsp;See&nbsp;help(type)&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="PyQt6.sip.html#simplewrapper">PyQt6.sip.simplewrapper</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

@@ -42,6 +42,10 @@ class vueFileviewer(QWidget):
     
     def init_ui(self):
         
+        """_summary_
+        Initialisation de la vue
+        """
+        
         # Layout associé à l'instance de la classe vueFileviewer
         self.vuefileviewer_layout = QVBoxLayout(self)
         

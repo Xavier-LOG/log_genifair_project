@@ -49,6 +49,10 @@ class vueCatalogviewer(QWidget):
     
     def init_ui(self):
 
+        """_summary_
+        Initialisation de la vue
+        """
+
         # Layout associé à l'instance de la classe vueCatalogviewer
         self.vuecatalogviewer_layout = QVBoxLayout(self)
         
@@ -70,6 +74,10 @@ class vueCatalogviewer(QWidget):
     
     
     def connect_signals(self):
+        
+        """_summary_
+        Connexion des signaux
+        """
         
         self.groupbox_searchbar.returnPressed.connect(self.controleurcatalogviewer.find_keyword)
         self.shortcut.activated.connect(self.controleurcatalogviewer.toggle_searchbar)

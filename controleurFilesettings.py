@@ -20,6 +20,10 @@ class controleurFilesettings:
     
     def confirm(self):
         
+        """_summary_
+        Sélection de la limite du nombre de lignes par fichier importé
+        """
+        
         self.vuefilesettings.groupbox_slider.setEnabled(False)
         self.vuefilesettings.groupbox_confirm_button.setEnabled(False)
         self.vuefilesettings.groupbox_cancel_button.setEnabled(True)
@@ -38,6 +42,11 @@ class controleurFilesettings:
     
     def cancel(self):
         
+        """_summary_
+        Réinitialisation
+        """
+        
+        # Réinitialisation
         self.vuefilesettings.groupbox_slider.setEnabled(True)
         self.vuefilesettings.groupbox_confirm_button.setEnabled(True)
         self.vuefilesettings.groupbox_cancel_button.setEnabled(False)

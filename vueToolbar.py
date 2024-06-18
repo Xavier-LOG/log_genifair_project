@@ -43,6 +43,10 @@ class vueToolbar(QToolBar):
     
     def init_ui(self):
         
+        """_summary_
+        Initialisation de la barre d'outils
+        """
+        
         self.controleurtoolbar = controleurToolbar(self)
         
         self.menu_file_button = QPushButton("File")
@@ -75,6 +79,10 @@ class vueToolbar(QToolBar):
         
     
     def connect_signals(self):
+        
+        """_summary_
+        Connexion des signaux
+        """
         
         self.action_file.triggered.connect(self.controleurtoolbar.import_file_option)
         self.action_folder.triggered.connect(self.controleurtoolbar.import_folder_option)
