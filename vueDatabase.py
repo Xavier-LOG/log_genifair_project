@@ -67,6 +67,8 @@ class vueDatabase(QWidget):
         self.groupbox_connection_username_lineedit = QLineEdit()
         self.groupbox_connection_password_lineedit = QLineEdit()
         self.groupbox_connection_checkbox = QCheckBox("Show Password")
+        self.groupbox_connection_key_lineedit = QLineEdit()
+        self.groupbox_connection_key_checkbox = QCheckBox("Key")
         self.groupbox_connection_button = QPushButton("Connect")
         
         self.groupbox_connection_host_lineedit.setPlaceholderText("IP Address")
@@ -74,10 +76,13 @@ class vueDatabase(QWidget):
         self.groupbox_connection_database_name_lineedit.setPlaceholderText("Database Name")
         self.groupbox_connection_username_lineedit.setPlaceholderText("Username")
         self.groupbox_connection_password_lineedit.setPlaceholderText("Password")
+        self.groupbox_connection_key_lineedit.setPlaceholderText("Symmetric Key")
         self.groupbox_connection_host_checkbox.setChecked(True)
         self.groupbox_connection_host_lineedit.setVisible(False)
         self.groupbox_connection_port_checkbox.setChecked(True)
         self.groupbox_connection_port_lineedit.setVisible(False)
+        self.groupbox_connection_key_lineedit.setVisible(False)
+        self.groupbox_connection_key_checkbox.setChecked(False)
         # Configuration de l'affichage du texte en mode mot de passe
         self.groupbox_connection_password_lineedit.setEchoMode(QLineEdit.EchoMode.Password)
         
@@ -89,6 +94,8 @@ class vueDatabase(QWidget):
         self.groupbox_connection_layout.addWidget(self.groupbox_connection_username_lineedit)
         self.groupbox_connection_layout.addWidget(self.groupbox_connection_password_lineedit)
         self.groupbox_connection_layout.addWidget(self.groupbox_connection_checkbox)
+        self.groupbox_connection_layout.addWidget(self.groupbox_connection_key_lineedit)
+        self.groupbox_connection_layout.addWidget(self.groupbox_connection_key_checkbox)
         self.groupbox_connection_layout.addWidget(self.groupbox_connection_button)
         
         self.groupbox_connection.setLayout(self.groupbox_connection_layout)
@@ -157,6 +164,7 @@ class vueDatabase(QWidget):
         self.groupbox_connection_port_checkbox.stateChanged.connect(self.controleurdatabase.toggle_port_visibility)
         self.groupbox_connection_button.clicked.connect(self.controleurdatabase.connect)
         self.groupbox_connection_checkbox.stateChanged.connect(self.controleurdatabase.toggle_password_visibility)
+        self.groupbox_connection_key_checkbox.stateChanged.connect(self.controleurdatabase.toggle_key_visibility)
         self.groupbox_table_confirm_button.clicked.connect(self.controleurdatabase.table_confirm)
         self.groupbox_column_button.clicked.connect(self.controleurdatabase.unselect_all_columns)
         self.groupbox_column_confirm_button.clicked.connect(self.controleurdatabase.column_confirm)
@@ -174,8 +182,6 @@ if __name__ == "__main__":
     
     import sys
     from PyQt6.QtWidgets import QApplication, QMainWindow
-    from vueMainwindow import vueMainwindow
-    from vueToolbar import vueToolbar
     
     app = QApplication(sys.argv)
     mainwindow = QMainWindow()

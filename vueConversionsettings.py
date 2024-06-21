@@ -13,7 +13,7 @@ from controleurConversionsettings import controleurConversionsettings
 
 
 
-from PyQt6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QGroupBox
+from PyQt6.QtWidgets import QWidget, QPushButton, QVBoxLayout, QCheckBox, QGroupBox
 
 
 
@@ -54,8 +54,10 @@ class vueConversionsettings(QWidget):
         self.groupbox_layout = QVBoxLayout()
         
         self.groupbox_convert_button = QPushButton("Convert to NetCDF")
+        self.groupbox_checkbox = QCheckBox("Categorize Columns")
         
         self.groupbox_layout.addWidget(self.groupbox_convert_button)
+        self.groupbox_layout.addWidget(self.groupbox_checkbox)
         self.groupbox.setLayout(self.groupbox_layout)
         
         self.vueconversionsettings_layout.addWidget(self.groupbox)
@@ -68,6 +70,7 @@ class vueConversionsettings(QWidget):
         """
         
         self.groupbox_convert_button.clicked.connect(self.controleurconversionsettings.convert)
+        self.groupbox_checkbox.toggled.connect(self.controleurconversionsettings.set_activation)
 
 
 

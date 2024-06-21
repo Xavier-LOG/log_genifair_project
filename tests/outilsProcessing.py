@@ -10,6 +10,8 @@ import numpy as np
 from datetime import datetime, date, time
 import re
 import json
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 
 
 
@@ -29,18 +31,23 @@ class outilsProcessing:
     # Constructeur par défaut
     
     
-    def __init__(self: Self, controleurlogs, dataframe: pd.DataFrame, xarray_dataset: xr.Dataset, arrangement_path: str):
+    def __init__(self: Self, controleurlogs, dataframe: pd.DataFrame, xarray_dataset: xr.Dataset, arrangement_path: str, activation: bool):
         
         self.controleurlogs = controleurlogs
         self.dataframe: pd.DataFrame = dataframe
         self.xarray_dataset: xr.Dataset = xarray_dataset
         self.arrangement_path: str = arrangement_path
+        self.activation: bool = activation
     
     
     # Définition des méthodes
     
     
     def create_xarray_dataset_dimension(self: Self, arrangement: dict):
+          
+        """_summary_
+        Création des dimensions du dataset xarray
+        """
             
         # Parcours de chaque nom de dimension dans l'agencement
         for dimension_name in arrangement['dimension']:
@@ -55,6 +62,10 @@ class outilsProcessing:
         
 
     def create_xarray_dataset_variable(self: Self, arrangement: dict):
+    
+        """_summary_
+        Création des variables du dataset xarray
+        """
     
         # Initialisation d'un dictionnaire dont chacune de ses clés sera le nom d'une variable et dont chacune de ses valeurs sera une liste d'une ou de plusieurs dimensions de la variable si celles-ci contiennent chacune un tableau de valeurs spécifiques
         specific_dimension_variable_dict: dict = {}
@@ -100,6 +111,10 @@ class outilsProcessing:
 
 
     def insert_bidimensional_variable(self: Self, specific_dimension_variable_dict: dict, arrangement: dict):        
+            
+        """_summary_
+        Insertion des variables bidimensionnelles
+        """
             
         # Initialisation d'une liste de listes dont chacune contiendra le nom de la dimension spécifique commune à une ou plusieurs variables, le nom de la seconde dimension spécifique et son tableau numpy de valeurs
         common_dimension_list = []
@@ -203,6 +218,10 @@ class outilsProcessing:
 
     def create_xarray_dataset_global_attribute(self: Self, arrangement: dict):
     
+        """_summary_
+        Création des attributs globaux du dataset xarray
+        """
+    
         # Parcours de chaque nom d'attribut global dans l'agencement
         for global_attribute_name in arrangement['global_attribute']:
             if global_attribute_name[0] == ":":
@@ -214,6 +233,10 @@ class outilsProcessing:
     
     
     def check_dataframe_integrity(self: Self):
+        
+        """_summary_
+        Vérification de l'intégrité du dataframe
+        """
         
         # Si le dataframe est vide
         if self.dataframe.empty:
@@ -238,7 +261,7 @@ class outilsProcessing:
                         # Si les noms de la variable du fichier netCDF sont renseignés
                         if 'long_name' in self.xarray_dataset[key].attrs.keys() and 'standard_name' in self.xarray_dataset[key].attrs.keys() and 'sdn_parameter_name' in self.xarray_dataset[key].attrs.keys():
                             # Si le type des données du fichier netCDF est bien précisé
-                            if 'dtype' in self.xarray_dataset[key].attrs.keys():
+                            if 'dtype' in self.xarray_dataset[key].attrs.keys() and hasattr(self.dataframe[column], 'dtype'):
                                 # Si le tableau de données est de dimension 1 et si un des mots de la liste des noms possibles de la clé est le nom de la colonne du dataframe
                                 if self.xarray_dataset[key].values.ndim == 1 and outilsProcessing.check_names([self.xarray_dataset[key].attrs['standard_name'], self.xarray_dataset[key].attrs['long_name'], self.xarray_dataset[key].attrs['sdn_parameter_name'], self.xarray_dataset[key].attrs['column_name']], column) == True:
                                     # Si les données de la colonne du dataframe sont du même type que celui des données du fichier netCDF ou si une colonne du dataframe est vide
@@ -471,6 +494,10 @@ class outilsProcessing:
 
 
     def check_datetime_format(self: Self):
+        
+        """_summary_
+        Reformatage des dates
+        """
         
         # Si le dataframe est vide
         if self.dataframe.empty:
@@ -716,12 +743,16 @@ class outilsProcessing:
 
     def adapt_xarray_dataset(self: Self):
         
+        """_summary_
+        Adaptation du dataset xarray
+        """
+        
         # Parcours de chaque clé du dataset xarray
         for key in list(self.xarray_dataset.data_vars.keys()):
             if 'column_name' in self.xarray_dataset[key].attrs.keys():
                 del self.xarray_dataset[key].attrs['column_name']
             # Si le tableau de données de la clé est vide
-            if np.all(self.xarray_dataset[key].values == 0) or np.all(self.xarray_dataset[key].values != self.xarray_dataset[key].values):
+            if np.all(self.xarray_dataset[key].values == 0) or np.all(self.xarray_dataset[key].values == None) or np.all(self.xarray_dataset[key].values == "") or np.all(self.xarray_dataset[key].values != self.xarray_dataset[key].values):
                 # Suppression des attributs de la variable
                 self.xarray_dataset[key].attrs.clear()
                 # Suppression de la variable
@@ -730,11 +761,36 @@ class outilsProcessing:
 
     def create_xarray_dataset(self: Self):
         
+        """_summary_
+        Création du dataset xarray
+        """
+        
         self.xarray_dataset = xr.Dataset()
         
         # Chargement du fichier JSON
         with open(self.arrangement_path, "r") as f:
             arrangement = json.load(f)
+        
+        # Exemple de jeu de données
+        dataset = [
+            {'data': np.random.normal(loc=20, scale=5, size=100), 'label': 'temperature'},
+            {'data': np.random.normal(loc=35, scale=10, size=100), 'label': 'salinity'},
+            {'data': np.random.normal(loc=100, scale=50, size=100), 'label': 'depth'},
+            {'data': np.random.normal(loc=10, scale=3, size=100), 'label': 'longitude'},
+            {'data': np.random.normal(loc=50, scale=20, size=100), 'label': 'latitude'}
+        ]
+
+        # Si tous les noms de colonne du dataframe sont des chaînes de caractères
+        if all(isinstance(column, str) for column in self.dataframe.columns) == True: 
+            # Suppression des colonnes duppliquées du dataframe
+            self.dataframe = self.dataframe.drop(columns = self.dataframe.columns[self.dataframe.columns.duplicated()])
+
+        # Si une ou plusieurs colonnes du dataframe pandas sont sans nom
+        if self.activation == True:
+            # Entraînement du modèle
+            model, X, y = outilsProcessing.train_model(dataset)
+            # Renommage des colonnes sans titre du dataframe
+            self.dataframe = outilsProcessing.rename_dataframe_columns(model, self.dataframe)
         
         self.create_xarray_dataset_dimension(arrangement)
 
@@ -751,6 +807,12 @@ class outilsProcessing:
     
     def get_xarray_dataset(self: Self):
         
+        """_summary_
+        Retourne le dataset xarray
+        Returns:
+            _type_: _description_
+        """
+        
         self.xarray_dataset = outilsProcessing.check_xarray_dataset(self.xarray_dataset)
         
         return self.xarray_dataset
@@ -766,6 +828,13 @@ class outilsProcessing:
     
     @staticmethod
     def get_index_as_int(dataframe: pd.DataFrame, column_name: str):
+        
+        """_summary_
+        Obtenir l'indice entier
+        Returns:
+            _type_: _description_
+        """
+        
         index = dataframe.columns.get_loc(column_name)
         if isinstance(index, int):
             return index
@@ -777,6 +846,12 @@ class outilsProcessing:
 
     @staticmethod
     def check_xarray_dataset(xarray_dataset: xr.Dataset):
+        
+        """_summary_
+        Vérifie et adapte le dataset xarray
+        Returns:
+            _type_: _description_
+        """
         
         # Initialisation d'un dictionnaire qui contiendra les clés sans caractères spéciaux
         new_key_dict = {}
@@ -798,6 +873,12 @@ class outilsProcessing:
     
     @staticmethod
     def check_names(variable_name_list: list[str], column_name: str):
+        
+        """_summary_
+        Vérification des noms de colonne du dataframe
+        Returns:
+            _type_: _description_
+        """
         
         # Si la liste des noms possibles de la variable existe
         if variable_name_list:
@@ -835,6 +916,183 @@ class outilsProcessing:
         return False    
         
 
+    @staticmethod
+    def extract_features(data_list: list):
+        
+        """_summary_
+        Extraction des caractéristiques statistiques d'un tableau numpy de données sous forme d'un ensemble de données
+        Returns:
+            _type_: _description_
+        """
+        
+        # Initialisation d'un ensemble de données statistique contenant les caractéristiques statistiques d'une série de données
+        dataset = {
+            # Moyenne
+            'mean': np.mean(data_list),
+            # Ecart-type
+            'std': np.std(data_list),
+            # Minimum
+            'min': np.min(data_list),
+            # Maximum
+            'max': np.max(data_list),
+            # Domaine de définition
+            'range': np.max(data_list) - np.min(data_list),
+            # Médiane
+            'median': np.median(data_list),
+            # 25ème percentile représente les valeurs en-dessous desquelles se trouvent 25% des données d'un ensemble donné
+            '25_percentile': np.percentile(data_list, 25),
+            # 75ème percentile représente les valeurs en-dessous desquelles se trouvent 75% des données d'un ensemble donné
+            '75_percentile': np.percentile(data_list, 75)
+        }
+        
+        # Retourne l'ensemble de données statistique
+        return dataset
+    
+    
+    @staticmethod
+    def train_model(dataset: list):
+        
+        """_summary_
+        Entraînement d'un modèle RandomForestClassifier 
+        Returns:
+            _type_: _description_
+        """
+        
+        # Initialisation d'une variable représentant la liste des caractéristiques
+        features = []
+        # Initialisation d'une variable représentant la liste des labels
+        labels = []
+        # Pour chaque clé de l'ensemble de données d'entraînement
+        for key in dataset:
+            # Ajout de l'ensemble de données statistique associé à la liste de valeurs de l'ensemble de données d'entraînement
+            # key['data'] représente la liste de valeurs de l'ensemble de données d'entraînement
+            features.append(outilsProcessing.extract_features(key['data']))
+            # Ajout du label à la liste des labels associée à chaque liste de valeurs de l'ensemble de données d'entraînement
+            labels.append(key['label'])
+
+        # Initialisation d'un dataframe contenant la liste des ensembles de données statistiques de chaque liste de valeurs de l'ensemble de données d'entraînement
+        dataframe = pd.DataFrame(features)
+        # Ajout de la colonne label contenant la liste des labels associée à chaque liste de valeurs de l'ensemble de données d'entraînement
+        dataframe['label'] = labels
+
+        # Initialisation d'un dataframe contenant toutes les colonnes sauf la colonne label
+        X = dataframe.drop('label', axis=1)
+        # Initialisation d'un dataframe contenant la colonne des labels
+        y = dataframe['label']
+
+        # Etape 1 : Mélange des données de l'ensemble X et de l'ensemble y de façon aléatoire (random_state). Une séquence de données mélangées aléatoirement est obtenue pour l'ensemble X et pour l'ensemble y. La valeur de random_state donne une séquence spécifique de données mélangées aléatoirement.
+        # Etape 2 : Pour chacune des 2 séquences, une partie des données (80%) est mise de côté pour former l'ensemble d'entraînement, et une autre partie (20%) est mise de côté pour former l'ensemble de test. On obtient donc X_train et X_test pour la séquence de l'ensemble X, et y_train et y_test pour la séquence de l'ensemble y.
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+        
+        # RandomForestClassifier est un algorithme qui classifie les données
+        # Initialisation d'une forêt de 100 arbres (n_estimators = 100) sans noeuds définis construit sur une reproductibilité aléatoire (random_state = 42)
+        model = RandomForestClassifier(n_estimators = 100, random_state = 42, max_depth = 30)
+        
+        """
+        1. Initialisation d’une forêt contenant 100 arbres sans nœuds.
+
+        2. Pour chaque arbre de la forêt :
+
+	        2.1. Création d’un sous-ensemble aléatoire (appelé sub_X_train) de X_train avec remise (certaines données peuvent être sélectionnées plusieurs fois, tandis que d'autres peuvent ne pas être sélectionnées du tout). De manière générale, chaque arbre possède donc un sous-ensemble différent.
+
+	        2.2. Pour le premier nœud de l’abre :
+
+		        2.2.1. Création d’un sous ensemble aléatoire (appelé sub_X_features) de l’ensemble des caractéristiques de X, puis tirage de la meilleure caractéristique selon un critère de l’algorithme RandomForestClassifier. Ce sous-ensemble ne contient pas de doublons et est de taille racine(p), où p est la taille de l’ensemble des caractéristiques de X.
+	
+		        2.2.2. Calcul des valeurs seuils candidates en prenant la médiane entre chaque paire de valeurs consécutives dans le sous-ensemble sub_X_train.
+
+		        2.2.3. Choix de la meilleure valeur seuil parmi ces valeurs en utilisant l’indice de Gini.
+
+		        2.2.4. Ajout d’un opérateur (≤ ou ≥) entre cette caractéristique et cette valeur seuil. De manière générale, une condition vient d’être créée pour ce nœud.
+
+		        2.2.5. Création d’une feuille à gauche et d’une feuille à droite à partir de cette condition.
+
+		        2.2.6. Répartition des données du sous-ensemble sub_X_train dans les feuilles gauche et droite suivant cette condition. De manière générale, deux nouveaux sous-ensembles (sub_sub_X_train₁ et sub_sub_X_train₂) viennent d’être créés respectivement pour les deux feuilles.
+
+		        2.2.7. Pour chaque feuille :
+
+			        2.2.7.1. A partir de y_train, comptage du nombre de données de ce nouveau sous-ensemble qui sont de la même catégorie.
+
+			        2.2.7.2. Si toutes ces données ne sont pas de la même catégorie, ou si elles ne sont pas majoraitement de la même catégorie, ou si une 	profondeur maximale (définie ou non à l’étape 1) n’a pas été atteint, la feuille devient un nouveau nœud et il faut répéter les étapes 2.2.7.3 à 2.2.7.3.7.2. Sinon, passer à l’étape 3.
+
+			        2.2.7.3. Pour le nouveau nœud :
+
+				        2.2.7.3.1. Création d’un sous-ensemble aléatoire de l’ensemble des caractéristiques de X, puis tirage de la meilleure caractéristique selon un critère de l’algorithme RandomForestClassifier. Ce sous-ensemble ne contient pas de doublons et est de taille racine(p), où p est la taille de l’ensemble des caractéristiques de X.
+
+				        2.2.7.3.2. Calcul des valeurs seuils candidates en prenant la médiane entre chaque paire de valeurs consécutives dans le sous- ensemble sub_sub_X_traini.
+
+				        2.2.7.3.3. Choix de la meilleure valeur seuil parmi ces valeurs en utilisant l’indice de Gini.
+
+				        2.2.7.3.4. Ajout d’un opérateur (≤ ou ≥) entre cette caractéristique et cette valeur seuil. De manière générale, une condition vient d’être créée pour ce nœud.
+
+				        2.2.7.3.5. Création d’une feuille à gauche et d’une feuille à droite à partir de cette condition.
+
+				        2.2.6.3.6. Répartition des données du sous-ensemble sub_sub_X_traini dans les feuilles gauche et droite suivant cette condition. De manière générale, deux nouveaux sous-ensembles (sub_sub_sub_X_train₁ et sub_sub_sub_X_train₂) viennent d’être créés respectivement pour les deux feuilles.
+
+				        2.2.7.3.7. Pour chaque feuille :
+
+					        2.2.7.3.7.1. A partir de y_train, comptage du nombre de données de ce nouveau sous-ensemble qui sont de la même catégorie.
+
+					        2.2.7.3.7.2. Si toutes ces données ne sont pas de la même catégorie, ou si elles ne sont pas majoritairement de la même catégorie, ou si une profondeur maximale (définie ou non à l’étape 1) n’a pas été atteint, la feuille devient un nouveau nœud et il faut répéter les étapes 2.2.7.3 à 2.2.7.3.7.2. Sinon, passer à l’étape 3.
+        """
+        model.fit(X_train, y_train)
+
+        # Retourne le modèle et les dataframes
+        return model, X, y
+
+
+    @staticmethod
+    def rename_dataframe_columns(model: RandomForestClassifier, dataframe: pd.DataFrame):
+        
+        """_summary_
+        Renommage des colonnes sans nom du dataframe pandas en prédisant la catégorie de données
+        Returns:
+            _type_: _description_
+        """
+
+        # Parcours du dataframe
+        for column in dataframe.columns:
+            # Si la colonne du dataframe n'existe pas
+            if isinstance(column, int) or column == "" or column == None or re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith("unnamed") or re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().endswith("unnamed"):
+                # Si toutes les valeurs de la colonne du dataframe sont des entiers ou des flottants
+                if all(isinstance(value, int) for value in dataframe[column]) or all(isinstance(value, float) for value in dataframe[column]):
+                    # Extraction des caractéristiques statistiques de la colonne sans nom du dataframe
+                    features = outilsProcessing.extract_features(dataframe[column].to_list())
+                    # Conversion des caractéristiques statistiques en dataframe pandas
+                    features_dataframe = pd.DataFrame([features])
+                    """
+                    3. Si un nouvel ensemble (appelé new_X) est inséré dans la forêt, pour chaque arbre construit :
+
+	                    3.1. Insertion des données d’un nouvel ensemble (appelé new_X) dans l’arbre. Chaque donnée de l'ensemble new_X suit le chemin à travers l'arbre selon les règles de division définies par les caractéristiques et les valeurs seuils. Elle finit par atteindre une feuille spécifique de l'arbre. 
+
+	                    3.2. Comptage des données de chaque feuille. La feuille avec le plus de données est la 	catégorie majoritaire.
+
+	                    3.3. Si tous les arbres n’ont pas été faits, répéter les étapes 3.1. à 3.3. Sinon, passer à l’étape 4.
+
+                    4. Comptage de la catégorie sortie de chaque arbre. La catégorie majoritaire est la catégorie prédite par la forêt.
+                    """
+                    # Prédiction de la catégorie de la colonne à partir des caractéristiques statistiques
+                    prediction = model.predict(features_dataframe)[0]
+
+                    # Si la prédiction est une chaîne de caractères
+                    if isinstance(prediction, str):
+                        # Si la colonne sans nom contient une série d'entiers consécutifs
+                        if all(value1 == value2 for value1, value2 in zip(dataframe[column].to_list(), list(range(len(dataframe.index) + 1)))):
+                            # Suppression de la colonne sans nom
+                            dataframe = dataframe.drop(columns = column)
+                        # Si la catégorie prédite n'est pas dans la liste des noms de colonne filtrés du dataframe
+                        elif not [column for column in dataframe.columns.to_list() if prediction.startswith(re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower()) or prediction.endswith(re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower())]:
+                            # Renommage de la colonne sans nom du dataframe
+                            dataframe = dataframe.rename(columns={column: prediction})
+                        # Sinon
+                        else:
+                            # Suppression de la colonne sans nom
+                            dataframe = dataframe.drop(columns = column)
+        
+        # Retourne le dataframe actualisé
+        return dataframe
+
+
 
 
 # Programme principal
@@ -851,7 +1109,7 @@ if __name__ == '__main__':
     from vueToolbar import vueToolbar
     import sys
     from PyQt6.QtWidgets import QApplication
-    
+
     app = QApplication(sys.argv)
     vuemainwindow = vueMainwindow()
     
@@ -867,7 +1125,7 @@ if __name__ == '__main__':
     
     # Initialisation du chemin
     arrangement_path = './trajectory_catalog.json'
-    
-    xarray_dataset = outilsProcessing(controleurlogs, dataframe, xr.Dataset(), arrangement_path)
+
+    xarray_dataset = outilsProcessing(None, dataframe, xr.Dataset(), arrangement_path, True)
     xarray_dataset.create_xarray_dataset()
     xarray_dataset.__repr__()

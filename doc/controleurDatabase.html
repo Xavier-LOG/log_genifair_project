@@ -17,9 +17,10 @@
 <font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="base64.html">base64</a><br>
+</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
 </td><td width="25%" valign=top><a href="psycopg2.html">psycopg2</a><br>
-</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -81,6 +82,9 @@ Dégrisage&nbsp;de&nbsp;la&nbsp;confirmation&nbsp;de&nbsp;la&nbsp;sélection&nbs
 <dl><dt><a name="controleurDatabase-toggle_host_visibility"><strong>toggle_host_visibility</strong></a>(self)</dt><dd><tt>_summary_<br>
 Gestion&nbsp;de&nbsp;la&nbsp;visibilité&nbsp;de&nbsp;la&nbsp;ligne&nbsp;de&nbsp;saisie&nbsp;pour&nbsp;saisir&nbsp;l'adresse&nbsp;IP</tt></dd></dl>
 
+<dl><dt><a name="controleurDatabase-toggle_key_visibility"><strong>toggle_key_visibility</strong></a>(self)</dt><dd><tt>_summary_<br>
+Gestion&nbsp;de&nbsp;la&nbsp;visibilité&nbsp;de&nbsp;la&nbsp;ligne&nbsp;de&nbsp;saisie&nbsp;pour&nbsp;saisir&nbsp;la&nbsp;clé</tt></dd></dl>
+
 <dl><dt><a name="controleurDatabase-toggle_password_visibility"><strong>toggle_password_visibility</strong></a>(self)</dt><dd><tt>_summary_<br>
 Gestion&nbsp;de&nbsp;la&nbsp;visibilité&nbsp;du&nbsp;mot&nbsp;de&nbsp;passe&nbsp;de&nbsp;l'utilisateur</tt></dd></dl>
 
@@ -89,6 +93,18 @@ Gestion&nbsp;de&nbsp;la&nbsp;visibilité&nbsp;de&nbsp;la&nbsp;ligne&nbsp;de&nbsp
 
 <dl><dt><a name="controleurDatabase-unselect_all_columns"><strong>unselect_all_columns</strong></a>(self)</dt><dd><tt>_summary_<br>
 Décochage&nbsp;de&nbsp;toutes&nbsp;les&nbsp;cases&nbsp;cochées</tt></dd></dl>
+
+<hr>
+Static methods defined here:<br>
+<dl><dt><a name="controleurDatabase-decrypt_data"><strong>decrypt_data</strong></a>(encrypted_data, key)</dt><dd><tt>_summary_<br>
+Décryptage&nbsp;de&nbsp;la&nbsp;donnée&nbsp;chiffrée&nbsp;avec&nbsp;la&nbsp;clé<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
+
+<dl><dt><a name="controleurDatabase-is_encrypted"><strong>is_encrypted</strong></a>(data)</dt><dd><tt>_summary_<br>
+Vérification&nbsp;de&nbsp;la&nbsp;donnée<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="PyQt6.QtCore.html#QObject">PyQt6.QtCore.QObject</a>:<br>

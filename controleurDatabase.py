@@ -7,6 +7,8 @@ import psycopg2
 import pandas as pd
 from PyQt6.QtWidgets import QLineEdit, QCheckBox
 from PyQt6.QtCore import QObject, pyqtSignal
+from cryptography.fernet import Fernet
+import base64
 
 
 
@@ -29,6 +31,7 @@ class controleurDatabase(QObject):
         
         super().__init__()
         self.vuedatabase = vuedatabase
+        self.key = ""
         self.connection = None
         self.cursor = None
         self.table_dict = {}
@@ -85,6 +88,22 @@ class controleurDatabase(QObject):
             self.vuedatabase.groupbox_connection_password_lineedit.setEchoMode(QLineEdit.EchoMode.Password)
 
 
+    def toggle_key_visibility(self):
+        
+        """_summary_
+        Gestion de la visibilité de la ligne de saisie pour saisir la clé
+        """
+        
+        # Si le port est décoché
+        if self.vuedatabase.groupbox_connection_key_checkbox.isChecked() == True:
+            # Affichage de la ligne de saisie pour saisir la clé
+            self.vuedatabase.groupbox_connection_key_lineedit.setVisible(True)
+        # Sinon
+        else:
+            # La ligne de saisie pour saisir la clé reste cachée
+            self.vuedatabase.groupbox_connection_key_lineedit.setVisible(False)
+
+
     def connect(self):
 
         """_summary_
@@ -101,6 +120,10 @@ class controleurDatabase(QObject):
             if self.vuedatabase.groupbox_connection_port_checkbox.isChecked() == True:
                 # Le port par défaut est 5432
                 port_variable = "5432"
+            # Si la clé est cochée
+            if self.vuedatabase.groupbox_connection_key_checkbox.isChecked() == True:
+                # Clé
+                self.key = self.vuedatabase.groupbox_connection_key_lineedit.text()
             
             # Connexion à la base de données
             self.connection = psycopg2.connect(
@@ -262,7 +285,7 @@ class controleurDatabase(QObject):
         self.vuedatabase.groupbox_table.setEnabled(False)
         self.vuedatabase.groupbox_button.setEnabled(True)
     
-    
+        
     def import_data(self):
     
         """_summary_
@@ -293,8 +316,17 @@ class controleurDatabase(QObject):
                     filtered_row = []
                     # Parcours de chaque valeur de la ligne
                     for value in row:
+                        # Si la valeur est une chaîne de caractères et qu'elle est cryptée
+                        if isinstance(value, str) and controleurDatabase.is_encrypted(value):
+                            # Décryptage de la valeur
+                            decrypted_value = controleurDatabase.decrypt_data(value.encode(), self.key)
+                            # Ajout de la valeur dans la ligne filtrée
+                            filtered_row.append(decrypted_value)
                         # Si la valeur n'est pas un tableau
-                        if not (isinstance(value, list) or isinstance(value, tuple)):
+                        elif (isinstance(value, list) or isinstance(value, tuple)):
+                            filtered_row.append(None)
+                        # Sinon
+                        else:
                             # Ajout de la valeur dans la ligne filtrée
                             filtered_row.append(value)
                     # Conversion de la ligne filtrée en tuple
@@ -313,4 +345,43 @@ class controleurDatabase(QObject):
     
         # Fermeture de la vue    
         self.vuedatabase.close()
+    
+    
+    # Définition des méthodes statiques
+    
+    
+    @staticmethod
+    def decrypt_data(encrypted_data, key):
+    
+        """_summary_
+        Décryptage de la donnée chiffrée avec la clé
+        Returns:
+            _type_: _description_
+        """
+        
+        # Création de l'objet Fernet avec la clé de décryptage fournie pour préparer l'objet afin de déchiffrer la donnée chiffrée
+        fernet = Fernet(key)
+        # Déchiffrage de la donnée chiffrée avec la méthode decrypt de l'objet fernet et conversion en chaîne de caractères
+        decrypted_data = fernet.decrypt(encrypted_data).decode()
+        
+        # Retourne la donnée décryptée
+        return decrypted_data
+
+
+    @staticmethod
+    def is_encrypted(data):
+    
+        """_summary_
+        Vérification de la donnée
+        Returns:
+            _type_: _description_
+        """
+    
+        try:
+            # Si la donnée est encodée en base64 et si elle a une longueur attendue
+            base64_bytes = base64.b64decode(data, validate=True)
+            # Retourne la longueur
+            return len(base64_bytes) > 0
+        except Exception:
+            return False
     

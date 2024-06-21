@@ -67,19 +67,11 @@ class controleurToolbar(QObject):
     def import_check(self, file_path, dataframe):
         
         """_summary_
-        Vérification de l'importation et suppression des colonnes du dataframe dont le nom de colonne est duppliqué
+        Vérification de l'importation
         """
         
-        # Si tous les noms de colonne du dataframe sont des chaînes de caractères
-        if all(isinstance(column, str) for column in dataframe.columns) == True: 
-            # Suppression des colonnes du dataframe dont le nom de colonne est duppliqué
-            dataframe = dataframe.drop(columns = dataframe.columns[dataframe.columns.duplicated()])
-            self.file_list.append(str(file_path))
-            self.dataframe_list.append(dataframe)
-        # Sinon le chemin du fichier et le dataframe sont ignorés
-        else:
-            self.vuetoolbar.vuemainwindow.vuelogs.controleurlogs.add_log("Column name must be a string. Dataframe will be cleared.\n")
-            self.vuetoolbar.vuemainwindow.vuelogs.controleurlogs.add_colored_log("Column name must be a string. Dataframe will be cleared.\n", "red")
+        self.file_list.append(str(file_path))
+        self.dataframe_list.append(dataframe)
 
 
     def import_validation(self):

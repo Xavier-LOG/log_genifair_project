@@ -1,5 +1,8 @@
 {
     "dimension": {
+        "Station": {
+            "values": []
+        },
         "Sample": {
             "values": []
         }
@@ -17,17 +20,499 @@
                 ":standard_name": "sample",
                 ":long_name": "Sample",
                 ":sdn_parameter_name": "sample",
-                ":sdn_parameter_urn": "urn:sdn:parameter:sample",
+                ":sdn_paramter_urn": "urn:sdn:parameter:sample",
                 "column_name": "sample"
+            }
+        },
+        "id_station": {
+            "dimension": [
+                "Station"
+            ],
+            "attribute": {
+                ":dtype": "int64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "urn:sdn:parameter:NaN",
+                ":standard_name": "id_station",
+                ":long_name": "Id station",
+                ":sdn_parameter_name": "id_station",
+                ":sdn_paramter_urn": "urn:sdn:parameter:id_station",
+                "column_name": "id_station"
+            }
+        },
+        "t": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "t",
+                ":long_name": "T",
+                ":sdn_parameter_name": "t",
+                ":sdn_paramter_urn": "urn:sdn:parameter:t",
+                "column_name": "t"
+            }
+        },
+        "sal": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "sal",
+                ":long_name": "Sal",
+                ":sdn_parameter_name": "sal",
+                ":sdn_paramter_urn": "urn:sdn:parameter:sal",
+                "column_name": "sal"
+            }
+        },
+        "fluo_chl": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "fluo_chl",
+                ":long_name": "Fluo chl",
+                ":sdn_parameter_name": "fluo_chl",
+                ":sdn_paramter_urn": "urn:sdn:parameter:fluo_chl",
+                "column_name": "fluo_chl"
+            }
+        },
+        "cstar_c": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "cstar_c",
+                ":long_name": "Cstar c",
+                ":sdn_parameter_name": "cstar_c",
+                ":sdn_paramter_urn": "urn:sdn:parameter:cstar_c",
+                "column_name": "cstar_c"
+            }
+        },
+        "vsf_bbr": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "vsf_bbr",
+                ":long_name": "Vsf bbr",
+                ":sdn_parameter_name": "vsf_bbr",
+                ":sdn_paramter_urn": "urn:sdn:parameter:vsf_bbr",
+                "column_name": "vsf_bbr"
+            }
+        },
+        "vsf_bbg": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "vsf_bbg",
+                ":long_name": "Vsf bbg",
+                ":sdn_parameter_name": "vsf_bbg",
+                ":sdn_paramter_urn": "urn:sdn:parameter:vsf_bbg",
+                "column_name": "vsf_bbg"
+            }
+        },
+        "bp": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "bp",
+                ":long_name": "Bp",
+                ":sdn_parameter_name": "bp",
+                ":sdn_paramter_urn": "urn:sdn:parameter:bp",
+                "column_name": "bp"
+            }
+        },
+        "bbp_bp": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "bbp_bp",
+                ":long_name": "Bbp bp",
+                ":sdn_parameter_name": "bbp_bp",
+                ":sdn_paramter_urn": "urn:sdn:parameter:bbp_bp",
+                "column_name": "bbp_bp"
+            }
+        },
+        "gamma_bbp": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "gamma_bbp",
+                ":long_name": "Gamma bbp",
+                ":sdn_parameter_name": "gamma_bbp",
+                ":sdn_paramter_urn": "urn:sdn:parameter:gamma_bbp",
+                "column_name": "gamma_bbp"
+            }
+        },
+        "pression": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "pression",
+                ":long_name": "Pression",
+                ":sdn_parameter_name": "pression",
+                ":sdn_paramter_urn": "urn:sdn:parameter:pression",
+                "column_name": "pression"
+            }
+        },
+        "beta_vsfr": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "beta_vsfr",
+                ":long_name": "Beta vsfr",
+                ":sdn_parameter_name": "beta_vsfr",
+                ":sdn_paramter_urn": "urn:sdn:parameter:beta_vsfr",
+                "column_name": "beta_vsfr"
+            }
+        },
+        "beta_vsfg": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "beta_vsfg",
+                ":long_name": "Beta vsfg",
+                ":sdn_parameter_name": "beta_vsfg",
+                ":sdn_paramter_urn": "urn:sdn:parameter:beta_vsfg",
+                "column_name": "beta_vsfg"
+            }
+        },
+        "fluo_cdom": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "float64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "fluo_cdom",
+                ":long_name": "Fluo cdom",
+                ":sdn_parameter_name": "fluo_cdom",
+                ":sdn_paramter_urn": "urn:sdn:parameter:fluo_cdom",
+                "column_name": "fluo_cdom"
+            }
+        },
+        "time": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":axis": "T",
+                ":coverage_content_type": "coordinate",
+                ":dtype": "object",
+                ":units": "seconds since 1970-01-01 00:00:00",
+                ":origin": "01-JAN-1970 00:00:00",
+                ":calendar": "standard",
+                ":sdn_uom_name": "seconds",
+                ":sdn_uom_urn": "SDN:P06::UTBB",
+                ":standard_name": "time",
+                ":long_name": "Time",
+                ":sdn_parameter_name": "Elapsed time relative to 1970-01-01T00:00:00Z",
+                ":sdn_paramter_urn": "SDN:P01::ELTMEP01",
+                "column_name": "datetime"
+            }
+        },
+        "sens": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "int64",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "sens",
+                ":long_name": "Sens",
+                ":sdn_parameter_name": "sens",
+                ":sdn_paramter_urn": "urn:sdn:parameter:sens",
+                "column_name": "sens"
+            }
+        },
+        "bb9_beta": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "bb9_beta",
+                ":long_name": "Bb9 beta",
+                ":sdn_parameter_name": "bb9_beta",
+                ":sdn_paramter_urn": "urn:sdn:parameter:bb9_beta",
+                "column_name": "bb9_beta"
+            }
+        },
+        "bb9_bbp": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "bb9_bbp",
+                ":long_name": "Bb9 bbp",
+                ":sdn_parameter_name": "bb9_bbp",
+                ":sdn_paramter_urn": "urn:sdn:parameter:bb9_bbp",
+                "column_name": "bb9_bbp"
+            }
+        },
+        "acs_tab_c": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "acs_tab_c",
+                ":long_name": "Acs tab c",
+                ":sdn_parameter_name": "acs_tab_c",
+                ":sdn_paramter_urn": "urn:sdn:parameter:acs_tab_c",
+                "column_name": "acs_tab_c"
+            }
+        },
+        "acs_tab_a": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "acs_tab_a",
+                ":long_name": "Acs tab a",
+                ":sdn_parameter_name": "acs_tab_a",
+                ":sdn_paramter_urn": "urn:sdn:parameter:acs_tab_a",
+                "column_name": "acs_tab_a"
+            }
+        },
+        "qualite": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "qualite",
+                ":long_name": "Qualite",
+                ":sdn_parameter_name": "qualite",
+                ":sdn_paramter_urn": "urn:sdn:parameter:qualite",
+                "column_name": "qualite"
+            }
+        },
+        "acs_tab_ccor": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "acs_tab_ccor",
+                ":long_name": "Acs tab ccor",
+                ":sdn_parameter_name": "acs_tab_ccor",
+                ":sdn_paramter_urn": "urn:sdn:parameter:acs_tab_ccor",
+                "column_name": "acs_tab_ccor"
+            }
+        },
+        "acs_tab_acor": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "acs_tab_acor",
+                ":long_name": "Acs tab acor",
+                ":sdn_parameter_name": "acs_tab_acor",
+                ":sdn_paramter_urn": "urn:sdn:parameter:acs_tab_acor",
+                "column_name": "acs_tab_acor"
+            }
+        },
+        "gamma_bp": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "gamma_bp",
+                ":long_name": "Gamma bp",
+                ":sdn_parameter_name": "gamma_bp",
+                ":sdn_paramter_urn": "urn:sdn:parameter:gamma_bp",
+                "column_name": "gamma_bp"
+            }
+        },
+        "gamma_cp": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "gamma_cp",
+                ":long_name": "Gamma cp",
+                ":sdn_parameter_name": "gamma_cp",
+                ":sdn_paramter_urn": "urn:sdn:parameter:gamma_cp",
+                "column_name": "gamma_cp"
+            }
+        },
+        "acs_tab_bcor": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "acs_tab_bcor",
+                ":long_name": "Acs tab bcor",
+                ":sdn_parameter_name": "acs_tab_bcor",
+                ":sdn_paramter_urn": "urn:sdn:parameter:acs_tab_bcor",
+                "column_name": "acs_tab_bcor"
+            }
+        },
+        "turbi_stm": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "turbi_stm",
+                ":long_name": "Turbi stm",
+                ":sdn_parameter_name": "turbi_stm",
+                ":sdn_paramter_urn": "urn:sdn:parameter:turbi_stm",
+                "column_name": "turbi_stm"
+            }
+        },
+        "eco3_bbp": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "eco3_bbp",
+                ":long_name": "Eco3 bbp",
+                ":sdn_parameter_name": "eco3_bbp",
+                ":sdn_paramter_urn": "urn:sdn:parameter:eco3_bbp",
+                "column_name": "eco3_bbp"
+            }
+        },
+        "eco3_beta": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "eco3_beta",
+                ":long_name": "Eco3 beta",
+                ":sdn_parameter_name": "eco3_beta",
+                ":sdn_paramter_urn": "urn:sdn:parameter:eco3_beta",
+                "column_name": "eco3_beta"
+            }
+        },
+        "eco3_cdom": {
+            "dimension": [
+                "Sample"
+            ],
+            "attribute": {
+                ":dtype": "object",
+                ":units": "NaN",
+                ":sdn_uom_name": "NaN",
+                ":sdn_uom_urn": "NaN",
+                ":standard_name": "eco3_cdom",
+                ":long_name": "Eco3 cdom",
+                ":sdn_parameter_name": "eco3_cdom",
+                ":sdn_paramter_urn": "urn:sdn:parameter:eco3_cdom",
+                "column_name": "eco3_cdom"
             }
         }
     },
     "global_attribute": {
         ":_FillValue": "NaN",
-        ":coordinates": "Sample",
-        ":date_created": "NaN",
-        ":title": "Sample",
         ":project": "NaN",
+        ":coordinates": "Station, Sample",
         ":Conventions": "CF-1.6, SeaDataNet_1.0",
         ":institution": "LOG Wimereux",
         ":source": "NaN",
@@ -46,6 +531,8 @@
         ":history": "NaN",
         ":creator_email": "NaN",
         ":creator_name": "NaN",
-        ":creator_url": "NaN"
+        ":creator_url": "NaN",
+        ":title": "Sample",
+        ":date_created": "2024/06/21 12:19:03"
     }
 }

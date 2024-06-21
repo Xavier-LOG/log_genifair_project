@@ -36,9 +36,22 @@ class controleurConversionsettings:
         
         super().__init__()
         self.vueconversionsettings = vueconversionsettings
+        self.activation = False
     
     
     # Définition des méthodes
+    
+    
+    def set_activation(self):
+        
+        """_summary_
+        Activation de la vérification des catégories
+        """
+        
+        if self.vueconversionsettings.groupbox_checkbox.isChecked():
+            self.activation = True
+        else:
+            self.activation = False
     
     
     def convert(self):
@@ -59,7 +72,7 @@ class controleurConversionsettings:
                     dataframe = self.vueconversionsettings.vueconversion.vuemainwindow.vuetoolbar.controleurtoolbar.dataframe_list[i]
                     catalog_path = self.vueconversionsettings.vueconversion.vuemainwindow.vuecatalog.modelecatalog.path_list_files[0]
                     # Initialisation du dataset xarray à partir de l'outil de traitement
-                    xarray_dataset = outilsProcessing(controleurlogs, dataframe, xr.Dataset(), catalog_path)
+                    xarray_dataset = outilsProcessing(controleurlogs, dataframe, xr.Dataset(), catalog_path, self.activation)
                     # Création du dataset xarray
                     xarray_dataset.create_xarray_dataset()
                     # Si le dataset xarray existe

@@ -44,40 +44,75 @@
 <font color="#000000" face="helvetica, arial"><a name="outilsProcessing">class <strong>outilsProcessing</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt><a href="#outilsProcessing">outilsProcessing</a>(controleurlogs,&nbsp;dataframe:&nbsp;pandas.core.frame.DataFrame,&nbsp;xarray_dataset:&nbsp;xarray.core.dataset.Dataset,&nbsp;arrangement_path:&nbsp;str)<br>
+<td colspan=2><tt><a href="#outilsProcessing">outilsProcessing</a>(controleurlogs,&nbsp;dataframe:&nbsp;pandas.core.frame.DataFrame,&nbsp;xarray_dataset:&nbsp;xarray.core.dataset.Dataset,&nbsp;arrangement_path:&nbsp;str,&nbsp;activation:&nbsp;bool)<br>
 &nbsp;<br>
 <br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="outilsProcessing-__init__"><strong>__init__</strong></a>(self: typing_extensions.Self, controleurlogs, dataframe: pandas.core.frame.DataFrame, xarray_dataset: xarray.core.dataset.Dataset, arrangement_path: str)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="outilsProcessing-__init__"><strong>__init__</strong></a>(self: typing_extensions.Self, controleurlogs, dataframe: pandas.core.frame.DataFrame, xarray_dataset: xarray.core.dataset.Dataset, arrangement_path: str, activation: bool)</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
 
 <dl><dt><a name="outilsProcessing-__repr__"><strong>__repr__</strong></a>(self: typing_extensions.Self)</dt><dd><tt>Return&nbsp;repr(self).</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-adapt_xarray_dataset"><strong>adapt_xarray_dataset</strong></a>(self: typing_extensions.Self)</dt></dl>
+<dl><dt><a name="outilsProcessing-adapt_xarray_dataset"><strong>adapt_xarray_dataset</strong></a>(self: typing_extensions.Self)</dt><dd><tt>_summary_<br>
+Adaptation&nbsp;du&nbsp;dataset&nbsp;xarray</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-check_dataframe_integrity"><strong>check_dataframe_integrity</strong></a>(self: typing_extensions.Self)</dt></dl>
+<dl><dt><a name="outilsProcessing-check_dataframe_integrity"><strong>check_dataframe_integrity</strong></a>(self: typing_extensions.Self)</dt><dd><tt>_summary_<br>
+Vérification&nbsp;de&nbsp;l'intégrité&nbsp;du&nbsp;dataframe</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-check_datetime_format"><strong>check_datetime_format</strong></a>(self: typing_extensions.Self)</dt></dl>
+<dl><dt><a name="outilsProcessing-check_datetime_format"><strong>check_datetime_format</strong></a>(self: typing_extensions.Self)</dt><dd><tt>_summary_<br>
+Reformatage&nbsp;des&nbsp;dates</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-create_xarray_dataset"><strong>create_xarray_dataset</strong></a>(self: typing_extensions.Self)</dt></dl>
+<dl><dt><a name="outilsProcessing-create_xarray_dataset"><strong>create_xarray_dataset</strong></a>(self: typing_extensions.Self)</dt><dd><tt>_summary_<br>
+Création&nbsp;du&nbsp;dataset&nbsp;xarray</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-create_xarray_dataset_dimension"><strong>create_xarray_dataset_dimension</strong></a>(self: typing_extensions.Self, arrangement: dict)</dt></dl>
+<dl><dt><a name="outilsProcessing-create_xarray_dataset_dimension"><strong>create_xarray_dataset_dimension</strong></a>(self: typing_extensions.Self, arrangement: dict)</dt><dd><tt>_summary_<br>
+Création&nbsp;des&nbsp;dimensions&nbsp;du&nbsp;dataset&nbsp;xarray</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-create_xarray_dataset_global_attribute"><strong>create_xarray_dataset_global_attribute</strong></a>(self: typing_extensions.Self, arrangement: dict)</dt></dl>
+<dl><dt><a name="outilsProcessing-create_xarray_dataset_global_attribute"><strong>create_xarray_dataset_global_attribute</strong></a>(self: typing_extensions.Self, arrangement: dict)</dt><dd><tt>_summary_<br>
+Création&nbsp;des&nbsp;attributs&nbsp;globaux&nbsp;du&nbsp;dataset&nbsp;xarray</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-create_xarray_dataset_variable"><strong>create_xarray_dataset_variable</strong></a>(self: typing_extensions.Self, arrangement: dict)</dt></dl>
+<dl><dt><a name="outilsProcessing-create_xarray_dataset_variable"><strong>create_xarray_dataset_variable</strong></a>(self: typing_extensions.Self, arrangement: dict)</dt><dd><tt>_summary_<br>
+Création&nbsp;des&nbsp;variables&nbsp;du&nbsp;dataset&nbsp;xarray</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-get_xarray_dataset"><strong>get_xarray_dataset</strong></a>(self: typing_extensions.Self)</dt></dl>
+<dl><dt><a name="outilsProcessing-get_xarray_dataset"><strong>get_xarray_dataset</strong></a>(self: typing_extensions.Self)</dt><dd><tt>_summary_<br>
+Retourne&nbsp;le&nbsp;dataset&nbsp;xarray<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-insert_bidimensional_variable"><strong>insert_bidimensional_variable</strong></a>(self: typing_extensions.Self, specific_dimension_variable_dict: dict, arrangement: dict)</dt></dl>
+<dl><dt><a name="outilsProcessing-insert_bidimensional_variable"><strong>insert_bidimensional_variable</strong></a>(self: typing_extensions.Self, specific_dimension_variable_dict: dict, arrangement: dict)</dt><dd><tt>_summary_<br>
+Insertion&nbsp;des&nbsp;variables&nbsp;bidimensionnelles</tt></dd></dl>
 
 <hr>
 Static methods defined here:<br>
-<dl><dt><a name="outilsProcessing-check_names"><strong>check_names</strong></a>(variable_name_list: list, column_name: str)</dt></dl>
+<dl><dt><a name="outilsProcessing-check_names"><strong>check_names</strong></a>(variable_name_list: list, column_name: str)</dt><dd><tt>_summary_<br>
+Vérification&nbsp;des&nbsp;noms&nbsp;de&nbsp;colonne&nbsp;du&nbsp;dataframe<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-check_xarray_dataset"><strong>check_xarray_dataset</strong></a>(xarray_dataset: xarray.core.dataset.Dataset)</dt></dl>
+<dl><dt><a name="outilsProcessing-check_xarray_dataset"><strong>check_xarray_dataset</strong></a>(xarray_dataset: xarray.core.dataset.Dataset)</dt><dd><tt>_summary_<br>
+Vérifie&nbsp;et&nbsp;adapte&nbsp;le&nbsp;dataset&nbsp;xarray<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
 
-<dl><dt><a name="outilsProcessing-get_index_as_int"><strong>get_index_as_int</strong></a>(dataframe: pandas.core.frame.DataFrame, column_name: str)</dt></dl>
+<dl><dt><a name="outilsProcessing-extract_features"><strong>extract_features</strong></a>(data_list: list)</dt><dd><tt>_summary_<br>
+Extraction&nbsp;des&nbsp;caractéristiques&nbsp;statistiques&nbsp;d'un&nbsp;tableau&nbsp;numpy&nbsp;de&nbsp;données&nbsp;sous&nbsp;forme&nbsp;d'un&nbsp;ensemble&nbsp;de&nbsp;données<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
+
+<dl><dt><a name="outilsProcessing-get_index_as_int"><strong>get_index_as_int</strong></a>(dataframe: pandas.core.frame.DataFrame, column_name: str)</dt><dd><tt>_summary_<br>
+Obtenir&nbsp;l'indice&nbsp;entier<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
+
+<dl><dt><a name="outilsProcessing-rename_dataframe_columns"><strong>rename_dataframe_columns</strong></a>(model: sklearn.ensemble._forest.RandomForestClassifier, dataframe: pandas.core.frame.DataFrame)</dt><dd><tt>_summary_<br>
+Renommage&nbsp;des&nbsp;colonnes&nbsp;sans&nbsp;nom&nbsp;du&nbsp;dataframe&nbsp;pandas&nbsp;en&nbsp;prédisant&nbsp;la&nbsp;catégorie&nbsp;de&nbsp;données<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
+
+<dl><dt><a name="outilsProcessing-train_model"><strong>train_model</strong></a>(dataset: list)</dt><dd><tt>_summary_<br>
+Entraînement&nbsp;d'un&nbsp;modèle&nbsp;RandomForestClassifier&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_type_:&nbsp;_description_</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
