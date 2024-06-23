@@ -232,7 +232,7 @@ class outilsProcessing:
                 self.xarray_dataset.attrs[global_attribute_name] = arrangement['global_attribute'][global_attribute_name]
     
     
-    def check_dataframe_integrity(self: Self):
+    def check_dataframe_integrity(self: Self, model: RandomForestClassifier):
         
         """_summary_
         Vérification de l'intégrité du dataframe
@@ -264,8 +264,8 @@ class outilsProcessing:
                             if 'dtype' in self.xarray_dataset[key].attrs.keys() and hasattr(self.dataframe[column], 'dtype'):
                                 # Si le tableau de données est de dimension 1 et si un des mots de la liste des noms possibles de la clé est le nom de la colonne du dataframe
                                 if self.xarray_dataset[key].values.ndim == 1 and outilsProcessing.check_names([self.xarray_dataset[key].attrs['standard_name'], self.xarray_dataset[key].attrs['long_name'], self.xarray_dataset[key].attrs['sdn_parameter_name'], self.xarray_dataset[key].attrs['column_name']], column) == True:
-                                    # Si les données de la colonne du dataframe sont du même type que celui des données du fichier netCDF ou si une colonne du dataframe est vide
-                                    if self.dataframe[column].dtype == self.xarray_dataset[key].attrs['dtype'] or self.dataframe[column].isna().all() == True:
+                                    # Si les données de la colonne du dataframe sont du même type que celui des données du fichier netCDF ou si une colonne du dataframe est vide et si les valeurs de la colonne ont été vérifiées
+                                    if (self.dataframe[column].dtype == self.xarray_dataset[key].attrs['dtype'] or self.dataframe[column].isna().all() == True) and outilsProcessing.check_column_values(self.activation, self.dataframe, column, model) == True:
                                         # Si la liste de données de la colonne du dataframe contient au minimum 10 données
                                         if len(self.dataframe[column].iloc[:].tolist()) >= 10:
                                             # Si la clé est latitude
@@ -304,8 +304,8 @@ class outilsProcessing:
                                         if self.controleurlogs != None:
                                             self.controleurlogs.add_log("Data type in column " + column + " : " + str(self.dataframe[column].dtype) + " does not match the type of the variable : " + key + " : " + self.xarray_dataset[key].attrs['dtype'] + " . Data will be not selected.\n")
                                             self.controleurlogs.add_colored_log("Data type in column " + column + " : " + str(self.dataframe[column].dtype) + " does not match the type of the variable : " + key + " : " + self.xarray_dataset[key].attrs['dtype'] + " . Data will be not selected.\n", "red")
-                                # Si le tableau de données est de dimension 2, si le nom de la colonne filtré commence ou se termine par la clé
-                                elif self.xarray_dataset[key].values.ndim == 2 and (re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith(key.split('_')[0].lower()) or re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().endswith(key.split('_')[0].lower())):
+                                # Si le tableau de données est de dimension 2, si le nom de la colonne filtré commence ou se termine par la clé et si les valeurs de la colonne ont été vérifiées
+                                elif self.xarray_dataset[key].values.ndim == 2 and (re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith(key.split('_')[0].lower()) or re.sub(r'[^a-zA-Z/:.-_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().endswith(key.split('_')[0].lower())) and outilsProcessing.check_column_values(self.activation, self.dataframe, column, model) == True:
                                     # Si la liste de données de la colonne du dataframe contient au minimum 10 données
                                     if len(self.dataframe[column].iloc[:].tolist()) >= 10:
                                         # Si la liste existe
@@ -782,6 +782,9 @@ class outilsProcessing:
             {'data': np.random.normal(loc=150, scale=150, size=500), 'label': 'sea_water_chla'},
             {'data': np.random.normal(loc=0.005, scale=0.00400, size=500), 'label': 'bbp'}
         ]
+        
+        # Entraînement du modèle
+        model, X, y = outilsProcessing.train_model(dataset)
 
         # Si tous les noms de colonne du dataframe sont des chaînes de caractères
         if all(isinstance(column, str) for column in self.dataframe.columns) == True: 
@@ -790,8 +793,6 @@ class outilsProcessing:
 
         # Si une ou plusieurs colonnes du dataframe pandas sont sans nom
         if self.activation == True:
-            # Entraînement du modèle
-            model, X, y = outilsProcessing.train_model(dataset)
             # Renommage des colonnes sans titre du dataframe
             self.dataframe = outilsProcessing.rename_dataframe_columns(model, self.dataframe)
         
@@ -801,7 +802,7 @@ class outilsProcessing:
         
         self.create_xarray_dataset_global_attribute(arrangement)
         
-        self.check_dataframe_integrity()
+        self.check_dataframe_integrity(model)
         
         self.check_datetime_format()
         
@@ -1056,9 +1057,75 @@ class outilsProcessing:
         # Parcours du dataframe
         for column in dataframe.columns:
             # Si la colonne du dataframe n'existe pas
-            if isinstance(column, int) or column == "" or column == None or re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith("unnamed") or re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().endswith("unnamed"):
+            if column == "" or column == None or re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith("unnamed") or re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().endswith("unnamed"):
+                # Si toutes les valeurs de la colonne du dataframe sont des timestamp
+                if all(isinstance(value, pd.Timestamp) for value in dataframe[column]):
+                    # Conversion en str
+                    dataframe[column] = [value.strftime("%Y-%m-%d %H:%M:%S") for value in dataframe[column]]
+                    # Si date n'est pas déjà dans la liste des noms de colonne du dataframe
+                    if "date" not in dataframe.columns.to_list():
+                        # Renommage de la colonne sans nom du dataframe
+                        dataframe = dataframe.rename(columns={column: "date"})
+                    # Sinon
+                    else:
+                        # Suppression de la colonne sans nom
+                        dataframe = dataframe.drop(columns = column)
+                # Si toutes les valeurs de la colonne du dataframe sont des datetime
+                elif all(isinstance(value, datetime) for value in dataframe[column]):
+                    # Conversion en str
+                    dataframe[column] = [value.strftime("%Y-%m-%d %H:%M:%S") for value in dataframe[column]]
+                    # Si date n'est pas déjà dans la liste des noms de colonne du dataframe
+                    if "date" not in dataframe.columns.to_list():
+                        # Renommage de la colonne sans nom du dataframe
+                        dataframe = dataframe.rename(columns={column: "date"})
+                    # Sinon
+                    else:
+                        # Suppression de la colonne sans nom
+                        dataframe = dataframe.drop(columns = column)
+                # Si toutes les valeurs de la colonne du dataframe sont des date
+                elif all(isinstance(value, date) for value in dataframe[column]):
+                    # Conversion en str
+                    dataframe[column] = [value.strftime("%Y-%m-%d") for value in dataframe[column]]
+                    # Si date n'est pas déjà dans la liste des noms de colonne du dataframe
+                    if "date" not in dataframe.columns.to_list():
+                        # Renommage de la colonne sans nom du dataframe
+                        dataframe = dataframe.rename(columns={column: "date"})
+                    # Sinon
+                    else:
+                        # Suppression de la colonne sans nom
+                        dataframe = dataframe.drop(columns = column)
+                # Si toutes les valeurs de la colonne du dataframe sont des time
+                elif all(isinstance(value, time) for value in dataframe[column]):
+                    # Conversion en str
+                    dataframe[column] = [value.strftime("%H:%M:%S") for value in dataframe[column]]
+                    # Si date n'est pas déjà dans la liste des noms de colonne du dataframe
+                    if "time" not in dataframe.columns.to_list():
+                        # Renommage de la colonne sans nom du dataframe
+                        dataframe = dataframe.rename(columns={column: "time"})
+                    # Sinon
+                    else:
+                        # Suppression de la colonne sans nom
+                        dataframe = dataframe.drop(columns = column)
+                # Si toutes les valeurs de la colonne du dataframe sont des chaînes de caractères
+                elif all(isinstance(value, str) for value in dataframe[column]):
+                    # Parcours des lignes du dataframe
+                    for i in dataframe.index:
+                        # Si la donnée temporelle n'est pas au format 'YYYY-MM-DD HH:MM:SS' ou 'YYYY-MM-DDTHH:MM:SS' ou 'YYYY-MM-DD' ou 'HH:MM:SS'
+                        if bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]) (?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', dataframe.at[i, column])) == False and bool(re.match(r'^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])T(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', dataframe.at[i, column])) == False and bool(re.match(r'^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)\.\d{3}$', dataframe.at[i, column])) == False:
+                            # Conversion en str
+                            dataframe.at[i, column] = str("")
+                    # Si date n'est pas déjà dans la liste des noms de colonne du dataframe
+                    if "date" not in dataframe.columns.to_list():
+                        # Renommage de la colonne sans nom du dataframe
+                        dataframe = dataframe.rename(columns={column: "date"})
+                    # Sinon
+                    else:
+                        # Suppression de la colonne sans nom
+                        dataframe = dataframe.drop(columns = column)
                 # Si toutes les valeurs de la colonne du dataframe sont des entiers ou des flottants
-                if all(isinstance(value, int) for value in dataframe[column]) or all(isinstance(value, float) for value in dataframe[column]):
+                elif all(isinstance(value, int) for value in dataframe[column]) or all(isinstance(value, float) for value in dataframe[column]):
+                    # Remplacement des NaN par des 0
+                    dataframe[column].fillna(0, inplace = True)
                     # Si toutes les valeurs de la colonne du dataframe sont des entiers
                     if all(isinstance(value, int) for value in dataframe[column]):
                         # Conversion des valeurs de la colonne du dataframe en flottant
@@ -1098,6 +1165,37 @@ class outilsProcessing:
         
         # Retourne le dataframe actualisé
         return dataframe
+
+
+    @staticmethod
+    def check_column_values(activation: bool, dataframe: pd.DataFrame, column: str, model: RandomForestClassifier):
+        
+        """_summary_
+        Vérification des valeurs de la colonne par le modèle
+        Returns:
+            _type_: _description_
+        """
+        
+        if activation == True:
+            # Si toutes les valeurs de la colonne du dataframe sont des entiers ou des flottants
+            if all(isinstance(value, int) for value in dataframe[column]) or all(isinstance(value, float) for value in dataframe[column]):
+                # Remplacement des NaN par des 0
+                dataframe[column].fillna(0, inplace = True)
+                # Extraction des caractéristiques statistiques de la colonne sans nom du dataframe
+                features = outilsProcessing.extract_features(dataframe[column].to_list())
+                # Conversion des caractéristiques statistiques en dataframe pandas
+                features_dataframe = pd.DataFrame([features])
+                # Prédiction de la catégorie de la colonne à partir des caractéristiques statistiques
+                prediction = model.predict(features_dataframe)[0]
+                # Si le nom de la colonne filtré du dataframe commence ou se termine par la catégorie prédite filtrée
+                if re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith(re.sub(r'^sea_water_', '', prediction[0])) or re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().endswith(re.sub(r'^sea_water_', '', prediction[0])):
+                    return True
+                else:
+                    return False
+            else:
+                return True
+        else:
+            return True
 
 
 
