@@ -774,13 +774,18 @@ class outilsProcessing:
         # Exemple de jeu de données originales
         dataset = [
             # Distribution normale car données de mesures de phénomènes naturels (concentration autour d'une valeur centrale)
-            {'data': np.random.normal(loc=1, scale=90, size=500), 'label': 'depth'},
-            {'data': np.random.normal(loc=-1, scale=179, size=500), 'label': 'longitude'},
-            {'data': np.random.normal(loc=1, scale=89, size=500), 'label': 'latitude'},
+            {'data': np.random.normal(loc=0.1, scale=0.1, size=500), 'label': 'depth'},
+            {'data': np.random.normal(loc=-1, scale=1, size=500), 'label': 'longitude'},
+            {'data': np.random.normal(loc=1, scale=1, size=500), 'label': 'latitude'},
             {'data': np.random.normal(loc=20, scale=10, size=500), 'label': 'sea_water_temperature'},
             {'data': np.random.normal(loc=30, scale=30, size=500), 'label': 'sea_water_salinity'},
-            {'data': np.random.normal(loc=150, scale=150, size=500), 'label': 'sea_water_chla'},
-            {'data': np.random.normal(loc=0.005, scale=0.00400, size=500), 'label': 'bbp'}
+            {'data': np.random.normal(loc=1, scale=0.03, size=500), 'label': 'sea_water_density'},
+            {'data': np.random.normal(loc=1, scale=1, size=500), 'label': 'sea_water_fluorescence'},
+            {'data': np.random.normal(loc=1, scale=0.1, size=500), 'label': 'sea_water_pressure'},
+            {'data': np.random.normal(loc=4, scale=4, size=500), 'label': 'dissolved_oxygen'},
+            {'data': np.random.normal(loc=0.001, scale=0.000009, size=500), 'label': 'sea_water_nitrate'},
+            {'data': np.random.normal(loc=0.07, scale=0.07, size=500), 'label': 'sea_water_phosphate'},
+            {'data': np.random.normal(loc=0.03, scale=0.03, size=500), 'label': 'sea_water_silicate'}
         ]
         
         # Entraînement du modèle
@@ -1196,6 +1201,55 @@ class outilsProcessing:
                 return True
         else:
             return True
+
+
+    @staticmethod
+    def check_unit(dataframe: pd.DataFrame, column: str, model: RandomForestClassifier):
+        
+        """_summary_
+        Vérification de l'unité par le modèle
+        Returns:
+            _type_: _description_
+        """
+        
+        # Si toutes les valeurs de la colonne du dataframe sont des entiers ou des flottants
+        if all(isinstance(value, int) for value in dataframe[column]) or all(isinstance(value, float) for value in dataframe[column]):
+            # Remplacement des NaN par des 0
+            dataframe[column].fillna(0, inplace = True)
+            # Extraction des caractéristiques statistiques de la colonne sans nom du dataframe
+            features = outilsProcessing.extract_features(dataframe[column].to_list())
+            # Conversion des caractéristiques statistiques en dataframe pandas
+            features_dataframe = pd.DataFrame([features])
+            # Prédiction de la catégorie de la colonne à partir des caractéristiques statistiques
+            prediction = model.predict(features_dataframe)[0]
+            if prediction == "depth":
+                return "meters"
+            elif prediction == "latitude":
+                return "degree North"
+            elif prediction == "longitude":
+                return "degree East"
+            elif prediction == "sea_water_temperature":
+                return "degree Celsius"
+            elif prediction == "sea_water_salinity":
+                return "PSU"
+            elif prediction == "sea_water_density":
+                return "kg/m^3"
+            elif prediction == "sea_water_fluorescence":
+                return "mg/m^3"
+            elif prediction == "sea_water_pressure":
+                return "dbar"
+            elif prediction == "dissolved_oxygen":
+                return "ml/l"
+            elif prediction == "sea_water_nitrate":
+                return "\u00c2\u00b5mol/l"
+            elif prediction == "sea_water_phosphate":
+                return "\u00c2\u00b5mol/l"
+            elif prediction == "sea_water_silicate":
+                return "\u00c2\u00b5mol/l"
+            else:
+                return "NaN"
+        else:
+            return "NaN"
 
 
 
