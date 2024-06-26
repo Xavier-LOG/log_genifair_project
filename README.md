@@ -1,6 +1,7 @@
 # Execution
 
 Unzip the folder log_wimereux_software.zip
+
 In the dist folder, run log_wimereux_software.exe file
 
 # Launch Programm
@@ -58,4 +59,4 @@ python app.py
 
 # Security
 
-The data used to train a decision tree forest model are original.
+The data used to train a decision tree forest model are original
