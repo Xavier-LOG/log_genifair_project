@@ -1,6 +1,7 @@
 # Execution
 
-Run .exe file
+Unzip the folder log_wimereux_software.zip
+In the dist folder, run log_wimereux_software.exe file
 
 # Launch Programm
 
