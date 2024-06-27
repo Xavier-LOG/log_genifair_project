@@ -192,7 +192,7 @@ class outilsArrangement:
                         # Si le nom de la colonne du dataframe filtré ne commence pas par unnamed
                         if not re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower().startswith('unnamed'):
                             # Ajout de la variable
-                            catalog['variable'][re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower()] = {
+                            catalog['variable']["sea_water_" + re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower()] = {
                                 "dimension" : [dimension_name],
                                 "attribute" : {
                                     ":dtype": str(dataframe[column].dtype),
@@ -200,7 +200,7 @@ class outilsArrangement:
                                     ":sdn_uom_name": re.sub(r'[^\u0391-\u03A9\u03B1-\u03C9-a-zA-Z\s/%._]', '', column.split(",")[1].strip("_")).replace(' ','').lower() if len(column.split(",")) == 2 else "NaN",
                                     ":sdn_uom_urn": "urn:sdn:parameter:" + re.sub(r'[^\u0391-\u03A9\u03B1-\u03C9-a-zA-Z\s/%._]', '', column.split(",")[1].strip("_")).replace(' ','').lower() if len(column.split(",")) == 2 else "NaN",
                                     ":standard_name": re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower(),
-                                    ":long_name": re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace('_', ' ').lower().capitalize(),
+                                    ":long_name": "sea_water_" + re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace('_', ' ').lower().capitalize(),
                                     ":sdn_parameter_name": re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower(),
                                     ":sdn_paramter_urn": "urn:sdn:parameter:" + str(re.sub(r'[^a-zA-Z0-9\s_]', '', column.split(",")[0].strip("_")).replace(' ','_').lower()),
                                     "column_name": str(column)
