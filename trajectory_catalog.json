@@ -112,7 +112,7 @@
                 ":sdn_parameter_name": "sea_water_temperature",
                 ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_temperature",
                 ":reference_scale": "ITS-90",
-                "column_name": "temperature"
+                "column_name": "temp"
             }
         },
         "sea_water_salinity": {
@@ -201,9 +201,9 @@
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "\u00c2\u00b5mol/l",
-                ":sdn_uom_name": "\u00c2\u00b5mol/l",
-                ":sdn_uom_urn": "urn:sdn:parameter:\u00c2\u00b5mol/l",
+                ":units": "\u00b5mol/l",
+                ":sdn_uom_name": "\u00b5mol/l",
+                ":sdn_uom_urn": "urn:sdn:parameter:\u00b5mol/l",
                 ":standard_name": "sea_water_nitrate",
                 ":long_name": "Sea water nitrate",
                 ":sdn_parameter_name": "concentration_of_nitrate_in_sea_water",
@@ -217,9 +217,9 @@
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "\u00c2\u00b5mol/l",
-                ":sdn_uom_name": "\u00c2\u00b5mol/l",
-                ":sdn_uom_urn": "urn:sdn:parameter:\u00c2\u00b5mol/l",
+                ":units": "\u00b5mol/l",
+                ":sdn_uom_name": "\u00b5mol/l",
+                ":sdn_uom_urn": "urn:sdn:parameter:\u00b5mol/l",
                 ":standard_name": "sea_water_phosphate",
                 ":long_name": "Sea water phosphate",
                 ":sdn_parameter_name": "concentration_of_phosphate_in_sea_water",
@@ -233,9 +233,9 @@
             ],
             "attribute": {
                 ":dtype": "float64",
-                ":units": "\u00c2\u00b5mol/l",
-                ":sdn_uom_name": "\u00c2\u00b5mol/l",
-                ":sdn_uom_urn": "urn:sdn:parameter:\u00c2\u00b5mol/l",
+                ":units": "\u00b5mol/l",
+                ":sdn_uom_name": "\u00b5mol/l",
+                ":sdn_uom_urn": "urn:sdn:parameter:\u00b5mol/l",
                 ":standard_name": "sea_water_silicate",
                 ":long_name": "Sea water silicate",
                 ":sdn_parameter_name": "concentration_of_silicate_in_sea_water",

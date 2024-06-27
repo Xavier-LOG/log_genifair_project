@@ -57,7 +57,7 @@
                 ":sdn_parameter_name": "sea_water_temperature",
                 ":sdn_parameter_urn": "urn:sdn:parameter:sea_water_temperature",
                 ":reference_scale": "ITS-90",
-                "column_name": "temperature"
+                "column_name": "temp"
             }
         },
         "sea_water_salinity": {
