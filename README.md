@@ -1,3 +1,7 @@
+This tool has been developped by Alexandre PAP in the frame of the GENIFAIR project, supported by the Federative Research Structure " SFR Campus de la mer"
+https://sfr-campusdelamer.univ-littoral.fr/
+Please dont't hesitate to thanks the author and the SFR if you like and use this tool !
+
 # Execution
 
 Unzip the folder log_wimereux_software.zip
